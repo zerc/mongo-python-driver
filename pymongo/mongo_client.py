@@ -58,6 +58,7 @@ from pymongo.errors import (ConfigurationError,
 from pymongo.read_preferences import ReadPreference
 from pymongo.server_selectors import (any_server_selector,
                                       writable_server_selector)
+from pymongo.server_type import SERVER_TYPE
 from pymongo.settings import ClusterSettings
 
 
@@ -455,7 +456,7 @@ class MongoClient(common.BaseObject):
     def is_mongos(self):
         """If this client is connected to mongos.
         """
-        return self._cluster.description.cluster_type == CLUSTER_TYPE.Sharded
+        return self._server_property('server_type') == SERVER_TYPE.Mongos
 
     @property
     def max_pool_size(self):
