@@ -846,11 +846,15 @@ class MongoClient(common.BaseObject):
         no effect.
         """
         if 0 == self.__request_counter.dec():
-            servers = self._cluster.select_servers(any_server_selector,
-                                                   server_wait_time=0)
+            try:
+                servers = self._cluster.select_servers(any_server_selector,
+                                                       server_wait_time=0)
 
-            for s in servers:
-                s.end_request()
+                for s in servers:
+                    s.end_request()
+            except ConnectionFailure:
+                # No servers, we've disconnected.
+                pass
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
