@@ -600,7 +600,7 @@ Bye"""))
         outfile.filename
 
     def test_grid_in_lazy_connect(self):
-        client = MongoClient('badhost', _connect=False)
+        client = MongoClient('badhost', _connect=False, serverWaitTimeMS=100)
         fs = client.db.fs
         infile = GridIn(fs, file_id=-1, chunk_size=1)
         self.assertRaises(ConnectionFailure, infile.write, b'data goes here')

@@ -25,8 +25,7 @@ from gridfs.errors import (NoFile,
 from gridfs.grid_file import (GridIn,
                               GridOut,
                               GridOutCursor)
-from pymongo import (MongoClient,
-                     ASCENDING,
+from pymongo import (ASCENDING,
                      DESCENDING)
 from pymongo.database import Database
 
@@ -61,10 +60,7 @@ class GridFS(object):
 
     def __is_secondary(self):
         client = self.__database.connection
-
-        # Connect the client, so we know if it's connected to the primary.
-        client._ensure_connected()
-        return isinstance(client, MongoClient) and not client.is_primary
+        return not client._is_writable()
 
     def __ensure_index_files_id(self):
         if not self.__is_secondary():

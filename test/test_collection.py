@@ -1371,7 +1371,6 @@ class TestCollection(IntegrationTest):
     def test_aggregation_cursor(self):
         db = self.db
         if client_context.setname:
-            db = client_context.rs_client[db.name]
             # Test that getMore messages are sent to the right server.
             db.read_preference = ReadPreference.SECONDARY
 
@@ -1398,7 +1397,6 @@ class TestCollection(IntegrationTest):
         db = self.db
         db.drop_collection("test")
         if client_context.setname:
-            db = client_context.rs_client[db.name]
             # Test that getMore messages are sent to the right server.
             db.read_preference = ReadPreference.SECONDARY
 
@@ -1716,7 +1714,6 @@ class TestCollection(IntegrationTest):
 
         client = get_client(pair, max_pool_size=1)
         socks = get_pool(client).sockets
-        self.assertEqual(1, len(socks))
 
         # Make sure the socket is returned after exhaustion.
         cur = client[self.db.name].test.find(exhaust=True)

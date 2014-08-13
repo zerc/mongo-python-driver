@@ -375,9 +375,10 @@ class TestGridfs(IntegrationTest):
         self.assertFalse(self.db.connection.in_request())
 
     def test_gridfs_lazy_connect(self):
-        client = MongoClient('badhost', _connect=False)
+        client = MongoClient('badhost', serverWaitTimeMS=100, _connect=False)
         db = client.db
-        self.assertRaises(ConnectionFailure, gridfs.GridFS, db)
+        gfs = gridfs.GridFS(db)
+        self.assertRaises(ConnectionFailure, gfs.list)
 
         fs = gridfs.GridFS(db, _connect=False)
         f = fs.new_file()  # Still no connection.

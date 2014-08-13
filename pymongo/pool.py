@@ -21,9 +21,15 @@ import threading
 import weakref
 
 from bson import EMPTY
-from pymongo import thread_util
+from bson.py3compat import u
+from pymongo import helpers, message, thread_util
 from pymongo.errors import ConnectionFailure
 
+# If the first getaddrinfo call of this interpreter's life is on a thread,
+# while the main thread holds the import lock, getaddrinfo deadlocks trying
+# to import the IDNA codec. Import it here, where presumably we're on the
+# main thread, to avoid the deadlock. See PYTHON-607.
+u('foo').encode('idna')
 
 try:
     from ssl import match_hostname, CertificateError
@@ -153,8 +159,24 @@ class SocketInfo(object):
         # Are we being used by an exhaust cursor?
         self._exhaust = False
 
+    def command(self, dbname, spec):
+        """Execute a command over the socket, or raise socket.error.
+
+        :Parameters:
+          - `dbname`: name of the database on which to run the command
+          - `spec`: a command document as a dict, SON, or mapping object
+        """
+        # TODO: command should already be encoded.
+        request_id, msg, _ = message.query(0, dbname + '.$cmd', 0, -1, spec)
+        self.send_message(msg)
+        response = self.receive_message(1, request_id)
+        unpacked = helpers._unpack_response(response)['data'][0]
+        msg = "command %r failed: %%s" % spec
+        helpers._check_command_response(unpacked, None, msg)
+        return unpacked
+
     def send_message(self, message):
-        """Send a raw BSON message.
+        """Send a raw BSON message or raise socket.error.
 
         If a network exception is raised, the socket is closed.
         """
@@ -165,7 +187,7 @@ class SocketInfo(object):
             raise
 
     def receive_message(self, operation, request_id):
-        """Receive a raw BSON message.
+        """Receive a raw BSON message or raise socket.error.
 
         If any exception is raised, the socket is closed.
         """

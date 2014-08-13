@@ -19,10 +19,12 @@ import os
 import struct
 import sys
 import threading
+import time
 
 from pymongo import MongoClient, MongoReplicaSetClient
 from pymongo.errors import AutoReconnect
 from pymongo.pool import NO_REQUEST, NO_SOCKET_YET, SocketInfo
+from pymongo.server_selectors import writable_server_selector
 from test import (client_context,
                   db_user,
                   db_pwd)
@@ -146,6 +148,27 @@ def joinall(threads):
     for t in threads:
         t.join(300)
         assert not t.isAlive(), "Thread %s hung" % t
+
+def connected(client):
+    """Convenience to wait for a newly-constructed client to connect."""
+    client.admin.command('ismaster')  # Force connection.
+    return client
+
+def wait_until(predicate, success_description):
+    """Wait up to 10 seconds for predicate to be True.
+
+    E.g.:
+
+        wait_until(lambda: c.primary == ('a', 1),
+                   'connect to the primary')
+
+    If the lambda-expression isn't true after 10 seconds, we raise
+    AssertionError("Didn't ever connect to the primary").
+    """
+    start = time.time()
+    while not predicate():
+        if time.time() - start > 10:
+            raise AssertionError("Didn't ever %s" % success_description)
 
 def is_mongos(client):
     res = client.admin.command('ismaster')
@@ -343,13 +366,9 @@ def assertReadFromAll(testcase, rsc, members, *args, **kwargs):
     testcase.assertEqual(members, used)
 
 def get_pool(client):
-    if isinstance(client, MongoClient):
-        return client._MongoClient__member.pool
-    elif isinstance(client, MongoReplicaSetClient):
-        rs_state = client._MongoReplicaSetClient__rs_state
-        return rs_state.primary_member.pool
-    else:
-        raise TypeError(str(client))
+    cluster = client.get_cluster()
+    server = cluster.select_server(writable_server_selector)
+    return server.pool
 
 def pools_from_rs_client(client):
     """Get Pool instances from a MongoReplicaSetClient.

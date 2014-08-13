@@ -27,8 +27,7 @@ from pymongo.server_type import SERVER_TYPE
 from pymongo.cluster import Cluster
 from pymongo.cluster_description import CLUSTER_TYPE
 from pymongo.errors import (ConfigurationError,
-                            ConnectionFailure,
-                            InvalidOperation)
+                            ConnectionFailure)
 from pymongo.ismaster import IsMaster
 from pymongo.monitor import Monitor
 from pymongo.read_preferences import MovingAverage
@@ -387,6 +386,45 @@ class TestMultiServerCluster(unittest.TestCase):
 
         self.assertEqual(SERVER_TYPE.RSPrimary, get_type(c, 'a'))
         self.assertEqual(SERVER_TYPE.Unknown, get_type(c, 'b'))
+        self.assertEqual(CLUSTER_TYPE.ReplicaSetWithPrimary,
+                         c.description.cluster_type)
+
+    def test_reset_server(self):
+        c = create_mock_cluster(set_name='rs')
+        got_ismaster(c, ('a', 27017), {
+            'ok': 1,
+            'ismaster': True,
+            'setName': 'rs',
+            'hosts': ['a', 'b']})
+
+        got_ismaster(c, ('b', 27017), {
+            'ok': 1,
+            'ismaster': False,
+            'secondary': True,
+            'setName': 'rs',
+            'hosts': ['a', 'b']})
+
+        c.reset_server(('a', 27017))
+        self.assertEqual(SERVER_TYPE.Unknown, get_type(c, 'a'))
+        self.assertEqual(SERVER_TYPE.RSSecondary, get_type(c, 'b'))
+        self.assertEqual('rs', c.description.set_name)
+        self.assertEqual(CLUSTER_TYPE.ReplicaSetNoPrimary,
+                         c.description.cluster_type)
+
+        got_ismaster(c, ('a', 27017), {
+            'ok': 1,
+            'ismaster': True,
+            'setName': 'rs',
+            'hosts': ['a', 'b']})
+
+        self.assertEqual(SERVER_TYPE.RSPrimary, get_type(c, 'a'))
+        self.assertEqual(CLUSTER_TYPE.ReplicaSetWithPrimary,
+                         c.description.cluster_type)
+
+        c.reset_server(('b', 27017))
+        self.assertEqual(SERVER_TYPE.RSPrimary, get_type(c, 'a'))
+        self.assertEqual(SERVER_TYPE.Unknown, get_type(c, 'b'))
+        self.assertEqual('rs', c.description.set_name)
         self.assertEqual(CLUSTER_TYPE.ReplicaSetWithPrimary,
                          c.description.cluster_type)
 

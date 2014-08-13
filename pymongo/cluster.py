@@ -24,6 +24,8 @@ from pymongo.cluster_description import (updated_cluster_description,
                                          ClusterDescription)
 from pymongo.errors import AutoReconnect
 from pymongo.server import Server
+from pymongo.server_selectors import (secondary_server_selector,
+                                      writable_server_selector)
 
 
 class Cluster(object):
@@ -96,6 +98,7 @@ class Cluster(object):
                 # came after our most recent selector() call, since we've
                 # held the lock until now.
                 self._condition.wait(common.MIN_HEARTBEAT_INTERVAL)
+                self._description.check_compatible()
                 now = time.time()
                 server_descriptions = self._apply_selector(selector)
 
@@ -130,6 +133,33 @@ class Cluster(object):
     def has_server(self, address):
         return address in self._servers
 
+    def get_primary(self):
+        """Return primary's address or None."""
+        # Implemented here in Cluster instead of MongoClient, so it can lock.
+        with self._lock:
+            cluster_type = self._description.cluster_type
+            if cluster_type != CLUSTER_TYPE.ReplicaSetWithPrimary:
+                return None
+
+            description, = writable_server_selector(
+                self._description.known_servers)
+
+            return description.address
+
+    def get_secondaries(self):
+        """Return set of secondary addresses."""
+        # Implemented here in Cluster instead of MongoClient, so it can lock.
+        with self._lock:
+            cluster_type = self._description.cluster_type
+            if cluster_type not in (CLUSTER_TYPE.ReplicaSetWithPrimary,
+                                    CLUSTER_TYPE.ReplicaSetNoPrimary):
+                return []
+
+            descriptions = secondary_server_selector(
+                self._description.known_servers)
+
+            return set([d.address for d in descriptions])
+
     def close(self):
         # TODO.
         raise NotImplementedError
@@ -146,8 +176,21 @@ class Cluster(object):
             if server:
                 server.pool.reset()
 
+    def reset_server(self, address):
+        with self._lock:
+            server = self._servers.get(address)
+            if server:
+                server.pool.reset()
+
+            # Mark this server Unknown.
+            self._description = self._description.reset_server(address)
+            self._update_servers()
+
     def reset(self):
-        """Reset all pools and rediscover all servers."""
+        """Reset all pools and disconnect from all servers.
+
+        The cluster reconnects on demand, or after heartbeatFrequencyMS elapses.
+        """
         with self._lock:
             for server in self._servers.values():
                 server.pool.reset()
@@ -155,8 +198,6 @@ class Cluster(object):
             # Mark all servers Unknown.
             self._description = self._description.reset()
             self._update_servers()
-
-            self._request_check_all()
 
     @property
     def description(self):

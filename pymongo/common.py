@@ -31,7 +31,7 @@ from bson.py3compat import string_type, integer_types
 
 # Defaults until we connect to a server and get updated limits.
 MAX_BSON_SIZE = 16 * (1024 ** 2)
-MAX_MESSAGE_SIZE = 2 * MAX_BSON_SIZE  # TODO: remove.
+MAX_MESSAGE_SIZE = 2 * MAX_BSON_SIZE
 MIN_WIRE_VERSION = 0
 MAX_WIRE_VERSION = 0
 MAX_WRITE_BATCH_SIZE = 1000
@@ -279,7 +279,6 @@ VALIDATORS = {
     'readpreferencetags': validate_read_preference_tags,
     'latencythresholdms': validate_positive_float,
     'secondaryacceptablelatencyms': validate_positive_float,
-    'auto_start_request': validate_boolean,
     'authmechanism': validate_auth_mechanism,
     'authsource': validate_string,
     'gssapiservicename': validate_string,
