@@ -54,8 +54,8 @@ class Server(object):
         try:
             with self._pool.get_socket() as sock_info:
                 sock_info.send_message(data)
-        except socket.error as e:
-            raise AutoReconnect(str(e))
+        except socket.error as exc:
+            raise AutoReconnect(str(exc))
 
     def send_message_with_response(self, message, exhaust=False):
         """Send a message to MongoDB and return a Response object.
@@ -84,8 +84,8 @@ class Server(object):
                     return Response(
                         data=response_data,
                         address=self._description.address)
-        except socket.error as e:
-            raise AutoReconnect(str(e))
+        except socket.error as exc:
+            raise AutoReconnect(str(exc))
 
     def start_request(self):
         # TODO: Remove implicit threadlocal requests, use explicit requests.
