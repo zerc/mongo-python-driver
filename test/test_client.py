@@ -1010,7 +1010,8 @@ class TestMongoClientFailover(IntegrationTest):
             members=['a:1', 'b:2', 'c:3'],
             mongoses=[],
             host='b:2',  # Pass a secondary.
-            replicaSet='rs')
+            replicaSet='rs',
+            heartbeatFrequencyMS=9999999)  # Disable periodic monitoring.
 
         wait_until(lambda: len(c.nodes) == 3, 'connect')
         self.assertEqual('a', c.host)
