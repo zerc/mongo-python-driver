@@ -21,6 +21,7 @@ import threading
 import socket
 import sys
 import time
+import warnings
 
 sys.path[0:0] = [""]
 
@@ -480,6 +481,10 @@ class TestClient(IntegrationTest, TestRequestMixin):
         # document_class is read-only in PyMongo 3.0.
         with self.assertRaises(AttributeError):
             c.document_class = dict
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DeprecationWarning)
+            self.assertRaises(DeprecationWarning, c.get_document_class)
 
     def test_timeouts(self):
         client = MongoClient(host, port, connectTimeoutMS=10500)

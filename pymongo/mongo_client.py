@@ -482,7 +482,14 @@ class MongoClient(common.BaseObject):
         return self.__document_class
 
     def get_document_class(self):
-        """Default class to use for documents returned from this client."""
+        """Default class to use for documents returned from this client.
+
+        Deprecated; use the document_class property instead.
+        """
+        warnings.warn('get_document_class() is deprecated, use the'
+                      ' document_class property',
+                      DeprecationWarning, stacklevel=2)
+
         return self.__document_class
 
     @property
