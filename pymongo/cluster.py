@@ -141,8 +141,8 @@ class Cluster(object):
             if cluster_type != CLUSTER_TYPE.ReplicaSetWithPrimary:
                 return None
 
-            description, = writable_server_selector(
-                self._description.known_servers)
+            description = writable_server_selector(
+                self._description.known_servers)[0]
 
             return description.address
 
