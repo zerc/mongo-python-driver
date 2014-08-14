@@ -33,18 +33,24 @@ from pymongo.database import Database
 class GridFS(object):
     """An instance of GridFS on top of a single Database.
     """
-    def __init__(self, database, collection="fs", _connect=True):
+    def __init__(self, database, collection="fs", connect=True):
         """Create a new instance of :class:`GridFS`.
 
         Raises :class:`TypeError` if `database` is not an instance of
         :class:`~pymongo.database.Database`.
 
+        The `connect` parameter ensures that the underlying
+        :class:`~pymongo.mongo_client.MongoClient` is connected to a server,
+        and creates an index on the "chunks" collection if needed.
+
         :Parameters:
           - `database`: database to use
           - `collection` (optional): root collection to use
+          - `connect` (optional): whether to begin connecting the client in
+            the background
 
-        .. versionadded:: 1.6
-           The `collection` parameter.
+        .. versionadded:: 3.0
+           The `connect` parameter.
 
         .. mongodoc:: gridfs
         """
@@ -55,7 +61,7 @@ class GridFS(object):
         self.__collection = database[collection]
         self.__files = self.__collection.files
         self.__chunks = self.__collection.chunks
-        if _connect:
+        if connect:
             self.__ensure_index_files_id()
 
     def __is_secondary(self):
