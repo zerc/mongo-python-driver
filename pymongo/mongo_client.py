@@ -459,11 +459,6 @@ class MongoClient(common.BaseObject):
         a socket to be returned to the pool. If ``waitQueueTimeoutMS`` is set,
         a blocked operation will raise :exc:`~pymongo.errors.ConnectionFailure`
         after a timeout. By default ``waitQueueTimeoutMS`` is not set.
-
-        .. warning:: SIGNIFICANT BEHAVIOR CHANGE in 2.6. Previously, this
-          parameter would limit only the idle sockets the pool would hold
-          onto, not the number of open sockets. The default has also changed
-          to 100.
         """
         return self.__options.pool_options.max_pool_size
 
