@@ -1022,7 +1022,9 @@ class MongoClient(common.BaseObject):
 
         with server.pool.get_socket() as sock:
             if username is not None:
-                get_nonce_cmd = {"copydbgetnonce": 1, "fromhost": from_host}
+                get_nonce_cmd = SON([("copydbgetnonce", 1),
+                                     ("fromhost", from_host)])
+
                 nonce = sock.command("admin", get_nonce_cmd)["nonce"]
 
                 command["username"] = username
