@@ -233,9 +233,8 @@ class MongoClient(common.BaseObject):
            returns immediately and launches the connection process on
            background threads.
 
-           The ``serverWaitTimeMS`` option is added and
+           The ``connect`` and ``serverWaitTimeMS`` options are added and
            ``auto_start_request`` is removed.
-           ``_connect`` is deprecated in favor of ``connect``.
         """
         if host is None:
             host = self.HOST
@@ -274,12 +273,6 @@ class MongoClient(common.BaseObject):
         pool_class = kwargs.pop('_pool_class', None)
         monitor_class = kwargs.pop('_monitor_class', None)
         condition_class = kwargs.pop('_condition_class', None)
-
-        if '_connect' in kwargs:
-            warnings.warn('_connect is deprecated, use "connect"',
-                          DeprecationWarning, stacklevel=2)
-
-            connect = kwargs.pop('_connect')
 
         kwargs['max_pool_size'] = max_pool_size
         opts.update(kwargs)

@@ -77,7 +77,7 @@ class TestGridfsNoConnect(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        client = MongoClient(host, port, _connect=False)
+        client = MongoClient(host, port, connect=False)
         cls.db = client.pymongo_test
 
     def test_gridfs(self):
@@ -375,12 +375,12 @@ class TestGridfs(IntegrationTest):
         self.assertFalse(self.db.connection.in_request())
 
     def test_gridfs_lazy_connect(self):
-        client = MongoClient('badhost', serverWaitTimeMS=100, _connect=False)
+        client = MongoClient('badhost', serverWaitTimeMS=100, connect=False)
         db = client.db
         gfs = gridfs.GridFS(db)
         self.assertRaises(ConnectionFailure, gfs.list)
 
-        fs = gridfs.GridFS(db, _connect=False)
+        fs = gridfs.GridFS(db, connect=False)
         f = fs.new_file()  # Still no connection.
         self.assertRaises(ConnectionFailure, f.close)
 
@@ -449,10 +449,10 @@ class TestGridfsReplicaSet(TestReplicaSetClientBase):
         client = MongoClient(
             connection_string(seeds=[secondary_pair]),
             read_preference=ReadPreference.SECONDARY,
-            _connect=False)
+            connect=False)
 
         # Still no connection.
-        fs = gridfs.GridFS(client.test_gridfs_secondary_lazy, _connect=False)
+        fs = gridfs.GridFS(client.test_gridfs_secondary_lazy, connect=False)
 
         # Connects, doesn't create index.
         self.assertRaises(NoFile, fs.get_last_version)

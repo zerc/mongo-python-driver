@@ -371,7 +371,7 @@ class GridOut(object):
     """Class to read data out of GridFS.
     """
     def __init__(self, root_collection, file_id=None, file_document=None,
-                 _connect=True):
+                 connect=True):
         """Read a file from GridFS
 
         Application developers should generally not need to
@@ -383,13 +383,20 @@ class GridOut(object):
         :class:`TypeError` if `root_collection` is not an instance of
         :class:`~pymongo.collection.Collection`.
 
+        If `connect` is True (the default), retrieve the file metadata from
+        the server immediately. Otherwise retrieve the metadata before the
+        first read.
+
         :Parameters:
           - `root_collection`: root collection to read from
-          - `file_id`: value of ``"_id"`` for the file to read
-          - `file_document`: file document from `root_collection.files`
+          - `file_id` (optional): value of ``"_id"`` for the file to read
+          - `file_document` (optional): file document from
+            `root_collection.files`
+          - `connect` (optional): whether to connect to the server
+            immediately
 
-        .. versionadded:: 1.9
-           The `file_document` parameter.
+        .. versionadded:: 3.0
+           The `connect` parameter.
         """
         if not isinstance(root_collection, Collection):
             raise TypeError("root_collection must be an "
@@ -401,7 +408,7 @@ class GridOut(object):
         self.__buffer = EMPTY
         self.__position = 0
         self._file = file_document
-        if _connect:
+        if connect:
             self._ensure_file()
 
     _id = _create_property("_id", "The ``'_id'`` value for this file.", True)

@@ -121,7 +121,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
             self.fail(self._formatMessage(msg, standardMsg))
 
     def test_init_disconnected(self):
-        c = self._get_client(_connect=False)
+        c = self._get_client(connect=False)
 
         self.assertIsInstance(c.is_mongos, bool)
         self.assertIsInstance(c.max_pool_size, int)
@@ -147,28 +147,28 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
             self.assertEqual(c.max_wire_version, 0)
         self.assertTrue(c.min_wire_version >= 0)
 
-        c = self._get_client(_connect=False)
+        c = self._get_client(connect=False)
         c.pymongo_test.test.update({}, {})  # Auto-connect for write.
         self.assertTrue(c.primary)
 
-        c = self._get_client(_connect=False)
+        c = self._get_client(connect=False)
         c.pymongo_test.test.insert({})  # Auto-connect for write.
         self.assertTrue(c.primary)
 
-        c = self._get_client(_connect=False)
+        c = self._get_client(connect=False)
         c.pymongo_test.test.remove({})  # Auto-connect for write.
         self.assertTrue(c.primary)
 
         c = MongoReplicaSetClient(
             "somedomainthatdoesntexist.org", replicaSet="rs",
-            connectTimeoutMS=1, _connect=False)
+            connectTimeoutMS=1, connect=False)
 
         self.assertRaises(ConnectionFailure, c.pymongo_test.test.find_one)
 
     def test_init_disconnected_with_auth_failure(self):
         c = MongoReplicaSetClient(
             "mongodb://user:pass@somedomainthatdoesntexist", replicaSet="rs",
-            connectTimeoutMS=1, _connect=False)
+            connectTimeoutMS=1, connect=False)
 
         self.assertRaises(ConnectionFailure, c.pymongo_test.test.find_one)
 
@@ -184,14 +184,14 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
             uri = "mongodb://user:pass@%s:%d/pymongo_test?replicaSet=%s" % (
                 host[0], host[1], self.name)
 
-            authenticated_client = MongoReplicaSetClient(uri, _connect=False)
+            authenticated_client = MongoReplicaSetClient(uri, connect=False)
             authenticated_client.pymongo_test.test.find_one()
 
             # Wrong password.
             bad_uri = "mongodb://user:wrong@%s:%d/pymongo_test?replicaSet=%s" % (
                 host[0], host[1], self.name)
 
-            bad_client = MongoReplicaSetClient(bad_uri, _connect=False)
+            bad_client = MongoReplicaSetClient(bad_uri, connect=False)
             self.assertRaises(
                 OperationFailure, bad_client.pymongo_test.test.find_one)
 
@@ -311,7 +311,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         lazy_client = MongoReplicaSetClient(
             "mongodb://user:wrong@%s/pymongo_test" % pair,
             replicaSet=self.name,
-            _connect=False)
+            connect=False)
 
         assertRaisesExactly(
             OperationFailure, lazy_client.test.collection.find_one)
@@ -454,7 +454,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         uri = "mongodb://%s:%d/foo?replicaSet=%s" % (
             host[0], host[1], self.name)
 
-        c = MongoReplicaSetClient(uri, _connect=False)
+        c = MongoReplicaSetClient(uri, connect=False)
         self.assertEqual(Database(c, 'foo'), c.get_default_database())
 
     def test_get_default_database_error(self):
@@ -463,7 +463,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         uri = "mongodb://%s:%d/?replicaSet=%s" % (
             host[0], host[1], self.name)
 
-        c = MongoReplicaSetClient(uri, _connect=False)
+        c = MongoReplicaSetClient(uri, connect=False)
         self.assertRaises(ConfigurationError, c.get_default_database)
 
     def test_get_default_database_with_authsource(self):
@@ -472,7 +472,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         uri = "mongodb://%s:%d/foo?replicaSet=%s&authSource=src" % (
             host[0], host[1], self.name)
 
-        c = MongoReplicaSetClient(uri, _connect=False)
+        c = MongoReplicaSetClient(uri, connect=False)
         self.assertEqual(Database(c, 'foo'), c.get_default_database())
 
     def test_iteration(self):
@@ -1063,7 +1063,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         self.assertTrue(client.alive())
 
         client = MongoReplicaSetClient(
-            'doesnt exist', replicaSet='rs', _connect=False)
+            'doesnt exist', replicaSet='rs', connect=False)
 
         self.assertFalse(client.alive())
 
@@ -1126,7 +1126,7 @@ class TestReplicaSetWireVersion(unittest.TestCase):
             mongoses=[],
             host='a:1',
             replicaSet='rs',
-            _connect=False)
+            connect=False)
 
         c.set_wire_version_range('a:1', 1, 5)
         c.set_wire_version_range('b:2', 0, 1)
@@ -1166,7 +1166,7 @@ class TestReplicaSetClientLazyConnect(
 
     def test_read_mode_secondary(self):
         client = MongoReplicaSetClient(
-            connection_string(), replicaSet=self.name, _connect=False,
+            connection_string(), replicaSet=self.name, connect=False,
             read_preference=ReadPreference.SECONDARY)
 
         # No error.
@@ -1223,7 +1223,7 @@ class TestReplicaSetClientMaxWriteBatchSize(unittest.TestCase):
             mongoses=[],
             host='a:1',
             replicaSet='rs',
-            _connect=False)
+            connect=False)
 
         c.set_max_write_batch_size('a:1', 1)
         c.set_max_write_batch_size('b:2', 2)

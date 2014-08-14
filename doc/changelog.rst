@@ -43,7 +43,7 @@ returns immediately and launches the connection process on
 background threads.
 
 The ``serverWaitTimeMS`` option is added and ``auto_start_request`` is removed.
-The ``_connect`` option is deprecated in favor of ``connect``.
+The ``connect`` option is introduced.
 
 In PyMongo 2.x, :class:`~pymongo.MongoClient` accepted a list of standalone
 MongoDB servers and used the first it could connect to::

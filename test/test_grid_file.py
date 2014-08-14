@@ -42,7 +42,7 @@ class TestGridFileNoConnect(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        client = MongoClient(host, port, _connect=False)
+        client = MongoClient(host, port, connect=False)
         cls.db = client.pymongo_test
 
     def test_grid_file(self):
@@ -588,19 +588,19 @@ Bye"""))
 
     def test_grid_out_lazy_connect(self):
         fs = self.db.fs
-        outfile = GridOut(fs, file_id=-1, _connect=False)
+        outfile = GridOut(fs, file_id=-1, connect=False)
         self.assertRaises(NoFile, outfile.read)
         self.assertRaises(NoFile, getattr, outfile, 'filename')
 
         infile = GridIn(fs, filename=1)
         infile.close()
 
-        outfile = GridOut(fs, infile._id, _connect=False)
+        outfile = GridOut(fs, infile._id, connect=False)
         outfile.read()
         outfile.filename
 
     def test_grid_in_lazy_connect(self):
-        client = MongoClient('badhost', _connect=False, serverWaitTimeMS=100)
+        client = MongoClient('badhost', connect=False, serverWaitTimeMS=100)
         fs = client.db.fs
         infile = GridIn(fs, file_id=-1, chunk_size=1)
         self.assertRaises(ConnectionFailure, infile.write, b'data goes here')

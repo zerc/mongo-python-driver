@@ -33,7 +33,7 @@ from test.version import Version
 
 def get_client(*args, **kwargs):
     client = MongoClient(*args, **kwargs)
-    if client_context.auth_enabled and kwargs.get("_connect", True):
+    if client_context.auth_enabled and kwargs.get("connect", True):
         client.admin.authenticate(db_user, db_pwd)
     return client
 
@@ -470,7 +470,7 @@ def lazy_client_trial(reset, target, test, get_client):
     try:
         for i in range(NTRIALS):
             reset(collection)
-            lazy_client = get_client(_connect=False)
+            lazy_client = get_client(connect=False)
             lazy_collection = lazy_client.pymongo_test.test
             run_threads(lazy_collection, target)
             test(lazy_collection)
@@ -488,7 +488,7 @@ class _TestLazyConnectMixin(object):
 
     Inherit from this class and from unittest.TestCase, and override
     _get_client(self, **kwargs), for testing a lazily-connecting
-    client, i.e. a client initialized with _connect=False.
+    client, i.e. a client initialized with connect=False.
     """
     NTRIALS = 5
     NTHREADS = 10
@@ -563,7 +563,7 @@ class _TestLazyConnectMixin(object):
     def test_max_bson_size(self):
         # Client should have sane defaults before connecting, and should update
         # its configuration once connected.
-        c = self._get_client(_connect=False)
+        c = self._get_client(connect=False)
         self.assertEqual(16 * (1024 ** 2), c.max_bson_size)
         self.assertEqual(2 * c.max_bson_size, c.max_message_size)
 

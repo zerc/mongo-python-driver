@@ -67,7 +67,7 @@ class ClientUnitTest(unittest.TestCase, TestRequestMixin):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = MongoClient(host, port, _connect=False)
+        cls.client = MongoClient(host, port, connect=False)
 
     def test_types(self):
         self.assertRaises(TypeError, MongoClient, 1)
@@ -100,18 +100,18 @@ class ClientUnitTest(unittest.TestCase, TestRequestMixin):
         self.assertRaises(TypeError, iterate)
 
     def test_get_default_database(self):
-        c = MongoClient("mongodb://%s:%d/foo" % (host, port), _connect=False)
+        c = MongoClient("mongodb://%s:%d/foo" % (host, port), connect=False)
         self.assertEqual(Database(c, 'foo'), c.get_default_database())
 
     def test_get_default_database_error(self):
         # URI with no database.
-        c = MongoClient("mongodb://%s:%d/" % (host, port), _connect=False)
+        c = MongoClient("mongodb://%s:%d/" % (host, port), connect=False)
         self.assertRaises(ConfigurationError, c.get_default_database)
 
     def test_get_default_database_with_authsource(self):
         # Ensure we distinguish database name from authSource.
         uri = "mongodb://%s:%d/foo?authSource=src" % (host, port)
-        c = MongoClient(uri, _connect=False)
+        c = MongoClient(uri, connect=False)
         self.assertEqual(Database(c, 'foo'), c.get_default_database())
 
 
@@ -146,7 +146,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
             self.fail(self._formatMessage(msg, standardMsg))
 
     def test_init_disconnected(self):
-        c = MongoClient(host, port, _connect=False)
+        c = MongoClient(host, port, connect=False)
 
         self.assertIsInstance(c.is_primary, bool)
         self.assertIsInstance(c.is_mongos, bool)
@@ -351,12 +351,12 @@ class TestClient(IntegrationTest, TestRequestMixin):
             # Auth with lazy connection.
             MongoClient(
                 "mongodb://user:pass@%s:%d/pymongo_test" % (host, port),
-                _connect=False).pymongo_test.test.find_one()
+                connect=False).pymongo_test.test.find_one()
 
             # Wrong password.
             bad_client = MongoClient(
                 "mongodb://user:wrong@%s:%d/pymongo_test" % (host, port),
-                _connect=False)
+                connect=False)
 
             self.assertRaises(OperationFailure,
                               bad_client.pymongo_test.test.find_one)
@@ -370,7 +370,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
     def test_lazy_auth_raises_operation_failure(self):
         lazy_client = MongoClient(
             "mongodb://user:wrong@%s:%d/pymongo_test" % (host, port),
-            _connect=False)
+            connect=False)
 
         assertRaisesExactly(
             OperationFailure, lazy_client.test.collection.find_one)
@@ -808,7 +808,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
     def test_alive(self):
         self.assertTrue(self.client.alive())
 
-        client = MongoClient('doesnt exist', _connect=False)
+        client = MongoClient('doesnt exist', connect=False)
         self.assertFalse(client.alive())
 
     def test_wire_version(self):
@@ -818,7 +818,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
             mongoses=[],
             host='b:2',  # Pass a secondary.
             replicaSet='rs',
-            _connect=False)
+            connect=False)
 
         c.set_wire_version_range('a:1', 1, 5)
         c.db.command('ismaster')  # Connect.
@@ -836,7 +836,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
             mongoses=[],
             host='b:2',  # Pass a secondary.
             replicaSet='rs',
-            _connect=False)
+            connect=False)
 
         c.set_max_write_batch_size('a:1', 1)
         c.set_max_write_batch_size('b:2', 2)
@@ -863,7 +863,7 @@ class TestClient(IntegrationTest, TestRequestMixin):
             members=[],
             mongoses=['a:1', 'b:2', 'c:3'],
             host='a:1,b:2,c:3',
-            _connect=False)
+            connect=False)
 
         c.set_wire_version_range('a:1', 2, 5)
         c.set_wire_version_range('b:2', 2, 2)
@@ -912,13 +912,13 @@ class TestClient(IntegrationTest, TestRequestMixin):
             connected(client)
 
     def test_lazy_connect_w0(self):
-        client = get_client(connection_string(), _connect=False)
+        client = get_client(connection_string(), connect=False)
         client.pymongo_test.test.insert({}, w=0)
 
-        client = get_client(connection_string(), _connect=False)
+        client = get_client(connection_string(), connect=False)
         client.pymongo_test.test.update({}, {'$set': {'x': 1}}, w=0)
 
-        client = get_client(connection_string(), _connect=False)
+        client = get_client(connection_string(), connect=False)
         client.pymongo_test.test.remove(w=0)
 
     @client_context.require_no_mongos
