@@ -625,7 +625,6 @@ class TestClient(IntegrationTest, TestRequestMixin):
 
         with self.client as client:
             self.assertEqual("bar", client.pymongo_test.test.find_one()["foo"])
-            self.assertEqual(1, len(get_pool(client).sockets))
         self.assertEqual(0, len(get_pool(client).sockets))
 
     def test_with_start_request(self):
