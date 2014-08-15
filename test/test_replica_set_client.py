@@ -47,7 +47,8 @@ from test import (client_context,
                   SkipTest,
                   unittest,
                   db_pwd,
-                  db_user)
+                  db_user,
+                  MockClientTest)
 from test.pymongo_mocks import MockClient
 from test.utils import (
     delay, assertReadFrom, assertReadFromAll, read_from_which_host,
@@ -1116,7 +1117,7 @@ class TestReplicaSetClient(TestReplicaSetClientBase, TestRequestMixin):
         c.test.collection.find_one()
 
 
-class TestReplicaSetWireVersion(unittest.TestCase):
+class TestReplicaSetWireVersion(MockClientTest):
 
     @client_context.require_connection
     def test_wire_version(self):
@@ -1195,7 +1196,7 @@ class TestReplicaSetClientLazyConnectBadSeeds(
         return client
 
 
-class TestReplicaSetClientInternalIPs(unittest.TestCase):
+class TestReplicaSetClientInternalIPs(MockClientTest):
 
     @client_context.require_connection
     def test_connect_with_internal_ips(self):
@@ -1213,7 +1214,7 @@ class TestReplicaSetClientInternalIPs(unittest.TestCase):
                 replicaSet='rs'))
 
 
-class TestReplicaSetClientMaxWriteBatchSize(unittest.TestCase):
+class TestReplicaSetClientMaxWriteBatchSize(MockClientTest):
 
     @client_context.require_connection
     def test_max_write_batch_size(self):

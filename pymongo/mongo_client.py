@@ -88,8 +88,6 @@ class MongoClient(common.BaseObject):
             document_class=dict,
             tz_aware=False,
             connect=True,
-            serverWaitTimeMS=5000,  # TODO: await the server selection spec.
-            heartbeatFrequencyMS=None,
             **kwargs):
         """Client for a MongoDB instance, a replica set, or a set of mongoses.
 
@@ -130,11 +128,6 @@ class MongoClient(common.BaseObject):
           - `connect` (optional): if ``True`` (the default), immediately
             begin connecting to MongoDB in the background. Otherwise connect
             on the first operation.
-          - `serverWaitTimeMS` (optional): how long to wait for a suitable
-            server to be found before aborting an operation. For example, if
-            the client attempts an insert during a replica set election,
-            ``serverWaitTimeMS`` governs the longest it is willing to wait
-            for a new primary to be found.
 
           | **Other optional parameters can be passed as keyword arguments:**
 
@@ -233,8 +226,8 @@ class MongoClient(common.BaseObject):
            returns immediately and launches the connection process on
            background threads.
 
-           The ``connect`` and ``serverWaitTimeMS`` options are added and
-           ``auto_start_request`` is removed.
+           The ``connect`` option is added and ``auto_start_request`` is
+           removed.
         """
         if host is None:
             host = self.HOST
@@ -292,23 +285,15 @@ class MongoClient(common.BaseObject):
                                           options.uuid_subtype,
                                           options.write_concern.document)
 
-        server_wait_time = common.validate_timeout_or_none(
-            'serverWaitTimeMS', serverWaitTimeMS)
-
-        heartbeat_frequency = common.validate_timeout_or_none(
-            'heartbeatFrequencyMS', heartbeatFrequencyMS)
-
         self.__request_counter = thread_util.Counter()
 
         cluster_settings = ClusterSettings(
             seeds=seeds,
             set_name=options.replica_set_name,
-            server_wait_time=server_wait_time,
             pool_class=pool_class,
             pool_options=options.pool_options,
             monitor_class=monitor_class,
-            condition_class=condition_class,
-            heartbeat_frequency=heartbeat_frequency)
+            condition_class=condition_class)
 
         self._cluster = Cluster(cluster_settings)
         if connect:

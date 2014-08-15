@@ -35,7 +35,13 @@ from gridfs.errors import (NoFile,
                            UnsupportedAPI)
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from test import client_context, qcheck, unittest, host, port, IntegrationTest
+from test import (client_context,
+                  client_knobs,
+                  IntegrationTest,
+                  host,
+                  port,
+                  unittest,
+                  qcheck)
 
 
 class TestGridFileNoConnect(unittest.TestCase):
@@ -600,11 +606,12 @@ Bye"""))
         outfile.filename
 
     def test_grid_in_lazy_connect(self):
-        client = MongoClient('badhost', connect=False, serverWaitTimeMS=100)
-        fs = client.db.fs
-        infile = GridIn(fs, file_id=-1, chunk_size=1)
-        self.assertRaises(ConnectionFailure, infile.write, b'data goes here')
-        self.assertRaises(ConnectionFailure, infile.close)
+        with client_knobs(server_wait_time=0.01):
+            client = MongoClient('badhost', connect=False)
+            fs = client.db.fs
+            infile = GridIn(fs, file_id=-1, chunk_size=1)
+            self.assertRaises(ConnectionFailure, infile.write, b'data')
+            self.assertRaises(ConnectionFailure, infile.close)
 
 
 if __name__ == "__main__":

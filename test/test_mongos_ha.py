@@ -20,7 +20,7 @@ import threading
 sys.path[0:0] = [""]
 
 from pymongo.errors import AutoReconnect
-from test import unittest, client_context, SkipTest
+from test import unittest, client_context, SkipTest, MockClientTest
 from test.pymongo_mocks import MockClient
 from test.utils import connected, wait_until
 
@@ -54,7 +54,8 @@ def do_simple_op(client, nthreads):
         assert t.passed
 
 
-class TestMongosHA(unittest.TestCase):
+class TestMongosHA(MockClientTest):
+
     def mock_client(self):
         return MockClient(
             standalones=[],

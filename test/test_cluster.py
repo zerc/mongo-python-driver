@@ -35,7 +35,7 @@ from pymongo.server_description import ServerDescription
 from pymongo.server_selectors import (any_server_selector,
                                       writable_server_selector)
 from pymongo.settings import ClusterSettings
-from test import unittest
+from test import unittest, client_knobs
 
 
 class MockSocketInfo(object):
@@ -94,8 +94,7 @@ def create_mock_cluster(seeds=None, set_name=None, monitor_class=MockMonitor):
         partitioned_seeds,
         set_name=set_name,
         pool_class=MockPool,
-        monitor_class=monitor_class,
-        heartbeat_frequency=99999999)
+        monitor_class=monitor_class)
 
     c = Cluster(cluster_settings)
     c.open()
@@ -121,7 +120,20 @@ def get_type(cluster, hostname):
     return description.server_type
 
 
-class TestSingleServerCluster(unittest.TestCase):
+class ClusterTest(unittest.TestCase):
+    """Disables periodic monitoring, to make tests deterministic."""
+
+    def setUp(self):
+        super(ClusterTest, self).setUp()
+        self.client_knobs = client_knobs(heartbeat_frequency=9999999)
+        self.client_knobs.enable()
+
+    def tearDown(self):
+        self.client_knobs.disable()
+        super(ClusterTest, self).tearDown()
+
+
+class TestSingleServerCluster(ClusterTest):
     def test_direct_connection(self):
         for server_type, ismaster_response in [
             (SERVER_TYPE.RSPrimary, {
@@ -205,7 +217,7 @@ class TestSingleServerCluster(unittest.TestCase):
         self.assertEqual(2, s.description.round_trip_time)
 
 
-class TestMultiServerCluster(unittest.TestCase):
+class TestMultiServerCluster(ClusterTest):
     def test_unexpected_host(self):
         # Received ismaster response from host not in cluster.
         # E.g., a race where the host is removed before it responds.
@@ -658,7 +670,7 @@ class TestMultiServerCluster(unittest.TestCase):
         self.assertEqual(2, write_batch_size())
 
 
-class TestClusterErrors(unittest.TestCase):
+class TestClusterErrors(ClusterTest):
     # Errors when calling ismaster.
 
     def test_pool_reset(self):

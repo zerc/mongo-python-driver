@@ -38,7 +38,9 @@ from pymongo.errors import (AutoReconnect,
                             InvalidName,
                             OperationFailure,
                             CursorNotFound)
+from pymongo.server_selectors import writable_server_selector
 from test import (client_context,
+                  client_knobs,
                   connection_string,
                   host,
                   pair,
@@ -47,7 +49,8 @@ from test import (client_context,
                   unittest,
                   IntegrationTest,
                   db_pwd,
-                  db_user)
+                  db_user,
+                  MockClientTest)
 from test.pymongo_mocks import MockClient
 from test.utils import (assertRaisesExactly,
                         delay,
@@ -127,8 +130,9 @@ class TestClient(IntegrationTest, TestRequestMixin):
         # Set bad defaults.
         MongoClient.HOST = "somedomainthatdoesntexist.org"
         MongoClient.PORT = 123456789
-        with self.assertRaises(AutoReconnect):
-            connected(MongoClient(serverWaitTimeMS=100))
+        with client_knobs(server_wait_time=0.01):
+            with self.assertRaises(AutoReconnect):
+                connected(MongoClient())
 
         # Override the defaults. No error.
         connected(MongoClient(host, port))
@@ -173,12 +177,14 @@ class TestClient(IntegrationTest, TestRequestMixin):
         self.assertTrue(c.min_wire_version >= 0)
 
         bad_host = "somedomainthatdoesntexist.org"
-        c = MongoClient(bad_host, port, serverWaitTimeMS=1)
+        with client_knobs(server_wait_time=0.01):
+            c = MongoClient(bad_host, port)
         self.assertRaises(ConnectionFailure, c.pymongo_test.test.find_one)
 
     def test_init_disconnected_with_auth(self):
         uri = "mongodb://user:pass@somedomainthatdoesntexist"
-        c = MongoClient(uri, serverWaitTimeMS=1)
+        with client_knobs(server_wait_time=0.01):
+            c = MongoClient(uri)
         self.assertRaises(ConnectionFailure, c.pymongo_test.test.find_one)
 
     def test_equality(self):
@@ -191,8 +197,9 @@ class TestClient(IntegrationTest, TestRequestMixin):
         self.assertFalse(self.client != c)
 
     def test_host_w_port(self):
-        with self.assertRaises(AutoReconnect):
-            connected(MongoClient("%s:1234567", serverWaitTimeMS=1))
+        with client_knobs(server_wait_time=0.01):
+            with self.assertRaises(AutoReconnect):
+                connected(MongoClient("%s:1234567"))
 
     def test_repr(self):
         # Making host a str avoids the 'u' prefix in Python 2, so the repr is
@@ -555,12 +562,13 @@ class TestClient(IntegrationTest, TestRequestMixin):
                 naive.pymongo_test.test.find_one()["x"])
 
     def test_ipv6(self):
-        try:
-            connected(MongoClient("[::1]", serverWaitTimeMS=100))
-        except:
-            # Either mongod was started without --ipv6
-            # or the OS doesn't support it (or both).
-            raise SkipTest("No IPv6")
+        with client_knobs(server_wait_time=0.01):
+            try:
+                connected(MongoClient("[::1]"))
+            except:
+                # Either mongod was started without --ipv6
+                # or the OS doesn't support it (or both).
+                raise SkipTest("No IPv6")
 
         if client_context.auth_enabled:
             auth_str = "%s:%s@" % (db_user, db_pwd)
@@ -816,81 +824,6 @@ class TestClient(IntegrationTest, TestRequestMixin):
         client = MongoClient('doesnt exist', connect=False)
         self.assertFalse(client.alive())
 
-    def test_wire_version(self):
-        c = MockClient(
-            standalones=[],
-            members=['a:1', 'b:2', 'c:3'],
-            mongoses=[],
-            host='b:2',  # Pass a secondary.
-            replicaSet='rs',
-            connect=False)
-
-        c.set_wire_version_range('a:1', 1, 5)
-        c.db.command('ismaster')  # Connect.
-        self.assertEqual(c.min_wire_version, 1)
-        self.assertEqual(c.max_wire_version, 5)
-
-        c.set_wire_version_range('a:1', 10, 11)
-        c.disconnect()
-        self.assertRaises(ConfigurationError, c.db.collection.find_one)
-
-    def test_max_wire_version(self):
-        c = MockClient(
-            standalones=[],
-            members=['a:1', 'b:2', 'c:3'],
-            mongoses=[],
-            host='b:2',  # Pass a secondary.
-            replicaSet='rs',
-            connect=False)
-
-        c.set_max_write_batch_size('a:1', 1)
-        c.set_max_write_batch_size('b:2', 2)
-
-        # Starts with default max batch size.
-        self.assertEqual(1000, c.max_write_batch_size)
-        c.db.command('ismaster')  # Connect.
-        # Uses primary's max batch size.
-        self.assertEqual(c.max_write_batch_size, 1)
-
-        # b becomes primary.
-        c.mock_primary = 'b:2'
-        c.disconnect()
-        self.assertEqual(1000, c.max_write_batch_size)
-        c.db.command('ismaster')  # Connect.
-        self.assertEqual(c.max_write_batch_size, 2)
-
-    def test_wire_version_mongos_ha(self):
-        # TODO: Reimplement Mongos HA with PyMongo 3's MongoClient.
-        raise SkipTest('Mongos HA must be reimplemented in PyMongo 3')
-
-        c = MockClient(
-            standalones=[],
-            members=[],
-            mongoses=['a:1', 'b:2', 'c:3'],
-            host='a:1,b:2,c:3',
-            connect=False)
-
-        c.set_wire_version_range('a:1', 2, 5)
-        c.set_wire_version_range('b:2', 2, 2)
-        c.set_wire_version_range('c:3', 1, 1)
-        c.db.command('ismaster')  # Connect.
-
-        # Which member did we use?
-        used_host = '%s:%s' % (c.host, c.port)
-        expected_min, expected_max = c.mock_wire_versions[used_host]
-        self.assertEqual(expected_min, c.min_wire_version)
-        self.assertEqual(expected_max, c.max_wire_version)
-
-        c.set_wire_version_range('a:1', 0, 0)
-        c.set_wire_version_range('b:2', 0, 0)
-        c.set_wire_version_range('c:3', 0, 0)
-        c.disconnect()
-        c.db.command('ismaster')
-        used_host = '%s:%s' % (c.host, c.port)
-        expected_min, expected_max = c.mock_wire_versions[used_host]
-        self.assertEqual(expected_min, c.min_wire_version)
-        self.assertEqual(expected_max, c.max_wire_version)
-        
     def test_kill_cursors(self):
         self.collection = self.client.pymongo_test.test
         self.collection.remove()
@@ -910,11 +843,11 @@ class TestClient(IntegrationTest, TestRequestMixin):
         name = client_context.setname
         connected(MongoClient(host, port, replicaSet=name))  # No error.
 
-        client = MongoClient(
-            host, port, replicaSet='bad' + name, serverWaitTimeMS=100)
+        with client_knobs(server_wait_time=0.01):
+            client = MongoClient(host, port, replicaSet='bad' + name)
 
-        with self.assertRaises(AutoReconnect):
-            connected(client)
+            with self.assertRaises(AutoReconnect):
+                connected(client)
 
     def test_lazy_connect_w0(self):
         client = get_client(connection_string(), connect=False)
@@ -978,6 +911,90 @@ class TestClient(IntegrationTest, TestRequestMixin):
         c.test.collection.find_one()
 
 
+class TestClientProperties(MockClientTest):
+
+    @client_context.require_connection
+    def test_wire_version(self):
+        c = MockClient(
+            standalones=[],
+            members=['a:1', 'b:2', 'c:3'],
+            mongoses=[],
+            host='b:2',  # Pass a secondary.
+            replicaSet='rs',
+            connect=False)
+
+        c.set_wire_version_range('a:1', 1, 5)
+        c.get_cluster().select_servers(writable_server_selector)  # Connect.
+        self.assertEqual(c.min_wire_version, 1)
+        self.assertEqual(c.max_wire_version, 5)
+
+        c.set_wire_version_range('a:1', 10, 11)
+        c.disconnect()
+        c.get_cluster()
+        self.assertRaises(ConfigurationError, c.db.collection.find_one)
+
+    def test_max_wire_version(self):
+        c = MockClient(
+            standalones=[],
+            members=['a:1', 'b:2', 'c:3'],
+            mongoses=[],
+            host='b:2',  # Pass a secondary.
+            replicaSet='rs',
+            connect=False)
+
+        c.set_max_write_batch_size('a:1', 1)
+        c.set_max_write_batch_size('b:2', 2)
+
+        # Starts with default max batch size.
+        self.assertEqual(1000, c.max_write_batch_size)
+        c.get_cluster()
+        wait_until(lambda: len(c.nodes) == 3, 'connect')
+
+        # Uses primary's max batch size.
+        self.assertEqual(c.max_write_batch_size, 1)
+
+        # b becomes primary.
+        c.mock_primary = 'b:2'
+        c.disconnect()
+        self.assertEqual(1000, c.max_write_batch_size)
+
+        c.get_cluster()
+        wait_until(lambda: len(c.nodes) == 3, 'connect')
+        self.assertEqual(c.max_write_batch_size, 2)
+
+    def test_wire_version_mongos_ha(self):
+        # TODO: Reimplement Mongos HA with PyMongo 3's MongoClient.
+        raise SkipTest('Mongos HA must be reimplemented in PyMongo 3')
+
+        c = MockClient(
+            standalones=[],
+            members=[],
+            mongoses=['a:1', 'b:2', 'c:3'],
+            host='a:1,b:2,c:3',
+            connect=False)
+
+        c.set_wire_version_range('a:1', 2, 5)
+        c.set_wire_version_range('b:2', 2, 2)
+        c.set_wire_version_range('c:3', 1, 1)
+        c.db.command('ismaster')  # Connect.
+
+        # Which member did we use?
+        used_host = '%s:%s' % (c.host, c.port)
+        expected_min, expected_max = c.mock_wire_versions[used_host]
+        self.assertEqual(expected_min, c.min_wire_version)
+        self.assertEqual(expected_max, c.max_wire_version)
+
+        c.set_wire_version_range('a:1', 0, 0)
+        c.set_wire_version_range('b:2', 0, 0)
+        c.set_wire_version_range('c:3', 0, 0)
+        c.disconnect()
+        c.db.command('ismaster')
+        used_host = '%s:%s' % (c.host, c.port)
+        expected_min, expected_max = c.mock_wire_versions[used_host]
+        self.assertEqual(expected_min, c.min_wire_version)
+        self.assertEqual(expected_max, c.max_wire_version)
+
+
 class TestClientLazyConnect(IntegrationTest, _TestLazyConnectMixin):
 
     def _get_client(self, **kwargs):
@@ -991,7 +1008,7 @@ class TestClientLazyConnectBadSeeds(IntegrationTest):
 
         # Assume there are no open mongods listening on a.com, b.com, ....
         bad_seeds = ['%s.com' % chr(ord('a') + i) for i in range(10)]
-        return get_client(bad_seeds, serverWaitTimeMS=100, **kwargs)
+        return get_client(bad_seeds, **kwargs)
 
     def test_connect(self):
         def reset(dummy):
@@ -1004,39 +1021,40 @@ class TestClientLazyConnectBadSeeds(IntegrationTest):
             client = collection.database.connection
             self.assertEqual(0, len(client.nodes))
 
-        lazy_client_trial(reset, connect, test, self._get_client)
+        with client_knobs(server_wait_time=0.01):
+            lazy_client_trial(reset, connect, test, self._get_client)
 
 
-class TestMongoClientFailover(IntegrationTest):
+class TestMongoClientFailover(MockClientTest):
 
     def test_discover_primary(self):
-        c = MockClient(
-            standalones=[],
-            members=['a:1', 'b:2', 'c:3'],
-            mongoses=[],
-            host='b:2',  # Pass a secondary.
-            replicaSet='rs',
-            heartbeatFrequencyMS=9999999)  # Disable periodic monitoring.
+        # Disable background refresh.
+        with client_knobs(heartbeat_frequency=9999999):
+            c = MockClient(
+                standalones=[],
+                members=['a:1', 'b:2', 'c:3'],
+                mongoses=[],
+                host='b:2',  # Pass a secondary.
+                replicaSet='rs')
 
-        wait_until(lambda: len(c.nodes) == 3, 'connect')
-        self.assertEqual('a', c.host)
-        self.assertEqual(1, c.port)
+            wait_until(lambda: len(c.nodes) == 3, 'connect')
+            self.assertEqual('a', c.host)
+            self.assertEqual(1, c.port)
 
-        # Fail over.
-        c.kill_host('a:1')
-        c.mock_primary = 'b:2'
+            # Fail over.
+            c.kill_host('a:1')
+            c.mock_primary = 'b:2'
 
-        c.disconnect()
-        self.assertEqual(0, len(c.nodes))
+            c.disconnect()
+            self.assertEqual(0, len(c.nodes))
 
-        # Force reconnect.
-        c.db.command('ismaster')
-        self.assertEqual('b', c.host)
-        self.assertEqual(2, c.port)
+            c.get_cluster().select_servers(writable_server_selector)
+            self.assertEqual('b', c.host)
+            self.assertEqual(2, c.port)
 
-        # a:1 not longer in nodes.
-        self.assertLess(len(c.nodes), 3)
-        wait_until(lambda: len(c.nodes) == 2, 'discover node "c"')
+            # a:1 not longer in nodes.
+            self.assertLess(len(c.nodes), 3)
+            wait_until(lambda: len(c.nodes) == 2, 'discover node "c"')
 
     def test_reconnect(self):
         # Verify the node list isn't forgotten during a network failure.
@@ -1047,8 +1065,7 @@ class TestMongoClientFailover(IntegrationTest):
             host='b:2',  # Pass a secondary.
             replicaSet='rs')
 
-        # Connect to "b" and discover the other members.
-        connected(c)
+        wait_until(lambda: len(c.nodes) == 3, 'connect')
 
         # Total failure.
         c.kill_host('a:1')
@@ -1060,7 +1077,7 @@ class TestMongoClientFailover(IntegrationTest):
 
         # But it can reconnect.
         c.revive_host('a:1')
-        c.db.command('ismaster')
+        c.get_cluster().select_servers(writable_server_selector)
         self.assertEqual('a', c.host)
         self.assertEqual(1, c.port)
 

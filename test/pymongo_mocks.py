@@ -120,10 +120,6 @@ class MockClient(MongoClient):
         kwargs['_pool_class'] = partial(MockPool, self)
         kwargs['_monitor_class'] = partial(MockMonitor, self)
 
-        # Speed up tests.
-        kwargs.setdefault('heartbeatFrequencyMS', 1)
-        kwargs.setdefault('serverWaitTimeMS', 100)
-
         super(MockClient, self).__init__(*args, **kwargs)
 
     def kill_host(self, host):

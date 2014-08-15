@@ -33,6 +33,7 @@ from bson.py3compat import u, StringIO, string_type
 from gridfs.errors import (FileExists,
                            NoFile)
 from test import (client_context,
+                  client_knobs,
                   connection_string,
                   unittest,
                   host,
@@ -375,14 +376,15 @@ class TestGridfs(IntegrationTest):
         self.assertFalse(self.db.connection.in_request())
 
     def test_gridfs_lazy_connect(self):
-        client = MongoClient('badhost', serverWaitTimeMS=100, connect=False)
-        db = client.db
-        gfs = gridfs.GridFS(db)
-        self.assertRaises(ConnectionFailure, gfs.list)
+        with client_knobs(server_wait_time=0.01):
+            client = MongoClient('badhost', connect=False)
+            db = client.db
+            gfs = gridfs.GridFS(db)
+            self.assertRaises(ConnectionFailure, gfs.list)
 
-        fs = gridfs.GridFS(db, connect=False)
-        f = fs.new_file()  # Still no connection.
-        self.assertRaises(ConnectionFailure, f.close)
+            fs = gridfs.GridFS(db, connect=False)
+            f = fs.new_file()  # Still no connection.
+            self.assertRaises(ConnectionFailure, f.close)
 
     def test_gridfs_find(self):
         self.fs.put(b"test2", filename="two")

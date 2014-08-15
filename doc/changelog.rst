@@ -42,8 +42,7 @@ if the user's credentials are wrong. Instead, the constructor
 returns immediately and launches the connection process on
 background threads.
 
-The ``serverWaitTimeMS`` option is added and ``auto_start_request`` is removed.
-The ``connect`` option is introduced.
+The ``connect`` option is added and ``auto_start_request`` is removed.
 
 In PyMongo 2.x, :class:`~pymongo.MongoClient` accepted a list of standalone
 MongoDB servers and used the first it could connect to::

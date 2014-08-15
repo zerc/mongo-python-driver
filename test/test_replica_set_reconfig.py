@@ -20,7 +20,7 @@ sys.path[0:0] = [""]
 
 from pymongo.errors import ConnectionFailure, AutoReconnect
 from pymongo import ReadPreference
-from test import unittest, client_context
+from test import unittest, client_context, client_knobs, MockClientTest
 from test.pymongo_mocks import MockClient
 from test.utils import wait_until
 
@@ -30,7 +30,7 @@ def setUpModule():
     pass
 
 
-class TestSecondaryBecomesStandalone(unittest.TestCase):
+class TestSecondaryBecomesStandalone(MockClientTest):
     # An administrator removes a secondary from a 3-node set and
     # brings it back up as standalone, without updating the other
     # members' config. Verify we don't continue using it.
@@ -87,7 +87,7 @@ class TestSecondaryBecomesStandalone(unittest.TestCase):
         self.assertEqual(('a', 1), c.primary)
 
 
-class TestSecondaryRemoved(unittest.TestCase):
+class TestSecondaryRemoved(MockClientTest):
     # An administrator removes a secondary from a 3-node set *without*
     # restarting it as standalone.
     def test_replica_set_client(self):
@@ -109,29 +109,30 @@ class TestSecondaryRemoved(unittest.TestCase):
         self.assertEqual(('a', 1), c.primary)
 
 
-class TestSocketError(unittest.TestCase):
+class TestSocketError(MockClientTest):
     def test_socket_error_marks_member_down(self):
-        c = MockClient(
-            standalones=[],
-            members=['a:1', 'b:2'],
-            mongoses=[],
-            host='a:1',
-            replicaSet='rs',
-            # Disable background refresh.
-            heartbeatFrequencyMS=999999999)
+        # Disable background refresh.
+        with client_knobs(heartbeat_frequency=9999999):
+            c = MockClient(
+                standalones=[],
+                members=['a:1', 'b:2'],
+                mongoses=[],
+                host='a:1',
+                replicaSet='rs')
 
-        wait_until(lambda: len(c.nodes) == 2, 'discover both nodes')
+            wait_until(lambda: len(c.nodes) == 2, 'discover both nodes')
 
-        # b now raises socket.error.
-        c.mock_down_hosts.append('b:2')
-        self.assertRaises(
-            ConnectionFailure,
-            c.db.collection.find_one, read_preference=ReadPreference.SECONDARY)
+            # b now raises socket.error.
+            c.mock_down_hosts.append('b:2')
+            self.assertRaises(
+                ConnectionFailure,
+                c.db.collection.find_one,
+                read_preference=ReadPreference.SECONDARY)
 
-        self.assertEqual(1, len(c.nodes))
+            self.assertEqual(1, len(c.nodes))
 
 
-class TestSecondaryAdded(unittest.TestCase):
+class TestSecondaryAdded(MockClientTest):
     def test_client(self):
         c = MockClient(
             standalones=[],

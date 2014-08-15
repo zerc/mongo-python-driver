@@ -58,7 +58,7 @@ class Cluster(object):
           - `selector`: function that takes a list of Servers and returns
             a subset of them.
           - `server_wait_time` (optional): maximum seconds to wait. If not
-            provided, the initial ClusterSettings' value is used.
+            provided, the default value common.SERVER_WAIT_TIME is used.
 
         Raises exc:`AutoReconnect` after `server_wait_time` if no
         matching servers are found.
@@ -66,12 +66,11 @@ class Cluster(object):
         if server_wait_time is not None:
             wait_time = server_wait_time
         else:
-            wait_time = self._settings.server_wait_time
+            wait_time = common.SERVER_WAIT_TIME
 
         with self._lock:
             self._description.check_compatible()
 
-            # TODO: use settings.server_wait_time.
             # TODO: use monotonic time if available.
             now = time.time()
             end_time = now + wait_time
@@ -189,7 +188,8 @@ class Cluster(object):
     def reset(self):
         """Reset all pools and disconnect from all servers.
 
-        The cluster reconnects on demand, or after heartbeatFrequencyMS elapses.
+        The cluster reconnects on demand, or after common.HEARTBEAT_FREQUENCY
+        seconds.
         """
         with self._lock:
             for server in self._servers.values():

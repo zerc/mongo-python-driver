@@ -20,7 +20,7 @@ sys.path[0:0] = [""]
 
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
-from test import unittest
+from test import unittest, client_knobs
 from test.utils import connected
 
 
@@ -28,8 +28,8 @@ class TestErrors(unittest.TestCase):
 
     def test_base_exception(self):
         # connected(MongoClient(...)) with a bad port raises AutoReconnect.
-        self.assertRaises(PyMongoError,
-                          connected, MongoClient(port=0, serverWaitTimeMS=100))
+        with client_knobs(server_wait_time=0.01):
+            self.assertRaises(PyMongoError, connected, MongoClient(port=0))
 
 
 if __name__ == '__main__':
