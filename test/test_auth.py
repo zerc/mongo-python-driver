@@ -508,6 +508,7 @@ class TestDelegatedAuth(unittest.TestCase):
 class TestClientAuth(unittest.TestCase):
 
     def test_copy_db(self):
+        raise SkipTest()
         authed_client = auth_context.client
         if is_mongos(authed_client):
             raise SkipTest("SERVER-6427")
