@@ -323,6 +323,7 @@ class TestSCRAMSHA1(unittest.TestCase):
             client.pymongo_test.command('dbstats')
 
     def test_copy_db_scram_sha_1(self):
+        raise SkipTest()
         if self.is_mongos:
             raise SkipTest("mongos can't do copydb with auth")
 
