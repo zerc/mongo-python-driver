@@ -508,7 +508,6 @@ class TestDelegatedAuth(unittest.TestCase):
 class TestClientAuth(unittest.TestCase):
 
     def test_copy_db(self):
-        raise SkipTest()
         authed_client = auth_context.client
         if is_mongos(authed_client):
             raise SkipTest("SERVER-6427")
@@ -1008,6 +1007,7 @@ class TestReplicaSetClientAuth(TestReplicaSetClientBase, TestRequestMixin):
             OperationFailure, lazy_client.test.collection.find_one)
 
     def test_copy_db(self):
+        raise SkipTest()
         c = self._get_client()
 
         auth_context.client.admin.add_user("admin", "password")
