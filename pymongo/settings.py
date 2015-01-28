@@ -18,7 +18,6 @@ import threading
 
 from pymongo import monitor, pool
 from pymongo.topology_description import TOPOLOGY_TYPE
-from pymongo.monotonic import time as _time
 from pymongo.pool import PoolOptions
 from pymongo.server_description import ServerDescription
 
@@ -33,7 +32,6 @@ class TopologySettings(object):
         monitor_class=None,
         condition_class=None,
         local_threshold_ms=15,
-        timer=None,
     ):
         """Represent MongoClient's configuration.
 
@@ -46,7 +44,6 @@ class TopologySettings(object):
         self._monitor_class = monitor_class or monitor.Monitor
         self._condition_class = condition_class or threading.Condition
         self._local_threshold_ms = local_threshold_ms
-        self._timer = timer or _time
         self._direct = (len(self._seeds) == 1 and not replica_set_name)
 
     @property
@@ -77,11 +74,6 @@ class TopologySettings(object):
     @property
     def local_threshold_ms(self):
         return self._local_threshold_ms
-
-    @property
-    def timer(self):
-        """A function like time.time()."""
-        return self._timer
 
     @property
     def direct(self):

@@ -25,6 +25,7 @@ from pymongo.topology_description import (updated_topology_description,
                                           TOPOLOGY_TYPE,
                                           TopologyDescription)
 from pymongo.errors import AutoReconnect
+from pymongo.monotonic import time as _time
 from pymongo.server import Server
 from pymongo.server_selectors import (address_server_selector,
                                       apply_local_threshold,
@@ -80,7 +81,7 @@ class Topology(object):
         with self._lock:
             self._description.check_compatible()
 
-            now = self._settings.timer()
+            now = _time()
             end_time = now + wait_time
             server_descriptions = self._apply_selector(selector)
 
@@ -98,7 +99,7 @@ class Topology(object):
                 # held the lock until now.
                 self._condition.wait(common.MIN_HEARTBEAT_INTERVAL)
                 self._description.check_compatible()
-                now = self._settings.timer()
+                now = _time()
                 server_descriptions = self._apply_selector(selector)
 
             return [self.get_server_by_address(sd.address)
