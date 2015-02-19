@@ -160,3 +160,49 @@ class Monitor(object):
         raw_response = sock_info.receive_message(1, request_id)
         result = helpers._unpack_response(raw_response)
         return IsMaster(result['data'][0]), _time() - start
+
+
+# Run on the monitor's thread.
+def run_monitor(monitor):
+    requested_checks = 0
+
+    # TODO: get lock
+    monitor._run()  # Releases and reacquires lock.
+    last_check_time = monitor._timer()
+
+    # The soonest we may respond to request_check(), 10 ms from now.
+    soonest = last_check_time + common.MIN_HEARTBEAT_INTERVAL
+
+    while not monitor.stopped:
+        failing_since = monitor._selections_failing_since
+
+        # The latest we may next check the server, 10 seconds from now.
+        latest = last_check_time + common.HEARTBEAT_FREQUENCY
+
+        while monitor._timer() < soonest:
+            # Sleep 10 seconds, or be awakened by request_check().
+            monitor._wait(latest - monitor._timer())
+
+            if monitor._selections_failing_since is None:
+                # Slow polling, but respond quickly to request_check().
+                requested_checks = 0
+                soonest = last_check_time + common.MIN_HEARTBEAT_INTERVAL
+                latest = last_check_time + common.HEARTBEAT_FREQUENCY
+            else:
+                # Threads are failing to select servers, back off.
+                requested_checks += 1
+                if monitor._selections_failing_since != failing_since:
+                    # Someone called cancel_backoff but then selection began
+                    # failing anew.
+                    requested_checks = 0
+                    failing_since = monitor._selections_failing_since
+
+                current_min_interval = (
+                    common.MIN_HEARTBEAT_INTERVAL * (2 ** requested_checks))
+
+                soonest = latest = last_check_time + min(
+                    current_min_interval * 2 * monitor._random(),
+                    common.HEARTBEAT_FREQUENCY)
+
+        monitor._run()  # Releases and reacquires lock.
+        last_check_time = monitor._timer()
