@@ -15,13 +15,23 @@
 """Tools for mocking parts of PyMongo to test other parts."""
 
 import contextlib
+import fcntl
+import random
+import struct
+import errno
+import os
 import socket
 from functools import partial
+import threading
 import weakref
+import select
+import time
+import bson
 
 from pymongo import common
 from pymongo import MongoClient
 from pymongo.ismaster import IsMaster
+from pymongo.message import MAX_INT32, MIN_INT32
 from pymongo.monitor import Monitor
 from pymongo.pool import Pool, PoolOptions
 from pymongo.server_description import ServerDescription
@@ -192,3 +202,150 @@ class MockClient(MongoClient):
         # Avoid the background thread causing races, e.g. a surprising
         # reconnect while we're trying to test a disconnected client.
         pass
+
+
+OP_REPLY = 1
+OP_QUERY = 2004
+
+
+class MockServer(object):
+    def __init__(self, handler):
+        self._handler = handler
+        self._address = None
+        self._sock = None
+        self._accept_thread = None
+        self._server_threads = weakref.WeakSet()
+        self._stopped = False
+        self._stopped_ev = threading.Event()
+
+    def run(self):
+        self._sock, port = bind_socket()
+        self._address = ('localhost', port)
+        self._accept_thread = threading.Thread(target=self.accept_loop)
+        self._accept_thread.daemon = True
+        self._accept_thread.start()
+
+    def stop(self):
+        self._stopped = True
+        self._stopped_ev.wait(timeout=10)
+
+    @property
+    def address(self):
+        return self._address
+
+    @property
+    def host(self):
+        return self._address[0]
+
+    @property
+    def port(self):
+        return self._address[1]
+
+    def accept_loop(self):
+        """Accept client connections and spawn a thread for each."""
+        self._sock.setblocking(0)
+        while not self._stopped:
+            # Wait a short time to accept.
+            if select.select([self._sock.fileno()], [], [], 0.1):
+                try:
+                    client, client_addr = self._sock.accept()
+                except socket.error as error:
+                    if error.errno != errno.EAGAIN:
+                        print('server-side error: %s' % error)
+                else:
+                    server_thread = threading.Thread(
+                        target=partial(self.server_loop, client))
+                    server_thread.daemon = True
+                    server_thread.start()
+                    self._server_threads.add(server_thread)
+
+        self._stopped_ev.set()
+
+    def server_loop(self, client):
+        """Reply to requests. 'client' is a client socket."""
+        UNPACK_INT = struct.Struct("<i").unpack
+        while True:
+            try:
+                header = mock_server_receive(client, 16)
+                length = UNPACK_INT(header[:4])[0]
+                request_id = UNPACK_INT(header[4:8])[0]
+                operation = UNPACK_INT(header[12:])[0]
+
+                msg = mock_server_receive(client, length - 16)
+                if operation == OP_QUERY:
+                    flags, = UNPACK_INT(msg[:4])
+                    collection, collection_len = bson._get_c_string(msg, 4)
+                    offset = 4 + collection_len
+                    num_to_skip, = UNPACK_INT(msg[offset:offset + 4])
+                    offset += 4
+                    docs = bson.decode_all(msg[offset:])
+                    if len(docs) == 2:
+                        query, fields = docs
+                    else:
+                        query, fields = docs, {}
+
+                    reply_doc = self._handler(operation, query)
+                    reply_msg = reply_message(request_id, [reply_doc])
+                    client.sendall(reply_msg)
+                else:
+                    raise AssertionError('todo')
+            except socket.error as error:
+                if error.errno == errno.EAGAIN:
+                    time.sleep(0.01)
+                    continue
+                elif error.errno == errno.ECONNRESET:
+                    return
+                elif error.args[0] != 'closed':
+                    print('server thread error %s' % error)
+
+
+def bind_socket():
+    for res in set(socket.getaddrinfo('localhost', None, socket.AF_INET,
+                                      socket.SOCK_STREAM, 0,
+                                      socket.AI_PASSIVE)):
+
+        af, socktype, proto, _, sock_addr = res
+        sock = socket.socket(af, socktype, proto)
+        flags = fcntl.fcntl(sock.fileno(), fcntl.F_GETFD)
+        fcntl.fcntl(sock.fileno(), fcntl.F_SETFD, flags | fcntl.FD_CLOEXEC)
+
+        if os.name != 'nt':
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Automatic port allocation with port=None.
+        sock.bind(sock_addr)
+        bound_port = sock.getsockname()[1]
+        sock.listen(128)
+        return sock, bound_port
+
+    raise socket.error('could not bind socket')
+
+
+def mock_server_receive(sock, length):
+    msg = b''
+    while length:
+        chunk = sock.recv(length)
+        if chunk == b'':
+            raise socket.error('closed')
+
+        length -= len(chunk)
+        msg += chunk
+
+    return msg
+
+
+def reply_message(response_to, docs):
+    flags = struct.pack("<i", 0)
+    cursor_id = struct.pack("<q", 0)
+    starting_from = struct.pack("<i", 0)
+    number_returned = struct.pack("<i", 1)
+    reply_id = random.randint(MIN_INT32, MAX_INT32)
+
+    data = b''.join([flags, cursor_id, starting_from, number_returned])
+    data += b''.join([bson.BSON.encode(doc) for doc in docs])
+
+    message = struct.pack("<i", 16 + len(data))
+    message += struct.pack("<i", reply_id)
+    message += struct.pack("<i", response_to)
+    message += struct.pack("<i", OP_REPLY)
+    return message + data
