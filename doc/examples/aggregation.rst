@@ -33,15 +33,15 @@ Aggregation Framework
 ---------------------
 
 This example shows how to use the
-:meth:`~pymongo.collection.Collection.aggregate` method to use the aggregation
+`~.collection.Collection.aggregate` method to use the aggregation
 framework.  We'll perform a simple aggregation to count the number of
 occurrences for each tag in the ``tags`` array, across the entire collection.
 To achieve this we need to pass in three operations to the pipeline.
 First, we need to unwind the ``tags`` array, then group by the tags and
 sum them up, finally we sort by count.
 
-As python dictionaries don't maintain order you should use :class:`~bson.son.SON`
-or :class:`collections.OrderedDict` where explicit ordering is required
+As python dictionaries don't maintain order you should use `~.bson.son.SON`
+or `collections.OrderedDict` where explicit ordering is required
 eg "$sort":
 
 .. note::
@@ -60,7 +60,7 @@ eg "$sort":
   [{u'count': 3, u'_id': u'cat'}, {u'count': 2, u'_id': u'dog'}, {u'count': 1, u'_id': u'mouse'}]
 
 To run an explain plan for this aggregation use the
-:meth:`~pymongo.database.Database.command` method::
+`~.pymongo.database.Database.command` method::
 
   >>> db.command('aggregate', 'things', pipeline=pipeline, explain=True)
   {u'ok': 1.0, u'stages': [...]}
@@ -80,7 +80,7 @@ Another option for aggregation is to use the map reduce framework.  Here we
 will define **map** and **reduce** functions to also count the number of
 occurrences for each tag in the ``tags`` array, across the entire collection.
 
-Our **map** function just emits a single `(key, 1)` pair for each tag in
+Our **map** function just emits a single ``(key, 1)`` pair for each tag in
 the array:
 
 .. doctest::
@@ -111,7 +111,7 @@ The **reduce** function sums over all of the emitted values for a given key:
 .. note:: We can't just return ``values.length`` as the **reduce** function
    might be called iteratively on the results of other reduce steps.
 
-Finally, we call :meth:`~pymongo.collection.Collection.map_reduce` and
+Finally, we call `~.Collection.map_reduce` and
 iterate over the result collection:
 
 .. doctest::
@@ -129,8 +129,8 @@ Advanced Map/Reduce
 
 PyMongo's API supports all of the features of MongoDB's map/reduce engine.
 One interesting feature is the ability to get more detailed results when
-desired, by passing `full_response=True` to
-:meth:`~pymongo.collection.Collection.map_reduce`. This returns the full
+desired, by passing ``full_response=True`` to
+`~.Collection.map_reduce`. This returns the full
 response to the map/reduce command, rather than just the result collection:
 
 .. doctest::
@@ -139,7 +139,7 @@ response to the map/reduce command, rather than just the result collection:
   {u'counts': {u'input': 4, u'reduce': 2, u'emit': 6, u'output': 3}, u'timeMillis': ..., u'ok': ..., u'result': u'...'}
 
 All of the optional map/reduce parameters are also supported, simply pass them
-as keyword arguments. In this example we use the `query` parameter to limit the
+as keyword arguments. In this example we use the ``query`` parameter to limit the
 documents that will be mapped over:
 
 .. doctest::
@@ -151,8 +151,8 @@ documents that will be mapped over:
   {u'_id': u'cat', u'value': 1.0}
   {u'_id': u'dog', u'value': 1.0}
 
-With MongoDB 1.8.0 or newer you can use :class:`~bson.son.SON` or
-:class:`collections.OrderedDict` to specify a different database to store the
+With MongoDB 1.8.0 or newer you can use `~.bson.son.SON` or
+`collections.OrderedDict` to specify a different database to store the
 result collection:
 
 .. doctest::
@@ -166,7 +166,7 @@ result collection:
 Group
 -----
 
-The :meth:`~pymongo.collection.Collection.group` method provides some of the
+The `~.Collection.group` method provides some of the
 same functionality as SQL's GROUP BY.  Simpler than a map reduce you need to
 provide a key to group by, an initial value for the aggregation and a
 reduce function.

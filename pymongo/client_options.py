@@ -121,12 +121,12 @@ class ClientOptions(object):
 
     @property
     def codec_options(self):
-        """A :class:`~bson.codec_options.CodecOptions` instance."""
+        """A `~bson.codec_options.CodecOptions` instance."""
         return self.__codec_options
 
     @property
     def credentials(self):
-        """A :class:`~pymongo.auth.MongoCredentials` instance or None."""
+        """A `~pymongo.auth.MongoCredentials` instance or None."""
         return self.__credentials
 
     @property
@@ -136,7 +136,7 @@ class ClientOptions(object):
 
     @property
     def pool_options(self):
-        """A :class:`~pymongo.pool.PoolOptions` instance."""
+        """A `~pymongo.pool.PoolOptions` instance."""
         return self.__pool_options
 
     @property
@@ -151,5 +151,5 @@ class ClientOptions(object):
 
     @property
     def write_concern(self):
-        """A :class:`~pymongo.write_concern.WriteConcern` instance."""
+        """A `~pymongo.write_concern.WriteConcern` instance."""
         return self.__write_concern

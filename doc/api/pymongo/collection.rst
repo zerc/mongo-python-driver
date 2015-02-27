@@ -1,5 +1,5 @@
-:mod:`collection` -- Collection level operations
-================================================
+`collection` -- Collection level operations
+===========================================
 
 .. automodule:: pymongo.collection
    :synopsis: Collection level operations
@@ -20,9 +20,9 @@
 
       .. describe:: c[name] || c.name
 
-         Get the `name` sub-collection of :class:`Collection` `c`.
+         Get the ``name`` sub-collection of `Collection` ``c``.
 
-         Raises :class:`~pymongo.errors.InvalidName` if an invalid
+         Raises `~pymongo.errors.InvalidName` if an invalid
          collection name is used.
 
       .. autoattribute:: full_name

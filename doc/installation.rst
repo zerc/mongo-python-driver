@@ -28,7 +28,7 @@ packages:
 Microsoft Windows
 -----------------
 
-We recommend using the `MS Windows installers` available from the `Python
+We recommend using the MS Windows installers available from the `Python
 Package Index <http://pypi.python.org/pypi/pymongo/>`_.
 
 Installing with pip

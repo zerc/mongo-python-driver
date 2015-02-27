@@ -40,7 +40,7 @@ class AutoReconnect(ConnectionFailure):
     will continue to raise this exception until the first successful
     connection is made).
 
-    Subclass of :exc:`~pymongo.errors.ConnectionFailure`.
+    Subclass of `~pymongo.errors.ConnectionFailure`.
     """
     def __init__(self, message='', errors=None):
         self.errors = errors or []
@@ -53,7 +53,7 @@ class NetworkTimeout(AutoReconnect):
     The remaining connections in the pool stay open. In the case of a write
     operation, you cannot know whether it succeeded or failed.
 
-    Subclass of :exc:`~pymongo.errors.AutoReconnect`.
+    Subclass of `~pymongo.errors.AutoReconnect`.
     """
 
 
@@ -68,7 +68,7 @@ class NotMasterError(AutoReconnect):
     The client launches a refresh operation on a background thread, to update
     its view of the server as soon as possible after throwing this exception.
 
-    Subclass of :exc:`~pymongo.errors.AutoReconnect`.
+    Subclass of `~pymongo.errors.AutoReconnect`.
     """
 
 
@@ -81,7 +81,7 @@ class OperationFailure(PyMongoError):
     """Raised when a database operation fails.
 
     .. versionadded:: 2.7
-       The :attr:`details` attribute.
+       The `details` attribute.
     """
 
     def __init__(self, error, code=None, details=None):
@@ -144,7 +144,7 @@ class WTimeoutError(WriteConcernError):
     """Raised when a database operation times out (i.e. wtimeout expires)
     before replication completes.
 
-    With newer versions of MongoDB the `details` attribute may include
+    With newer versions of MongoDB the `.details` attribute may include
     write concern fields like 'n', 'updatedExisting', or 'writtenTo'.
 
     .. versionadded:: 2.7

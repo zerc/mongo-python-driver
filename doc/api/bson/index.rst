@@ -1,5 +1,5 @@
-:mod:`bson` -- BSON (Binary JSON) Encoding and Decoding
-=======================================================
+`bson` -- BSON (Binary JSON) Encoding and Decoding
+==================================================
 
 .. automodule:: bson
    :synopsis: BSON (Binary JSON) Encoding and Decoding
@@ -15,6 +15,7 @@ Sub-modules:
    code
    codec_options
    dbref
+   int64
    errors
    json_util
    max_key

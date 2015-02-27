@@ -45,8 +45,8 @@ class SONManipulator(object):
         """Manipulate an incoming SON object.
 
         :Parameters:
-          - `son`: the SON object to be inserted into the database
-          - `collection`: the collection the object is being inserted into
+          - ``son``: the SON object to be inserted into the database
+          - ``collection``: the collection the object is being inserted into
         """
         if self.will_copy():
             return SON(son)
@@ -56,8 +56,8 @@ class SONManipulator(object):
         """Manipulate an outgoing SON object.
 
         :Parameters:
-          - `son`: the SON object being retrieved from the database
-          - `collection`: the collection this object was stored in
+          - ``son``: the SON object being retrieved from the database
+          - ``collection``: the collection this object was stored in
         """
         if self.will_copy():
             return SON(son)

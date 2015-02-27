@@ -32,8 +32,7 @@ can start it like so:
 Making a Connection with MongoClient
 ------------------------------------
 The first step when working with **PyMongo** is to create a
-:class:`~pymongo.mongo_client.MongoClient` to the running **mongod**
-instance. Doing so is easy:
+`~.mongo_client.MongoClient` to the running **mongod** instance. Doing so is easy:
 
 .. doctest::
 
@@ -58,7 +57,7 @@ Getting a Database
 A single instance of MongoDB can support multiple independent
 `databases <http://www.mongodb.org/display/DOCS/Databases>`_. When
 working with PyMongo you access databases using attribute style access
-on :class:`~pymongo.mongo_client.MongoClient` instances:
+on `~.mongo_client.MongoClient` instances:
 
 .. doctest::
 
@@ -110,7 +109,7 @@ post:
   ...         "date": datetime.datetime.utcnow()}
 
 Note that documents can contain native Python types (like
-:class:`datetime.datetime` instances) which will be automatically
+`datetime.datetime` instances) which will be automatically
 converted to and from the appropriate `BSON
 <http://www.mongodb.org/display/DOCS/BSON>`_ types.
 
@@ -119,7 +118,7 @@ converted to and from the appropriate `BSON
 Inserting a Document
 --------------------
 To insert a document into a collection we can use the
-:meth:`~pymongo.collection.Collection.insert_one` method:
+`~.collection.Collection.insert_one` method:
 
 .. doctest::
 
@@ -131,8 +130,8 @@ To insert a document into a collection we can use the
 When a document is inserted a special key, ``"_id"``, is automatically
 added if the document doesn't already contain an ``"_id"`` key. The value
 of ``"_id"`` must be unique across the
-collection. :meth:`~pymongo.collection.Collection.insert_one` returns an
-instance of :class:`~pymongo.results.InsertOneResult`. For more information
+collection. `~.collection.Collection.insert_one` returns an
+instance of `.InsertOneResult`. For more information
 on ``"_id"``, see the `documentation on _id
 <http://www.mongodb.org/display/DOCS/Object+IDs>`_.
 
@@ -145,14 +144,14 @@ of the collections in our database:
   >>> db.collection_names(include_system_collections=False)
   [u'posts']
 
-Getting a Single Document With :meth:`~pymongo.collection.Collection.find_one`
-------------------------------------------------------------------------------
+Getting a Single Document With `~.collection.Collection.find_one`
+-----------------------------------------------------------------
 The most basic type of query that can be performed in MongoDB is
-:meth:`~pymongo.collection.Collection.find_one`. This method returns a
+`~.collection.Collection.find_one`. This method returns a
 single document matching a query (or ``None`` if there are no
 matches). It is useful when you know there is only one matching
 document, or are only interested in the first match. Here we use
-:meth:`~pymongo.collection.Collection.find_one` to get the first
+`~.collection.Collection.find_one` to get the first
 document from the posts collection:
 
 .. doctest::
@@ -165,7 +164,7 @@ The result is a dictionary matching the one that we inserted previously.
 .. note:: The returned document contains an ``"_id"``, which was
    automatically added on insert.
 
-:meth:`~pymongo.collection.Collection.find_one` also supports querying
+`~.collection.Collection.find_one` also supports querying
 on specific elements that the resulting document must match. To limit
 our results to a document with author "Mike" we do:
 
@@ -238,7 +237,7 @@ Bulk Inserts
 In order to make querying a little more interesting, let's insert a
 few more documents. In addition to inserting a single document, we can
 also perform *bulk insert* operations, by passing a list as the
-first argument to :meth:`~pymongo.collection.Collection.insert_many`.
+first argument to `~.collection.Collection.insert_many`.
 This will insert each document in the list, sending only a single
 command to the server:
 
@@ -258,8 +257,8 @@ command to the server:
 
 There are a couple of interesting things to note about this example:
 
-  - The result from :meth:`~pymongo.collection.Collection.insert_many` now
-    returns two :class:`~bson.objectid.ObjectId` instances, one for
+  - The result from `~.collection.Collection.insert_many` now
+    returns two `~.bson.objectid.ObjectId` instances, one for
     each inserted document.
   - ``new_posts[1]`` has a different "shape" than the other posts -
     there is no ``"tags"`` field and we've added a new field,
@@ -269,9 +268,9 @@ There are a couple of interesting things to note about this example:
 Querying for More Than One Document
 -----------------------------------
 To get more than a single document as the result of a query we use the
-:meth:`~pymongo.collection.Collection.find`
-method. :meth:`~pymongo.collection.Collection.find` returns a
-:class:`~pymongo.cursor.Cursor` instance, which allows us to iterate
+`~.collection.Collection.find`
+method. `~.collection.Collection.find` returns a
+`~.cursor.Cursor` instance, which allows us to iterate
 over all matching documents. For example, we can iterate over every
 document in the ``posts`` collection:
 
@@ -284,8 +283,8 @@ document in the ``posts`` collection:
   {u'date': datetime.datetime(2009, 11, 12, 11, 14), u'text': u'Another post!', u'_id': ObjectId('...'), u'author': u'Mike', u'tags': [u'bulk', u'insert']}
   {u'date': datetime.datetime(2009, 11, 10, 10, 45), u'text': u'and pretty easy too!', u'_id': ObjectId('...'), u'author': u'Eliot', u'title': u'MongoDB is fun'}
 
-Just like we did with :meth:`~pymongo.collection.Collection.find_one`,
-we can pass a document to :meth:`~pymongo.collection.Collection.find`
+Just like we did with `~.collection.Collection.find_one`,
+we can pass a document to `~.collection.Collection.find`
 to limit the returned results. Here, we get only those documents whose
 author is "Mike":
 
@@ -300,7 +299,7 @@ author is "Mike":
 Counting
 --------
 If we just want to know how many documents match a query we can
-perform a :meth:`~pymongo.cursor.Cursor.count` operation instead of a
+perform a `~.cursor.Cursor.count` operation instead of a
 full query. We can get a count of all of the documents in a
 collection:
 
@@ -333,14 +332,14 @@ than a certain date, but also sort the results by author:
   {u'date': datetime.datetime(2009, 11, 12, 11, 14), u'text': u'Another post!', u'_id': ObjectId('...'), u'author': u'Mike', u'tags': [u'bulk', u'insert']}
 
 Here we use the special ``"$lt"`` operator to do a range query, and
-also call :meth:`~pymongo.cursor.Cursor.sort` to sort the results
+also call `~.cursor.Cursor.sort` to sort the results
 by author.
 
 Indexing
 --------
 To make the above query fast we can add a compound index on
 ``"date"`` and ``"author"``. To start, lets use the
-:meth:`~pymongo.cursor.Cursor.explain` method to get some information
+`~.cursor.Cursor.explain` method to get some information
 about how the query is being performed without the index:
 
 .. doctest::

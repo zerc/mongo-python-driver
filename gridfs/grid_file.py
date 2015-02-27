@@ -70,7 +70,7 @@ def _grid_in_property(field_name, docstring, read_only=False,
         docstring += "\n\nThis attribute is read-only."
     elif closed_only:
         docstring = "%s\n\n%s" % (docstring, "This attribute is read-only and "
-                                  "can only be read after :meth:`close` "
+                                  "can only be read after `close` "
                                   "has been called.")
 
     if not read_only and not closed_only:
@@ -100,10 +100,10 @@ class GridIn(object):
 
         Application developers should generally not need to
         instantiate this class directly - instead see the methods
-        provided by :class:`~gridfs.GridFS`.
+        provided by `~gridfs.GridFS`.
 
-        Raises :class:`TypeError` if `root_collection` is not an
-        instance of :class:`~pymongo.collection.Collection`.
+        Raises `TypeError` if ``root_collection`` is not an
+        instance of `.Collection`.
 
         Any of the file level options specified in the `GridFS Spec
         <http://dochub.mongodb.org/core/gridfsspec>`_ may be passed as
@@ -112,7 +112,7 @@ class GridIn(object):
         arguments include:
 
           - ``"_id"``: unique ID for this file (default:
-            :class:`~bson.objectid.ObjectId`) - this ``"_id"`` must
+            `~bson.objectid.ObjectId`) - this ``"_id"`` must
             not have already been used for another file
 
           - ``"filename"``: human name for the file
@@ -124,18 +124,18 @@ class GridIn(object):
             chunks, in bytes (default: 255 kb)
 
           - ``"encoding"``: encoding used for this file. In Python 2,
-            any :class:`unicode` that is written to the file will be
-            converted to a :class:`str`. In Python 3, any :class:`str`
+            any `unicode` that is written to the file will be
+            converted to a `str`. In Python 3, any `str`
             that is written to the file will be converted to
-            :class:`bytes`.
+            `bytes`.
 
         :Parameters:
-          - `root_collection`: root collection to write to
-          - `**kwargs` (optional): file level options (see above)
+          - ``root_collection``: root collection to write to
+          - ``**kwargs`` (optional): file level options (see above)
 
         .. versionchanged:: 3.0
-           `root_collection` must use an acknowledged
-           :attr:`~pymongo.collection.Collection.write_concern`
+           ``root_collection`` must use an acknowledged
+           `~.Collection.write_concern`
         """
         if not isinstance(root_collection, Collection):
             raise TypeError("root_collection must be an "
@@ -213,7 +213,7 @@ class GridIn(object):
                                             {"$set": {name: value}})
 
     def __flush_data(self, data):
-        """Flush `data` to a chunk.
+        """Flush ``data`` to a chunk.
         """
         # Ensure the index, even if there's nothing to write, so
         # the filemd5 command always succeeds.
@@ -268,7 +268,7 @@ class GridIn(object):
         """Flush the file and close it.
 
         A closed file cannot be written any more. Calling
-        :meth:`close` more than once is allowed.
+        `close` more than once is allowed.
         """
         if not self._closed:
             self.__flush()
@@ -277,23 +277,23 @@ class GridIn(object):
     def write(self, data):
         """Write data to the file. There is no return value.
 
-        `data` can be either a string of bytes or a file-like object
-        (implementing :meth:`read`). If the file has an
-        :attr:`encoding` attribute, `data` can also be a
-        :class:`unicode` (:class:`str` in python 3) instance, which
-        will be encoded as :attr:`encoding` before being written.
+        ``data`` can be either a string of bytes or a file-like object
+        (implementing ``read``). If the file has an
+        ``encoding`` attribute, ``data`` can also be a
+        `unicode` (`str` in python 3) instance, which
+        will be encoded as ``encoding`` before being written.
 
         Due to buffering, the data may not actually be written to the
-        database until the :meth:`close` method is called. Raises
-        :class:`ValueError` if this file is already closed. Raises
-        :class:`TypeError` if `data` is not an instance of
-        :class:`str` (:class:`bytes` in python 3), a file-like object,
-        or an instance of :class:`unicode` (:class:`str` in python 3).
-        Unicode data is only allowed if the file has an :attr:`encoding`
+        database until the `close` method is called. Raises
+        `ValueError` if this file is already closed. Raises
+        `TypeError` if ``data`` is not an instance of
+        `str` (`bytes` in python 3), a file-like object,
+        or an instance of `unicode` (`str` in python 3).
+        Unicode data is only allowed if the file has an ``encoding``
         attribute.
 
         :Parameters:
-          - `data`: string of bytes or file-like object to be written
+          - ``data``: string of bytes or file-like object to be written
             to the file
         """
         if self._closed:
@@ -361,18 +361,18 @@ class GridOut(object):
 
         Application developers should generally not need to
         instantiate this class directly - instead see the methods
-        provided by :class:`~gridfs.GridFS`.
+        provided by `~gridfs.GridFS`.
 
-        Either `file_id` or `file_document` must be specified,
-        `file_document` will be given priority if present. Raises
-        :class:`TypeError` if `root_collection` is not an instance of
-        :class:`~pymongo.collection.Collection`.
+        Either ``file_id`` or ``file_document`` must be specified,
+        ``file_document`` will be given priority if present. Raises
+        `TypeError` if ``root_collection`` is not an instance of
+        `.Collection`.
 
         :Parameters:
-          - `root_collection`: root collection to read from
-          - `file_id` (optional): value of ``"_id"`` for the file to read
-          - `file_document` (optional): file document from
-            `root_collection.files`
+          - ``root_collection``: root collection to read from
+          - ``file_id`` (optional): value of ``"_id"`` for the file to read
+          - ``file_document`` (optional): file document from
+            ``root_collection.files``
 
         .. versionchanged:: 3.0
            Creating a GridOut does not immediately retrieve the file metadata
@@ -439,14 +439,14 @@ class GridOut(object):
         return chunk_data
 
     def read(self, size=-1):
-        """Read at most `size` bytes from the file (less if there
+        """Read at most ``size`` bytes from the file (less if there
         isn't enough data).
 
-        The bytes are returned as an instance of :class:`str` (:class:`bytes`
-        in python 3). If `size` is negative or omitted all data is read.
+        The bytes are returned as an instance of `str` (`bytes`
+        in python 3). If ``size`` is negative or omitted all data is read.
 
         :Parameters:
-          - `size` (optional): the number of bytes to read
+          - ``size`` (optional): the number of bytes to read
         """
         self._ensure_file()
 
@@ -473,10 +473,10 @@ class GridOut(object):
         return data.read(size)
 
     def readline(self, size=-1):
-        """Read one line or up to `size` bytes from the file.
+        """Read one line or up to ``size`` bytes from the file.
 
         :Parameters:
-         - `size` (optional): the maximum number of bytes to read
+         - ``size`` (optional): the maximum number of bytes to read
         """
         if size == 0:
             return b''
@@ -515,12 +515,12 @@ class GridOut(object):
         """Set the current position of this file.
 
         :Parameters:
-         - `pos`: the position (or offset if using relative
+         - ``pos``: the position (or offset if using relative
            positioning) to seek to
-         - `whence` (optional): where to seek
-           from. :attr:`os.SEEK_SET` (``0``) for absolute file
-           positioning, :attr:`os.SEEK_CUR` (``1``) to seek relative
-           to the current position, :attr:`os.SEEK_END` (``2``) to
+         - ``whence`` (optional): where to seek
+           from. `os.SEEK_SET` (``0``) for absolute file
+           positioning, `os.SEEK_CUR` (``1``) to seek relative
+           to the current position, `os.SEEK_END` (``2``) to
            seek relative to the file's end.
         """
         if whence == _SEEK_SET:
@@ -542,7 +542,7 @@ class GridOut(object):
         """Return an iterator over all of this file's data.
 
         The iterator will return chunk-sized instances of
-        :class:`str` (:class:`bytes` in python 3). This can be
+        `str` (`bytes` in python 3). This can be
         useful when serving files using a webserver that handles
         such an iterator efficiently.
         """
@@ -553,13 +553,13 @@ class GridOut(object):
         pass
 
     def __enter__(self):
-        """Makes it possible to use :class:`GridOut` files
+        """Makes it possible to use `GridOut` files
         with the context manager protocol.
         """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Makes it possible to use :class:`GridOut` files
+        """Makes it possible to use `GridOut` files
         with the context manager protocol.
         """
         return False
@@ -596,10 +596,10 @@ class GridOutCursor(Cursor):
     def __init__(self, collection, filter=None, skip=0, limit=0,
                  no_cursor_timeout=False, sort=None):
         """Create a new cursor, similar to the normal
-        :class:`~pymongo.cursor.Cursor`.
+        `.Cursor`.
 
         Should not be called directly by application developers - see
-        the :class:`~gridfs.GridFS` method :meth:`~gridfs.GridFS.find` instead.
+        the `~gridfs.GridFS` method `~gridfs.GridFS.find` instead.
 
         .. versionadded 2.7
 

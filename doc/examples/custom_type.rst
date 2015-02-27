@@ -3,7 +3,7 @@ Custom Type Example
 
 This is an example of using a custom type with PyMongo. The example
 here is a bit contrived, but shows how to use a
-:class:`~pymongo.son_manipulator.SONManipulator` to manipulate
+`~.son_manipulator.SONManipulator` to manipulate
 documents as they are saved or retrieved from MongoDB. More
 specifically, it shows a couple different mechanisms for working with
 custom datatypes in PyMongo.
@@ -22,7 +22,7 @@ We'll start by getting a clean database to use for the example:
 
 Since the purpose of the example is to demonstrate working with custom
 types, we'll need a custom datatype to use. Here we define the aptly
-named :class:`Custom` class, which has a single method, :meth:`x`:
+named ``Custom`` class, which has a single method, ``x``:
 
 .. doctest::
 
@@ -37,8 +37,8 @@ named :class:`Custom` class, which has a single method, :meth:`x`:
   >>> foo.x()
   10
 
-When we try to save an instance of :class:`Custom` with PyMongo, we'll
-get an :class:`~bson.errors.InvalidDocument` exception:
+When we try to save an instance of ``Custom`` with PyMongo, we'll
+get an `~.bson.errors.InvalidDocument` exception:
 
 .. doctest::
 
@@ -51,7 +51,7 @@ Manual Encoding
 
 One way to work around this is to manipulate our data into something
 we *can* save with PyMongo. To do so we define two methods,
-:meth:`encode_custom` and :meth:`decode_custom`:
+``encode_custom`` and ``decode_custom``:
 
 .. doctest::
 
@@ -63,7 +63,7 @@ we *can* save with PyMongo. To do so we define two methods,
   ...   return Custom(document["x"])
   ...
 
-We can now manually encode and decode :class:`Custom` instances and
+We can now manually encode and decode ``Custom`` instances and
 use them with PyMongo:
 
 .. doctest::
@@ -82,8 +82,8 @@ Automatic Encoding and Decoding
 
 Needless to say, that was a little unwieldy. Let's make this a bit
 more seamless by creating a new
-:class:`~pymongo.son_manipulator.SONManipulator`.
-:class:`~pymongo.son_manipulator.SONManipulator` instances allow you
+`~.son_manipulator.SONManipulator`.
+`~.son_manipulator.SONManipulator` instances allow you
 to specify transformations to be applied automatically by PyMongo:
 
 .. doctest::
@@ -108,13 +108,13 @@ to specify transformations to be applied automatically by PyMongo:
   ...     return son
   ...
 
-Now we add our manipulator to the :class:`~pymongo.database.Database`:
+Now we add our manipulator to the `~.database.Database`:
 
 .. doctest::
 
   >>> db.add_son_manipulator(Transform())
 
-After doing so we can save and restore :class:`Custom` instances seamlessly:
+After doing so we can save and restore ``Custom`` instances seamlessly:
 
 .. doctest::
 
@@ -127,8 +127,8 @@ After doing so we can save and restore :class:`Custom` instances seamlessly:
   >>> db.test.find_one()["custom"].x()
   5
 
-If we get a new :class:`~pymongo.database.Database` instance we'll
-clear out the :class:`~pymongo.son_manipulator.SONManipulator`
+If we get a new `~.database.Database` instance we'll
+clear out the `~.son_manipulator.SONManipulator`
 instance we added:
 
 .. doctest::
@@ -143,7 +143,7 @@ This allows us to see what was actually saved to the database:
   {u'_id': ObjectId('...'), u'custom': {u'x': 5, u'_type': u'custom'}}
 
 which is the same format that we encode to with our
-:meth:`encode_custom` method!
+``encode_custom`` method!
 
 Binary Encoding
 ---------------
@@ -152,9 +152,9 @@ We can take this one step further by encoding to binary, using a user
 defined subtype. This allows us to identify what to decode without
 resorting to tricks like the ``_type`` field used above.
 
-We'll start by defining the methods :meth:`to_binary` and
-:meth:`from_binary`, which convert :class:`Custom` instances to and
-from :class:`~bson.binary.Binary` instances:
+We'll start by defining the methods ``to_binary`` and
+``from_binary``, which convert ``Custom`` instances to and
+from `~.bson.binary.Binary` instances:
 
 .. note:: You could just pickle the instance and save that. What we do
    here is a little more lightweight.
@@ -170,7 +170,7 @@ from :class:`~bson.binary.Binary` instances:
   ...
 
 Next we'll create another
-:class:`~pymongo.son_manipulator.SONManipulator`, this time using the
+`~.son_manipulator.SONManipulator`, this time using the
 methods we just defined:
 
 .. doctest::
@@ -193,7 +193,7 @@ methods we just defined:
   ...     return son
   ...
 
-Now we'll empty the :class:`~pymongo.database.Database` and add the
+Now we'll empty the `~.database.Database` and add the
 new manipulator:
 
 .. doctest::
@@ -202,7 +202,7 @@ new manipulator:
   {...}
   >>> db.add_son_manipulator(TransformToBinary())
 
-After doing so we can save and restore :class:`Custom` instances
+After doing so we can save and restore ``Custom`` instances
 seamlessly:
 
 .. doctest::
@@ -215,9 +215,9 @@ seamlessly:
   5
 
 We can see what's actually being saved to the database (and verify
-that it is using a :class:`~bson.binary.Binary` instance) by
+that it is using a `~.bson.binary.Binary` instance) by
 clearing out the manipulators and repeating our
-:meth:`~pymongo.collection.Collection.find_one`:
+`~.collection.Collection.find_one`:
 
 .. doctest::
 

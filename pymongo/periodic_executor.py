@@ -29,11 +29,11 @@ class PeriodicExecutor(object):
         If the target's return value is false, the executor stops.
 
         :Parameters:
-          - `condition_class`: A class like threading.Condition.
-          - `interval`: Seconds between calls to `target`.
-          - `min_interval`: Minimum seconds between calls if `wake` is
+          - ``condition_class``: A class like threading.Condition.
+          - ``interval``: Seconds between calls to ``target``.
+          - ``min_interval``: Minimum seconds between calls if ``wake`` is
             called very often.
-          - `target`: A function.
+          - ``target``: A function.
         """
         self._event = thread_util.Event(condition_class)
         self._interval = interval

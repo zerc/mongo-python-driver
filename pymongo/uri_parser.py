@@ -73,10 +73,10 @@ def parse_userinfo(userinfo):
     by the unescaped password.
 
     :Paramaters:
-        - `userinfo`: A string of the form <username>:<password>
+        - ``userinfo``: A string of the form <username>:<password>
 
     .. versionchanged:: 2.2
-       Now uses `urllib.unquote_plus` so `+` characters must be escaped.
+       Now uses `urllib.unquote_plus` so "+" characters must be escaped.
     """
     if '@' in userinfo or userinfo.count(':') > 1:
         raise InvalidURI("':' or '@' characters in a username or password "
@@ -98,9 +98,9 @@ def parse_ipv6_literal_host(entity, default_port):
     port is default_port if it wasn't specified in entity.
 
     :Parameters:
-        - `entity`: A string that represents an IPv6 literal enclosed
+        - ``entity``: A string that represents an IPv6 literal enclosed
                     in braces (e.g. '[::1]' or '[::1]:27017').
-        - `default_port`: The port number to use when one wasn't
+        - ``default_port``: The port number to use when one wasn't
                           specified in entity.
     """
     if entity.find(']') == -1:
@@ -120,9 +120,9 @@ def parse_host(entity, default_port=DEFAULT_PORT):
     if it wasn't specified in the string.
 
     :Parameters:
-        - `entity`: A host or host:port string where host could be a
+        - ``entity``: A host or host:port string where host could be a
                     hostname or IP address.
-        - `default_port`: The port number to use when one wasn't
+        - ``default_port``: The port number to use when one wasn't
                           specified in entity.
     """
     host = entity
@@ -154,7 +154,7 @@ def validate_options(opts):
     Returns a new dictionary of validated and normalized options.
 
     :Parameters:
-        - `opts`: A dict of MongoDB URI options.
+        - ``opts``: A dict of MongoDB URI options.
     """
     return dict([_validate(opt, val) for opt, val in iteritems(opts)])
 
@@ -181,8 +181,8 @@ def split_options(opts, validate=True):
     and returns the options in a dictionary.
 
     :Parameters:
-        - `opt`: A string representing MongoDB URI options.
-        - `validate`: If ``True`` (the default), validate and normalize all
+        - ``opt``: A string representing MongoDB URI options.
+        - ``validate``: If ``True`` (the default), validate and normalize all
           options.
     """
     and_idx = opts.find("&")
@@ -215,8 +215,8 @@ def split_hosts(hosts, default_port=DEFAULT_PORT):
     port number.
 
     :Parameters:
-        - `hosts`: A string of the form host1[:port],host2[:port],...
-        - `default_port`: The port number to use when one wasn't specified
+        - ``hosts``: A string of the form host1[:port],host2[:port],...
+        - ``default_port``: The port number to use when one wasn't specified
           for a host.
     """
     nodes = []
@@ -247,10 +247,10 @@ def parse_uri(uri, default_port=DEFAULT_PORT, validate=True):
         }
 
     :Parameters:
-        - `uri`: The MongoDB URI to parse.
-        - `default_port`: The port number to use when one wasn't specified
+        - ``uri``: The MongoDB URI to parse.
+        - ``default_port``: The port number to use when one wasn't specified
           for a host in the URI.
-        - `validate`: If ``True`` (the default), validate and normalize all
+        - ``validate``: If ``True`` (the default), validate and normalize all
           options.
     """
     if not uri.startswith(SCHEME):

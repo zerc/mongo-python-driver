@@ -714,26 +714,26 @@ _CODEC_OPTIONS_TYPE_ERROR = TypeError(
 def decode_all(data, codec_options=DEFAULT_CODEC_OPTIONS):
     """Decode BSON data to multiple documents.
 
-    `data` must be a string of concatenated, valid, BSON-encoded
+    ``data`` must be a string of concatenated, valid, BSON-encoded
     documents.
 
     :Parameters:
-      - `data`: BSON data
-      - `codec_options` (optional): An instance of
-        :class:`~bson.codec_options.CodecOptions`.
+      - ``data``: BSON data
+      - ``codec_options`` (optional): An instance of
+        `~bson.codec_options.CodecOptions`.
 
     .. versionchanged:: 3.0
-       Removed `compile_re` option: PyMongo now always represents BSON regular
-       expressions as :class:`~bson.regex.Regex` objects. Use
-       :meth:`~bson.regex.Regex.try_compile` to attempt to convert from a
+       Removed ``compile_re`` option: PyMongo now always represents BSON regular
+       expressions as `~bson.regex.Regex` objects. Use
+       `~bson.regex.Regex.try_compile` to attempt to convert from a
        BSON regular expression to a Python regular expression object.
 
-       Replaced `as_class`, `tz_aware`, and `uuid_subtype` options with
-       `codec_options`.
+       Replaced ``as_class``, ``tz_aware``, and ``uuid_subtype`` options with
+       ``codec_options``.
 
     .. versionchanged:: 2.7
-       Added `compile_re` option. If set to False, PyMongo represented BSON
-       regular expressions as :class:`~bson.regex.Regex` objects instead of
+       Added ``compile_re`` option. If set to False, PyMongo represented BSON
+       regular expressions as `~bson.regex.Regex` objects instead of
        attempting to compile BSON regular expressions as Python native
        regular expressions, thus preventing errors for some incompatible
        patterns, see `PYTHON-500`_.
@@ -778,17 +778,17 @@ def decode_iter(data, codec_options=DEFAULT_CODEC_OPTIONS):
     Works similarly to the decode_all function, but yields one document at a
     time.
 
-    `data` must be a string of concatenated, valid, BSON-encoded
+    ``data`` must be a string of concatenated, valid, BSON-encoded
     documents.
 
     :Parameters:
-      - `data`: BSON data
-      - `codec_options` (optional): An instance of
-        :class:`~bson.codec_options.CodecOptions`.
+      - ``data``: BSON data
+      - ``codec_options`` (optional): An instance of
+        `~bson.codec_options.CodecOptions`.
 
     .. versionchanged:: 3.0
-       Replaced `as_class`, `tz_aware`, and `uuid_subtype` options with
-       `codec_options`.
+       Replaced ``as_class``, ``tz_aware``, and ``uuid_subtype`` options with
+       ``codec_options``.
 
     .. versionadded:: 2.8
     """
@@ -812,13 +812,13 @@ def decode_file_iter(file_obj, codec_options=DEFAULT_CODEC_OPTIONS):
     in chunks and parses bson in chunks, yielding one document at a time.
 
     :Parameters:
-      - `file_obj`: A file object containing BSON data.
-      - `codec_options` (optional): An instance of
-        :class:`~bson.codec_options.CodecOptions`.
+      - ``file_obj``: A file object containing BSON data.
+      - ``codec_options`` (optional): An instance of
+        `~bson.codec_options.CodecOptions`.
 
     .. versionchanged:: 3.0
-       Replaced `as_class`, `tz_aware`, and `uuid_subtype` options with
-       `codec_options`.
+       Replaced ``as_class``, ``tz_aware``, and ``uuid_subtype`` options with
+       ``codec_options``.
 
     .. versionadded:: 2.8
     """
@@ -835,14 +835,14 @@ def decode_file_iter(file_obj, codec_options=DEFAULT_CODEC_OPTIONS):
 
 
 def is_valid(bson):
-    """Check that the given string represents valid :class:`BSON` data.
+    """Check that the given string represents valid `BSON` data.
 
-    Raises :class:`TypeError` if `bson` is not an instance of
-    :class:`str` (:class:`bytes` in python 3). Returns ``True``
-    if `bson` is valid :class:`BSON`, ``False`` otherwise.
+    Raises `TypeError` if ``bson`` is not an instance of
+    `str` (`bytes` in python 3). Returns ``True``
+    if ``bson`` is valid `BSON`, ``False`` otherwise.
 
     :Parameters:
-      - `bson`: the data to be validated
+      - ``bson``: the data to be validated
     """
     if not isinstance(bson, bytes):
         raise TypeError("BSON data must be an instance of a subclass of bytes")
@@ -861,26 +861,26 @@ class BSON(bytes):
     @classmethod
     def encode(cls, document, check_keys=False,
                codec_options=DEFAULT_CODEC_OPTIONS):
-        """Encode a document to a new :class:`BSON` instance.
+        """Encode a document to a new `BSON` instance.
 
-        A document can be any mapping type (like :class:`dict`).
+        A document can be any mapping type (like `dict`).
 
-        Raises :class:`TypeError` if `document` is not a mapping type,
+        Raises `TypeError` if ``document`` is not a mapping type,
         or contains keys that are not instances of
-        :class:`basestring` (:class:`str` in python 3). Raises
-        :class:`~bson.errors.InvalidDocument` if `document` cannot be
-        converted to :class:`BSON`.
+        `basestring` (`str` in python 3). Raises
+        `.InvalidDocument` if ``document`` cannot be
+        converted to `BSON`.
 
         :Parameters:
-          - `document`: mapping type representing a document
-          - `check_keys` (optional): check if keys start with '$' or
-            contain '.', raising :class:`~bson.errors.InvalidDocument` in
+          - ``document``: mapping type representing a document
+          - ``check_keys`` (optional): check if keys start with '$' or
+            contain '.', raising `~bson.errors.InvalidDocument` in
             either case
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`.
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`.
 
         .. versionchanged:: 3.0
-           Replaced `uuid_subtype` option with `codec_options`.
+           Replaced ``uuid_subtype`` option with ``codec_options``.
         """
         if not isinstance(codec_options, CodecOptions):
             raise _CODEC_OPTIONS_TYPE_ERROR
@@ -891,8 +891,8 @@ class BSON(bytes):
         """Decode this BSON data.
 
         By default, returns a BSON document represented as a Python
-        :class:`dict`. To use a different :class:`MutableMapping` class,
-        configure a :class:`~bson.codec_options.CodecOptions`::
+        `dict`. To use a different `~collections.MutableMapping` class,
+        configure a `~.CodecOptions`::
 
             >>> import collections  # From Python standard library.
             >>> import bson
@@ -906,21 +906,21 @@ class BSON(bytes):
             <class 'collections.OrderedDict'>
 
         :Parameters:
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`.
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`.
 
         .. versionchanged:: 3.0
-           Removed `compile_re` option: PyMongo now always represents BSON
-           regular expressions as :class:`~bson.regex.Regex` objects. Use
-           :meth:`~bson.regex.Regex.try_compile` to attempt to convert from a
+           Removed ``compile_re`` option: PyMongo now always represents BSON
+           regular expressions as `~bson.regex.Regex` objects. Use
+           `~bson.regex.Regex.try_compile` to attempt to convert from a
            BSON regular expression to a Python regular expression object.
 
-           Replaced `as_class`, `tz_aware`, and `uuid_subtype` options with
+           Replaced ``as_class``, ``tz_aware``, and ``uuid_subtype`` options with
            `codec_options`.
 
         .. versionchanged:: 2.7
-           Added `compile_re` option. If set to False, PyMongo represented BSON
-           regular expressions as :class:`~bson.regex.Regex` objects instead of
+           Added ``compile_re`` option. If set to False, PyMongo represented BSON
+           regular expressions as `~bson.regex.Regex` objects instead of
            attempting to compile BSON regular expressions as Python native
            regular expressions, thus preventing errors for some incompatible
            patterns, see `PYTHON-500`_.

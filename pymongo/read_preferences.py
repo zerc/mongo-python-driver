@@ -98,7 +98,7 @@ class ServerMode(object):
 
     @property
     def tag_sets(self):
-        """Set ``tag_sets`` to a list of dictionaries like [{'dc': 'ny'}] to
+        """Set ``tag_sets`` to a list of dictionaries like ``[{'dc': 'ny'}]`` to
         read only from members whose ``dc`` tag has the value ``"ny"``.
         To specify a priority-order for tag sets, provide a list of
         tag sets: ``[{'dc': 'ny'}, {'dc': 'la'}, {}]``. A final, empty tag
@@ -162,7 +162,7 @@ class PrimaryPreferred(ServerMode):
       available, otherwise a secondary.
 
     :Parameters:
-      - `tag_sets`: The :attr:`~tag_sets` to use if the primary is not
+      - ``tag_sets``: The `tag_sets` to use if the primary is not
         available.
     """
 
@@ -191,7 +191,7 @@ class Secondary(ServerMode):
       secondaries. An error is raised if no secondaries are available.
 
     :Parameters:
-      - `tag_sets`: The :attr:`~tag_sets` to use with this read_preference
+      - ``tag_sets``: The `tag_sets` to use with this read_preference
     """
 
     def __init__(self, tag_sets=None):
@@ -215,7 +215,7 @@ class SecondaryPreferred(ServerMode):
       secondaries, or the primary if no secondary is available.
 
     :Parameters:
-      - `tag_sets`: The :attr:`~tag_sets` to use with this read_preference
+      - ``tag_sets``: The `tag_sets` to use with this read_preference
     """
 
     def __init__(self, tag_sets=None):
@@ -244,7 +244,7 @@ class Nearest(ServerMode):
       members.
 
     :Parameters:
-      - `tag_sets`: The :attr:`~tag_sets` to use with this read_preference
+      - ``tag_sets``: The `tag_sets` to use with this read_preference
     """
 
     def __init__(self, tag_sets=None):
@@ -286,19 +286,19 @@ See :doc:`/examples/high_availability` for code examples.
 
 A read preference is used in three cases:
 
-:class:`~pymongo.mongo_client.MongoClient` connected to a single mongod:
+`~.mongo_client.MongoClient` connected to a single mongod:
 
 - ``PRIMARY``: Queries are allowed if the server is standalone or a replica
   set primary.
 - All other modes allow queries to standalone servers, to a replica set
   primary, or to replica set secondaries.
 
-:class:`~pymongo.mongo_client.MongoClient` initialized with the
+`~.mongo_client.MongoClient` initialized with the
 ``replicaSet`` option:
 
 - ``PRIMARY``: Read from the primary. This is the default, and provides the
   strongest consistency. If no primary is available, raise
-  :class:`~pymongo.errors.AutoReconnect`.
+  `~pymongo.errors.AutoReconnect`.
 
 - ``PRIMARY_PREFERRED``: Read from the primary if available, or if there is
   none, read from a secondary matching your choice of ``tag_sets`` and
@@ -306,7 +306,7 @@ A read preference is used in three cases:
 
 - ``SECONDARY``: Read from a secondary matching your choice of ``tag_sets`` and
   ``local_threshold_ms``. If no matching secondary is available,
-  raise :class:`~pymongo.errors.AutoReconnect`.
+  raise `~pymongo.errors.AutoReconnect`.
 
 - ``SECONDARY_PREFERRED``: Read from a secondary matching your choice of
   ``tag_sets`` and ``local_threshold_ms`` if available, otherwise
@@ -315,18 +315,18 @@ A read preference is used in three cases:
 - ``NEAREST``: Read from any member matching your choice of ``tag_sets`` and
   ``local_threshold_ms``.
 
-:class:`~pymongo.mongo_client.MongoClient` connected to a mongos, with a
+`~.mongo_client.MongoClient` connected to a mongos, with a
 sharded cluster of replica sets:
 
 - ``PRIMARY``: Read from the primary of the shard, or raise
-  :class:`~pymongo.errors.OperationFailure` if there is none.
+  `~pymongo.errors.OperationFailure` if there is none.
   This is the default.
 
 - ``PRIMARY_PREFERRED``: Read from the primary of the shard, or if there is
   none, read from a secondary matching your choice of ``tag_sets``.
 
 - ``SECONDARY``: Read from a secondary matching your choice of ``tag_sets``,
-  or raise :class:`~pymongo.errors.OperationFailure` if there is none.
+  or raise `~pymongo.errors.OperationFailure` if there is none.
 
 - ``SECONDARY_PREFERRED``: Read from a secondary matching your choice of
   ``tag_sets``, otherwise from primary.

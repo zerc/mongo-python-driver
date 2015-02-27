@@ -20,7 +20,7 @@ class MinKey(object):
     """MongoDB internal MinKey type.
 
     .. versionchanged:: 2.7
-       ``MinKey`` now implements comparison operators.
+       `MinKey` now implements comparison operators.
     """
 
     _type_marker = 255

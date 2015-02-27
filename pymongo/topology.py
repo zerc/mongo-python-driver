@@ -62,15 +62,15 @@ class Topology(object):
         """Return a list of Servers matching selector, or time out.
 
         :Parameters:
-          - `selector`: function that takes a list of Servers and returns
+          - ``selector``: function that takes a list of Servers and returns
             a subset of them.
-          - `server_wait_time` (optional): maximum seconds to wait. If not
-            provided, the default value common.SERVER_WAIT_TIME is used.
+          - ``server_wait_time`` (optional): maximum seconds to wait. If not
+            provided, the default value `common.SERVER_WAIT_TIME` is used.
 
         Calls self.open() if needed.
 
-        Raises exc:`AutoReconnect` after `server_wait_time` if no
-        matching servers are found.
+        Raises `AutoReconnect` after ``server_wait_time`` if no matching servers
+        are found.
         """
         if server_wait_time is None:
             wait_time = common.SERVER_WAIT_TIME
@@ -116,13 +116,13 @@ class Topology(object):
         reached.
 
         :Parameters:
-          - `address`: A (host, port) pair.
-          - `server_wait_time` (optional): maximum seconds to wait. If not
+          - ``address``: A (host, port) pair.
+          - ``server_wait_time`` (optional): maximum seconds to wait. If not
             provided, the default value common.SERVER_WAIT_TIME is used.
 
         Calls self.open() if needed.
 
-        Raises exc:`AutoReconnect` after `server_wait_time` if no
+        Raises `.AutoReconnect` after ``server_wait_time`` if no
         matching servers are found.
         """
         selector = partial(address_server_selector, address)

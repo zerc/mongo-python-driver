@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tools for using Python's :mod:`json` module with BSON documents.
+"""Tools for using Python's `json` module with BSON documents.
 
 This module provides two helper methods `dumps` and `loads` that wrap the
-native :mod:`json` methods and provide explicit BSON conversion to and from
+native `json` methods and provide explicit BSON conversion to and from
 json.  This allows for specialized encoding and decoding of BSON documents
 into `Mongo Extended JSON
 <http://www.mongodb.org/display/DOCS/Mongo+Extended+JSON>`_'s *Strict*
@@ -42,16 +42,16 @@ Example usage (deserialization):
    >>> loads('[{"foo": [1, 2]}, {"bar": {"hello": "world"}}, {"code": {"$scope": {}, "$code": "function x() { return 1; }"}}, {"bin": {"$type": "00", "$binary": "AQIDBA=="}}]')
    [{u'foo': [1, 2]}, {u'bar': {u'hello': u'world'}}, {u'code': Code('function x() { return 1; }', {})}, {u'bin': Binary('...', 0)}]
 
-Alternatively, you can manually pass the `default` to :func:`json.dumps`.
-It won't handle :class:`~bson.binary.Binary` and :class:`~bson.code.Code`
+Alternatively, you can manually pass the ``default`` to `json.dumps`.
+It won't handle `~bson.binary.Binary` and `~bson.code.Code`
 instances (as they are extended strings you can't provide custom defaults),
 but it will be faster as there is less recursion.
 
 .. versionchanged:: 2.8
-   The output format for :class:`~bson.timestamp.Timestamp` has changed from
+   The output format for `~bson.timestamp.Timestamp` has changed from
    '{"t": <int>, "i": <int>}' to '{"$timestamp": {"t": <int>, "i": <int>}}'.
    This new format will be decoded to an instance of
-   :class:`~bson.timestamp.Timestamp`. The old format will continue to be
+   `~bson.timestamp.Timestamp`. The old format will continue to be
    decoded to a python dict as before. Encoding to the old format is no longer
    supported as it was never correct and loses type information.
    Added support for $numberLong and $undefined - new in MongoDB 2.6 - and
@@ -63,8 +63,8 @@ but it will be faster as there is less recursion.
 
 .. versionchanged:: 2.3
    Added dumps and loads helpers to automatically handle conversion to and
-   from json and supports :class:`~bson.binary.Binary` and
-   :class:`~bson.code.Code`
+   from json and supports `~bson.binary.Binary` and
+   `~bson.code.Code`
 """
 
 import base64
@@ -101,10 +101,10 @@ _RE_OPT_TABLE = {
 
 
 def dumps(obj, *args, **kwargs):
-    """Helper function that wraps :class:`json.dumps`.
+    """Helper function that wraps `json.dumps`.
 
     Recursive function that handles all BSON types including
-    :class:`~bson.binary.Binary` and :class:`~bson.code.Code`.
+    `~bson.binary.Binary` and `~bson.code.Code`.
 
     .. versionchanged:: 2.7
        Preserves order when rendering SON, Timestamp, Code, Binary, and DBRef
@@ -114,7 +114,7 @@ def dumps(obj, *args, **kwargs):
 
 
 def loads(s, *args, **kwargs):
-    """Helper function that wraps :class:`json.loads`.
+    """Helper function that wraps `json.loads`.
 
     Automatically passes the object_hook for BSON type conversion.
     """

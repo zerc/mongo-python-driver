@@ -1,5 +1,5 @@
-:mod:`mongo_client` -- Tools for connecting to MongoDB
-======================================================
+`mongo_client` -- Tools for connecting to MongoDB
+=================================================
 
 .. automodule:: pymongo.mongo_client
    :synopsis: Tools for connecting to MongoDB
@@ -10,9 +10,9 @@
 
       .. describe:: c[db_name] || c.db_name
 
-         Get the `db_name` :class:`~pymongo.database.Database` on :class:`MongoClient` `c`.
+         Get the ``db_name`` `.Database` on `MongoClient` ``c``.
 
-         Raises :class:`~pymongo.errors.InvalidName` if an invalid database name is used.
+         Raises `~pymongo.errors.InvalidName` if an invalid database name is used.
 
       .. autoattribute:: host
       .. autoattribute:: port

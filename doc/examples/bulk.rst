@@ -18,7 +18,7 @@ Bulk Insert
 .. versionadded:: 2.6
 
 A batch of documents can be inserted by passing a list to the
-:meth:`~pymongo.collection.Collection.insert_many` method. PyMongo
+`~.collection.Collection.insert_many` method. PyMongo
 will automatically split the batch into smaller sub-batches based on
 the maximum message size accepted by MongoDB, supporting very large
 bulk insert operations.
@@ -83,7 +83,7 @@ describing the type and count of operations performed.
 
 The first write failure that occurs (e.g. duplicate key error) aborts the
 remaining operations, and PyMongo raises
-:class:`~pymongo.errors.BulkWriteError`. The :attr:`details` attibute of
+`~.BulkWriteError`. The ``details`` attibute of
 the exception instance provides the execution results up until the failure
 occurred and details about the failure - including the operation that caused
 the failure.
@@ -161,9 +161,9 @@ Write Concern
 .............
 
 By default bulk operations are executed with the
-:attr:`~pymongo.collection.Collection.write_concern` of the collection they
+`~.collection.Collection.write_concern` of the collection they
 are executed against. A custom write concern can be passed to the
-:meth:`~pymongo.bulk.BulkOperationBuilder.execute` method. Write concern
+`~.bulk.BulkOperationBuilder.execute` method. Write concern
 errors (e.g. wtimeout) will be reported after all operations are attempted,
 regardless of execution order.
 

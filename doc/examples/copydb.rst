@@ -3,7 +3,7 @@ Copying a Database
 
 To copy a database within a single mongod process, or between mongod
 servers, simply connect to the target mongod and use the
-:meth:`~pymongo.database.Database.command` method::
+`~.database.Database.command` method::
 
   >>> from pymongo import MongoClient
   >>> client = MongoClient('target.example.com')

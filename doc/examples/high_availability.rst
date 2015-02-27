@@ -80,7 +80,7 @@ Connecting to a Replica Set
 The initial connection as made above is a special case for an
 uninitialized replica set. Normally we'll want to connect
 differently. A connection to a replica set can be made using the
-:meth:`~pymongo.mongo_client.MongoClient` constructor, specifying
+`~.mongo_client.MongoClient` constructor, specifying
 one or more members of the set, along with the replica set name. Any of
 the following connects to the replica set we just created::
 
@@ -93,12 +93,12 @@ the following connects to the replica set we just created::
   >>> MongoClient('mongodb://localhost:27017,localhost:27018/?replicaSet=foo')
   MongoClient(['localhost:27017', 'localhost:27018'])
 
-The nodes passed to :meth:`~pymongo.mongo_client.MongoClient` are called
+The nodes passed to `~.mongo_client.MongoClient` are called
 the *seeds*. As long as at least one of the seeds is online, MongoClient
 discovers all the members in the replica set, and determines which is the
 current primary and which are secondaries.
 
-The :class:`~pymongo.mongo_client.MongoClient` constructor is non-blocking:
+The `~.mongo_client.MongoClient` constructor is non-blocking:
 the constructor returns immediately while the client connects to the replica
 set using background threads. Note how, if you create a client and immediately
 print its string representation, the client only prints the single host it
@@ -111,8 +111,8 @@ knows about. If you wait a moment, it to discovers the whole replica set:
 
 You need not wait for replica set discovery in your application, however.
 If you need to do any operation with a MongoClient, such as a
-:meth:`~pymongo.collection.Collection.find` or an
-:meth:`~pymongo.collection.Collection.insert_one`, the client waits to discover
+`~.Collection.find` or an
+`~.Collection.insert_one`, the client waits to discover
 a suitable member before it attempts the operation.
 
 Handling Failover
@@ -145,7 +145,7 @@ query again::
   Traceback (most recent call last):
   pymongo.errors.AutoReconnect: ...
 
-We get an :class:`~pymongo.errors.AutoReconnect` exception. This means
+We get an `~pymongo.errors.AutoReconnect` exception. This means
 that the driver was not able to connect to the old primary (which
 makes sense, as we killed the server), but that it will attempt to
 automatically reconnect on subsequent operations. When this exception
@@ -176,7 +176,7 @@ Secondary Reads
 
 By default an instance of MongoClient sends queries to
 the primary member of the replica set. To use secondaries for queries
-we have to change the :class:`~pymongo.read_preferences.ReadPreference`::
+we have to change the `~pymongo.read_preferences.ReadPreference`::
 
   >>> from pymongo.read_preferences import ReadPreference
   >>> client = MongoClient(
@@ -191,9 +191,9 @@ queries you would prefer to never send to the primary you can specify that
 using the ``SECONDARY`` read preference.
 
 The Read preference can be set when you create a
-:class:`~pymongo.mongo_client.MongoClient`, or when you execute a
-:meth:`~pymongo.collection.Collection.find`,
-:meth:`~pymongo.collection.Collection.find_one`,
+`~.mongo_client.MongoClient`, or when you execute a
+`~.Collection.find`,
+`~.Collection.find_one`,
 or a command::
 
   >>> db.test.find_one(read_preference=ReadPreference.PRIMARY)
@@ -211,7 +211,7 @@ and **local_threshold_ms**.
 
 - ``PRIMARY``: Read from the primary. This is the default, and provides the
   strongest consistency. If no primary is available, raise
-  :class:`~pymongo.errors.AutoReconnect`.
+  `~pymongo.errors.AutoReconnect`.
 
 - ``PRIMARY_PREFERRED``: Read from the primary if available, or if there is
   none, read from a secondary matching your choice of ``tag_sets`` and
@@ -219,7 +219,7 @@ and **local_threshold_ms**.
 
 - ``SECONDARY``: Read from a secondary matching your choice of ``tag_sets`` and
   ``local_threshold_ms``. If no matching secondary is available,
-  raise :class:`~pymongo.errors.AutoReconnect`.
+  raise `~pymongo.errors.AutoReconnect`.
 
 - ``SECONDARY_PREFERRED``: Read from a secondary matching your choice of
   ``tag_sets`` and ``local_threshold_ms`` if available, otherwise
@@ -250,11 +250,11 @@ MongoClient like so:
   ... )
 
 MongoClient tries to find secondaries in New York, then San Francisco,
-and raises :class:`~pymongo.errors.AutoReconnect` if none are available. As an
+and raises `~pymongo.errors.AutoReconnect` if none are available. As an
 additional fallback, specify a final, empty tag set, ``{}``, which means "read
 from any member that matches the mode, ignoring tags."
 
-See :mod:`~pymongo.read_preferences` for more information.
+See `~pymongo.read_preferences` for more information.
 
 **local_threshold_ms**:
 
@@ -296,7 +296,7 @@ High Availability and mongos
 .. warning:: The documentation below is obsolete. It awaits a new
    spec for how MongoDB drivers connect to multiple mongoses.
 
-An instance of :class:`~pymongo.mongo_client.MongoClient` can be configured
+An instance of `~.mongo_client.MongoClient` can be configured
 to automatically connect to a different mongos if the instance it is
 currently connected to fails. If a failure occurs, PyMongo will attempt
 to find the nearest mongos to perform subsequent operations. As with a
@@ -330,7 +330,7 @@ query again::
   pymongo.errors.AutoReconnect: ...
 
 As in the replica set example earlier in this document, we get
-an :class:`~pymongo.errors.AutoReconnect` exception. This means
+an `~pymongo.errors.AutoReconnect` exception. This means
 that the driver was not able to connect to the original mongos at port
 30001 (which makes sense, since we shut it down), but that it will
 attempt to connect to a new mongos on subsequent operations. When this
@@ -349,3 +349,4 @@ operation will succeed::
   30002
   >>> db.client.is_mongos
   True
+

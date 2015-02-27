@@ -29,15 +29,15 @@ class CodecOptions(_options_base):
     """Encapsulates BSON options used in CRUD operations.
 
     :Parameters:
-      - `as_class`: BSON documents returned in queries will be decoded
+      - ``as_class``: BSON documents returned in queries will be decoded
         to an instance of this class. Must be a subclass of
-        :class:`~collections.MutableMapping`. Defaults to :class:`dict`.
-      - `tz_aware`: If ``True``, BSON datetimes will be decoded to timezone
-        aware instances of :class:`~datetime.datetime`. Otherwise they will be
+        `~collections.MutableMapping`. Defaults to `dict`.
+      - ``tz_aware``: If ``True``, BSON datetimes will be decoded to timezone
+        aware instances of `~datetime.datetime`. Otherwise they will be
         naive. Defaults to ``False``.
-      - `uuid_representation`: The BSON representation to use when encoding
-        and decoding instances of :class:`~uuid.UUID`. Defaults to
-        :data:`~bson.binary.PYTHON_LEGACY`.
+      - ``uuid_representation``: The BSON representation to use when encoding
+        and decoding instances of `~uuid.UUID`. Defaults to
+        `~bson.binary.PYTHON_LEGACY`.
     """
 
     def __new__(cls, as_class=dict,

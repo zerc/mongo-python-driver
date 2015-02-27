@@ -54,29 +54,29 @@ class Database(common.BaseObject):
                  read_preference=None, write_concern=None):
         """Get a database by client and name.
 
-        Raises :class:`TypeError` if `name` is not an instance of
-        :class:`basestring` (:class:`str` in python 3). Raises
-        :class:`~pymongo.errors.InvalidName` if `name` is not a valid
+        Raises `TypeError` if ``name`` is not an instance of
+        `basestring` (`str` in python 3). Raises
+        `~.errors.InvalidName` if ``name`` is not a valid
         database name.
 
         :Parameters:
-          - `client`: A :class:`~pymongo.mongo_client.MongoClient` instance.
-          - `name`: The database name.
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the
+          - ``client``: A `~.mongo_client.MongoClient` instance.
+          - ``name``: The database name.
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`. If ``None`` (the
             default) client.codec_options is used.
-          - `read_preference` (optional): The read preference to use. If
+          - ``read_preference`` (optional): The read preference to use. If
             ``None`` (the default) client.read_preference is used.
-          - `write_concern` (optional): An instance of
-            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the
+          - ``write_concern`` (optional): An instance of
+            `~.write_concern.WriteConcern`. If ``None`` (the
             default) client.write_concern is used.
 
         .. mongodoc:: databases
 
         .. versionchanged:: 3.0
            Added the codec_options, read_preference, and write_concern options.
-           :class:`~pymongo.database.Database` no longer returns an instance
-           of :class:`~pymongo.collection.Collection` for attribute names
+           `.database.Database` no longer returns an instance
+           of `.Collection` for attribute names
            with leading underscores. You must use dict-style lookups instead::
 
                db['__my_collection__']
@@ -109,7 +109,7 @@ class Database(common.BaseObject):
     def add_son_manipulator(self, manipulator):
         """Add a new son manipulator to this database.
 
-        **DEPRECATED** - `add_son_manipulator` is deprecated.
+        **DEPRECATED** - ``add_son_manipulator`` is deprecated.
 
         .. versionchanged:: 3.0
           Deprecated add_son_manipulator.
@@ -135,20 +135,20 @@ class Database(common.BaseObject):
 
     @property
     def system_js(self):
-        """A :class:`SystemJS` helper for this :class:`Database`.
+        """A `SystemJS` helper for this `Database`.
 
-        See the documentation for :class:`SystemJS` for more details.
+        See the documentation for `SystemJS` for more details.
         """
         return SystemJS(self)
 
     @property
     def client(self):
-        """The client instance for this :class:`Database`."""
+        """The client instance for this `Database`."""
         return self.__client
 
     @property
     def name(self):
-        """The name of this :class:`Database`."""
+        """The name of this `Database`."""
         return self.__name
 
     @property
@@ -207,7 +207,7 @@ class Database(common.BaseObject):
         Raises InvalidName if an invalid collection name is used.
 
         :Parameters:
-          - `name`: the name of the collection to get
+          - ``name``: the name of the collection to get
         """
         if name.startswith('_'):
             raise AttributeError(
@@ -221,27 +221,27 @@ class Database(common.BaseObject):
         Raises InvalidName if an invalid collection name is used.
 
         :Parameters:
-          - `name`: the name of the collection to get
+          - ``name``: the name of the collection to get
         """
         return Collection(self, name)
 
     def get_collection(self, name, codec_options=None,
                        read_preference=None, write_concern=None):
-        """Get a :class:`~pymongo.collection.Collection` with the given name
+        """Get a `.Collection` with the given name
         and options.
 
         :Parameters:
-          - `name`: The name of the collection - a string.
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the
-            default) the :attr:`codec_options` of this :class:`Database` is
+          - ``name``: The name of the collection - a string.
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`. If ``None`` (the
+            default) the `codec_options` of this `Database` is
             used.
-          - `read_preference` (optional): The read preference to use. If
-            ``None`` (the default) the :attr:`read_preference` of this
-            :class:`Database` is used.
-          - `write_concern` (optional): An instance of
-            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the
-            default) the :attr:`write_concern` of this :class:`Database` is
+          - ``read_preference`` (optional): The read preference to use. If
+            ``None`` (the default) the `read_preference` of this
+            `Database` is used.
+          - ``write_concern`` (optional): An instance of
+            `~.write_concern.WriteConcern`. If ``None`` (the
+            default) the `write_concern` of this `Database` is
             used.
         """
         return Collection(
@@ -249,12 +249,12 @@ class Database(common.BaseObject):
 
     def create_collection(self, name, codec_options=None,
                           read_preference=None, write_concern=None, **kwargs):
-        """Create a new :class:`~pymongo.collection.Collection` in this
+        """Create a new `.Collection` in this
         database.
 
         Normally collection creation is automatic. This method should
         only be used to specify options on
-        creation. :class:`~pymongo.errors.CollectionInvalid` will be
+        creation. `.CollectionInvalid` will be
         raised if the collection already exists.
 
         Options should be passed as keyword arguments to this method. Supported
@@ -270,19 +270,19 @@ class Database(common.BaseObject):
         server version.
 
         :Parameters:
-          - `name`: the name of the collection to create
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the
-            default) the :attr:`codec_options` of this :class:`Database` is
+          - ``name``: the name of the collection to create
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`. If ``None`` (the
+            default) the `codec_options` of this `Database` is
             used.
-          - `read_preference` (optional): The read preference to use. If
-            ``None`` (the default) the :attr:`read_preference` of this
-            :class:`Database` is used.
-          - `write_concern` (optional): An instance of
-            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the
-            default) the :attr:`write_concern` of this :class:`Database` is
+          - ``read_preference`` (optional): The read preference to use. If
+            ``None`` (the default) the `read_preference` of this
+            `Database` is used.
+          - ``write_concern`` (optional): An instance of
+            `~.write_concern.WriteConcern`. If ``None`` (the
+            default) the `write_concern` of this `Database` is
             used.
-          - `**kwargs` (optional): additional keyword arguments will
+          - ``**kwargs`` (optional): additional keyword arguments will
             be passed as options for the create collection command
 
         .. versionchanged:: 3.0
@@ -298,13 +298,13 @@ class Database(common.BaseObject):
                           read_preference, write_concern, **kwargs)
 
     def _apply_incoming_manipulators(self, son, collection):
-        """Apply incoming manipulators to `son`."""
+        """Apply incoming manipulators to ``son``."""
         for manipulator in self.__incoming_manipulators:
             son = manipulator.transform_incoming(son, collection)
         return son
 
     def _apply_incoming_copying_manipulators(self, son, collection):
-        """Apply incoming copying manipulators to `son`."""
+        """Apply incoming copying manipulators to ``son``."""
         for manipulator in self.__incoming_copying_manipulators:
             son = manipulator.transform_incoming(son, collection)
         return son
@@ -313,8 +313,8 @@ class Database(common.BaseObject):
         """Apply manipulators to an incoming SON object before it gets stored.
 
         :Parameters:
-          - `son`: the son object going into the database
-          - `collection`: the collection the son object is being saved in
+          - ``son``: the son object going into the database
+          - ``collection``: the collection the son object is being saved in
         """
         son = self._apply_incoming_manipulators(son, collection)
         son = self._apply_incoming_copying_manipulators(son, collection)
@@ -324,8 +324,8 @@ class Database(common.BaseObject):
         """Apply manipulators to a SON object as it comes out of the database.
 
         :Parameters:
-          - `son`: the son object coming out of the database
-          - `collection`: the collection the son object was saved in
+          - ``son``: the son object coming out of the database
+          - ``collection``: the collection the son object was saved in
         """
         for manipulator in reversed(self.__outgoing_manipulators):
             son = manipulator.transform_outgoing(son, collection)
@@ -354,11 +354,11 @@ class Database(common.BaseObject):
                 codec_options=CodecOptions(), **kwargs):
         """Issue a MongoDB command.
 
-        Send command `command` to the database and return the
-        response. If `command` is an instance of :class:`basestring`
-        (:class:`str` in python 3) then the command {`command`: `value`}
-        will be sent. Otherwise, `command` must be an instance of
-        :class:`dict` and will be sent as is.
+        Send command ``command`` to the database and return the
+        response. If ``command`` is an instance of `basestring`
+        (`str` in python 3) then the command {``command``: ``value``}
+        will be sent. Otherwise, ``command`` must be an instance of
+        `dict` and will be sent as is.
 
         Any additional keyword arguments will be added to the final
         command document before it is sent.
@@ -379,51 +379,51 @@ class Database(common.BaseObject):
         >>> db.command("filemd5", object_id, root=file_root)
 
         :Parameters:
-          - `command`: document representing the command to be issued,
+          - ``command``: document representing the command to be issued,
             or the name of the command (for simple commands only).
 
-            .. note:: the order of keys in the `command` document is
+            .. note:: the order of keys in the ``command`` document is
                significant (the "verb" must come first), so commands
-               which require multiple keys (e.g. `findandmodify`)
-               should use an instance of :class:`~bson.son.SON` or
+               which require multiple keys (e.g. ``findandmodify``)
+               should use an instance of `~bson.son.SON` or
                a string and kwargs instead of a Python `dict`.
 
-          - `value` (optional): value to use for the command verb when
+          - ``value`` (optional): value to use for the command verb when
             `command` is passed as a string
-          - `check` (optional): check the response for errors, raising
-            :class:`~pymongo.errors.OperationFailure` if there are any
-          - `allowable_errors`: if `check` is ``True``, error messages
+          - ``check`` (optional): check the response for errors, raising
+            `~.errors.OperationFailure` if there are any
+          - ``allowable_errors``: if ``check`` is ``True``, error messages
             in this list will be ignored by error-checking
-          - `read_preference`: The read preference for this operation.
-          - `codec_options`: A :class:`~bson.codec_options.CodecOptions`
+          - ``read_preference``: The read preference for this operation.
+          - ``codec_options``: A `~bson.codec_options.CodecOptions`
             instance.
-          - `**kwargs` (optional): additional keyword arguments will
+          - ``**kwargs`` (optional): additional keyword arguments will
             be added to the command document before it is sent
 
-        .. note:: :meth:`command` does **not** obey :attr:`read_preference`
-           or :attr:`codec_options`. You must use the `read_preference` and
-           `codec_options` parameters instead.
+        .. note:: `command` does **not** obey `read_preference`
+           or `codec_options`. You must use the ``read_preference`` and
+           ``codec_options`` parameters instead.
 
         .. versionchanged:: 3.0
-           Removed the `as_class`, `fields`, `uuid_subtype`, `tag_sets`,
-           and `secondary_acceptable_latency_ms` option.
-           Removed `compile_re` option: PyMongo now always represents BSON
-           regular expressions as :class:`~bson.regex.Regex` objects. Use
-           :meth:`~bson.regex.Regex.try_compile` to attempt to convert from a
+           Removed the ``as_class``, ``fields``, ``uuid_subtype``, ``tag_sets``,
+           and ``secondary_acceptable_latency_ms`` option.
+           Removed ``compile_re`` option: PyMongo now always represents BSON
+           regular expressions as `~bson.regex.Regex` objects. Use
+           `~bson.regex.Regex.try_compile` to attempt to convert from a
            BSON regular expression to a Python regular expression object.
-           Added the `codec_options` parameter.
+           Added the ``codec_options`` parameter.
 
         .. versionchanged:: 2.7
-           Added `compile_re` option. If set to False, PyMongo represented BSON
-           regular expressions as :class:`~bson.regex.Regex` objects instead of
+           Added ``compile_re`` option. If set to False, PyMongo represented BSON
+           regular expressions as `~bson.regex.Regex` objects instead of
            attempting to compile BSON regular expressions as Python native
            regular expressions, thus preventing errors for some incompatible
            patterns, see `PYTHON-500`_.
 
         .. versionchanged:: 2.3
-           Added `tag_sets` and `secondary_acceptable_latency_ms` options.
+           Added ``tag_sets`` and ``secondary_acceptable_latency_ms`` options.
         .. versionchanged:: 2.2
-           Added support for `as_class` - the class you want to use for
+           Added support for ``as_class`` - the class you want to use for
            the resulting documents
 
         .. _PYTHON-500: https://jira.mongodb.org/browse/PYTHON-500
@@ -437,7 +437,7 @@ class Database(common.BaseObject):
         """Get a list of all the collection names in this database.
 
         :Parameters:
-          - `include_system_collections` (optional): if ``False`` list
+          - ``include_system_collections`` (optional): if ``False`` list
             will not include system collections (e.g ``system.indexes``)
         """
         client = self.__client
@@ -467,7 +467,7 @@ class Database(common.BaseObject):
         """Drop a collection.
 
         :Parameters:
-          - `name_or_collection`: the name of a collection to drop or the
+          - ``name_or_collection``: the name of a collection to drop or the
             collection object itself
         """
         name = name_or_collection
@@ -486,21 +486,21 @@ class Database(common.BaseObject):
                             scandata=False, full=False):
         """Validate a collection.
 
-        Returns a dict of validation info. Raises CollectionInvalid if
+        Returns a dict of validation info. Raises `.CollectionInvalid` if
         validation fails.
 
-        With MongoDB < 1.9 the result dict will include a `result` key
+        With MongoDB < 1.9 the result dict will include a ``result`` key
         with a string value that represents the validation results. With
-        MongoDB >= 1.9 the `result` key no longer exists and the results
+        MongoDB >= 1.9 the ``result`` key no longer exists and the results
         are split into individual fields in the result dict.
 
         :Parameters:
-          - `name_or_collection`: A Collection object or the name of a
+          - ``name_or_collection``: A Collection object or the name of a
             collection to validate.
-          - `scandata`: Do extra checks beyond checking the overall
+          - ``scandata``: Do extra checks beyond checking the overall
             structure of the collection.
-          - `full`: Have the server do a more thorough scan of the
-            collection. Use with `scandata` for a thorough scan
+          - ``full``: Have the server do a more thorough scan of the
+            collection. Use with ``scandata`` for a thorough scan
             of the structure of the collection and the individual
             documents. Ignored in MongoDB versions before 1.9.
         """
@@ -546,7 +546,7 @@ class Database(common.BaseObject):
         """Get information on operations currently running.
 
         :Parameters:
-          - `include_all` (optional): if ``True`` also list currently
+          - ``include_all`` (optional): if ``True`` also list currently
             idle operations in the result
          """
         if include_all:
@@ -557,8 +557,8 @@ class Database(common.BaseObject):
     def profiling_level(self):
         """Get the database's current profiling level.
 
-        Returns one of (:data:`~pymongo.OFF`,
-        :data:`~pymongo.SLOW_ONLY`, :data:`~pymongo.ALL`).
+        Returns one of (`.OFF`,
+        `.SLOW_ONLY`, `.ALL`).
 
         .. mongodoc:: profiling
         """
@@ -571,27 +571,26 @@ class Database(common.BaseObject):
         """Set the database's profiling level.
 
         :Parameters:
-          - `level`: Specifies a profiling level, see list of possible values
+          - ``level``: Specifies a profiling level, see list of possible values
             below.
-          - `slow_ms`: Optionally modify the threshold for the profile to
+          - ``slow_ms``: Optionally modify the threshold for the profile to
             consider a query or operation.  Even if the profiler is off queries
-            slower than the `slow_ms` level will get written to the logs.
+            slower than the ``slow_ms`` level will get written to the logs.
 
-        Possible `level` values:
+        Possible ``level`` values:
 
         +----------------------------+------------------------------------+
         | Level                      | Setting                            |
         +============================+====================================+
-        | :data:`~pymongo.OFF`       | Off. No profiling.                 |
+        | `.OFF`                     | Off. No profiling.                 |
         +----------------------------+------------------------------------+
-        | :data:`~pymongo.SLOW_ONLY` | On. Only includes slow operations. |
+        | `.SLOW_ONLY`               | On. Only includes slow operations. |
         +----------------------------+------------------------------------+
-        | :data:`~pymongo.ALL`       | On. Includes all operations.       |
+        | `.ALL`                     | On. Includes all operations.       |
         +----------------------------+------------------------------------+
 
-        Raises :class:`ValueError` if level is not one of
-        (:data:`~pymongo.OFF`, :data:`~pymongo.SLOW_ONLY`,
-        :data:`~pymongo.ALL`).
+        Raises `ValueError` if level is not one of
+        (`.OFF`, `.SLOW_ONLY`, `.ALL`).
 
         .. mongodoc:: profiling
         """
@@ -663,7 +662,7 @@ class Database(common.BaseObject):
         errors by default.
 
         Only returns errors that have occurred since the last call to
-        :meth:`reset_error_history`. Returns None if no such errors have
+        `reset_error_history`. Returns None if no such errors have
         occurred.
 
         .. versionchanged:: 2.8
@@ -684,7 +683,7 @@ class Database(common.BaseObject):
         remove, and so on) use the write concern ``w=1`` and report their
         errors by default.
 
-        Calls to :meth:`previous_error` will only return errors that have
+        Calls to `previous_error` will only return errors that have
         occurred since the most recent call to this method.
 
         .. versionchanged:: 2.8
@@ -786,18 +785,18 @@ class Database(common.BaseObject):
                 raise
 
     def add_user(self, name, password=None, read_only=None, **kwargs):
-        """Create user `name` with password `password`.
+        """Create user ``name`` with password ``password``.
 
-        Add a new user with permissions for this :class:`Database`.
+        Add a new user with permissions for this `Database`.
 
-        .. note:: Will change the password if user `name` already exists.
+        .. note:: Will change the password if user ``name`` already exists.
 
         :Parameters:
-          - `name`: the name of the user to create
-          - `password` (optional): the password of the user to create. Can not
+          - ``name``: the name of the user to create
+          - ``password`` (optional): the password of the user to create. Can not
             be used with the ``userSource`` argument.
-          - `read_only` (optional): if ``True`` the user will be read only
-          - `**kwargs` (optional): optional fields for the user document
+          - ``read_only`` (optional): if ``True`` the user will be read only
+          - ``**kwargs`` (optional): optional fields for the user document
             (e.g. ``userSource``, ``otherDBRoles``, or ``roles``). See
             `<http://docs.mongodb.org/manual/reference/privilege-documents>`_
             for more information.
@@ -846,13 +845,13 @@ class Database(common.BaseObject):
                 raise
 
     def remove_user(self, name):
-        """Remove user `name` from this :class:`Database`.
+        """Remove user ``name`` from this `Database`.
 
-        User `name` will no longer have permissions to access this
-        :class:`Database`.
+        User ``name`` will no longer have permissions to access this
+        `Database`.
 
         :Parameters:
-          - `name`: the name of the user to remove
+          - ``name``: the name of the user to remove
         """
         try:
             cmd = SON([("dropUser", name)])
@@ -875,19 +874,19 @@ class Database(common.BaseObject):
         """Authenticate to use this database.
 
         Authentication lasts for the life of the underlying client
-        instance, or until :meth:`logout` is called.
+        instance, or until `logout` is called.
 
-        Raises :class:`TypeError` if (required) `name`, (optional) `password`,
-        or (optional) `source` is not an instance of :class:`basestring`
-        (:class:`str` in python 3).
+        Raises `TypeError` if (required) ``name``, (optional) ``password``,
+        or (optional) ``source`` is not an instance of `basestring`
+        (`str` in python 3).
 
         .. note::
           - This method authenticates the current connection, and
-            will also cause all new :class:`~socket.socket` connections
+            will also cause all new `~socket.socket` connections
             in the underlying client instance to be authenticated automatically.
 
           - Authenticating more than once on the same database with different
-            credentials is not supported. You must call :meth:`logout` before
+            credentials is not supported. You must call `logout` before
             authenticating with new credentials.
 
           - When sharing a client instance between multiple threads, all
@@ -896,16 +895,16 @@ class Database(common.BaseObject):
             distinct client instances.
 
         :Parameters:
-          - `name`: the name of the user to authenticate.
-          - `password` (optional): the password of the user to authenticate.
+          - ``name``: the name of the user to authenticate.
+          - ``password`` (optional): the password of the user to authenticate.
             Not used with GSSAPI or MONGODB-X509 authentication.
-          - `source` (optional): the database to authenticate on. If not
+          - ``source`` (optional): the database to authenticate on. If not
             specified the current database is used.
-          - `mechanism` (optional): See
-            :data:`~pymongo.auth.MECHANISMS` for options.
+          - ``mechanism`` (optional): See
+            `.auth.MECHANISMS` for options.
             By default, use SCRAM-SHA-1 with MongoDB 3.0 and later,
             MONGODB-CR (MongoDB Challenge Response protocol) for older servers.
-          - `authMechanismProperties` (optional): Used to specify
+          - ``authMechanismProperties`` (optional): Used to specify
             authentication mechanism specific options. To specify the service
             name for GSSAPI authentication pass
             authMechanismProperties='SERVICE_NAME:<service name>'
@@ -914,8 +913,8 @@ class Database(common.BaseObject):
            Use SCRAM-SHA-1 with MongoDB 3.0 and later.
 
         .. versionchanged:: 2.5
-           Added the `source` and `mechanism` parameters. :meth:`authenticate`
-           now raises a subclass of :class:`~pymongo.errors.PyMongoError` if
+           Added the ``source`` and ``mechanism`` parameters. ``authenticate``
+           now raises a subclass of `~.errors.PyMongoError` if
            authentication fails due to invalid credentials or configuration
            issues.
 
@@ -957,20 +956,20 @@ class Database(common.BaseObject):
         self.client._purge_credentials(self.name)
 
     def dereference(self, dbref, **kwargs):
-        """Dereference a :class:`~bson.dbref.DBRef`, getting the
+        """Dereference a `~bson.dbref.DBRef`, getting the
         document it points to.
 
-        Raises :class:`TypeError` if `dbref` is not an instance of
-        :class:`~bson.dbref.DBRef`. Returns a document, or ``None`` if
+        Raises `TypeError` if ``dbref`` is not an instance of
+        `~bson.dbref.DBRef`. Returns a document, or ``None`` if
         the reference does not point to a valid document.  Raises
-        :class:`ValueError` if `dbref` has a database specified that
+        `ValueError` if ``dbref`` has a database specified that
         is different from the current database.
 
         :Parameters:
-          - `dbref`: the reference
-          - `**kwargs` (optional): any additional keyword arguments
+          - ``dbref``: the reference
+          - ``**kwargs`` (optional): any additional keyword arguments
             are the same as the arguments to
-            :meth:`~pymongo.collection.Collection.find`.
+            `~.Collection.find`.
         """
         if not isinstance(dbref, DBRef):
             raise TypeError("cannot dereference a %s" % type(dbref))
@@ -985,20 +984,20 @@ class Database(common.BaseObject):
 
         Useful if you need to touch a lot of data lightly; in such a
         scenario the network transfer of the data could be a
-        bottleneck. The `code` argument must be a JavaScript
+        bottleneck. The ``code`` argument must be a JavaScript
         function. Additional positional arguments will be passed to
         that function when it is run on the server.
 
-        Raises :class:`TypeError` if `code` is not an instance of
-        :class:`basestring` (:class:`str` in python 3) or `Code`.
-        Raises :class:`~pymongo.errors.OperationFailure` if the eval
+        Raises `TypeError` if ``code`` is not an instance of
+        `basestring` (`str` in python 3) or `~.code.Code`.
+        Raises `~.errors.OperationFailure` if the eval
         fails. Returns the result of the evaluation.
 
         :Parameters:
-          - `code`: string representation of JavaScript code to be
+          - ``code``: string representation of JavaScript code to be
             evaluated
-          - `args` (optional): additional positional arguments are
-            passed to the `code` being evaluated
+          - ``args`` (optional): additional positional arguments are
+            passed to the ``code`` being evaluated
         """
         if not isinstance(code, Code):
             code = Code(code)
@@ -1020,13 +1019,13 @@ class SystemJS(object):
     """
 
     def __init__(self, database):
-        """Get a system js helper for the database `database`.
+        """Get a system js helper for the database ``database``.
 
-        An instance of :class:`SystemJS` can be created with an instance
-        of :class:`Database` through :attr:`Database.system_js`,
+        An instance of `SystemJS` can be created with an instance
+        of `Database` through `Database.system_js`,
         manual instantiation of this class should not be necessary.
 
-        :class:`SystemJS` instances allow for easy manipulation and
+        `SystemJS` instances allow for easy manipulation and
         access to server-side JavaScript:
 
         .. doctest::

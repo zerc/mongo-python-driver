@@ -76,8 +76,8 @@ class ObjectId(object):
           - a 3-byte counter, starting with a random value.
 
         By default, ``ObjectId()`` creates a new unique identifier. The
-        optional parameter `oid` can be an :class:`ObjectId`, or any 12
-        :class:`bytes` or, in Python 2, any 12-character :class:`str`.
+        optional parameter ``oid`` can be an `ObjectId`, or any 12
+        `bytes` or, in Python 2, any 12-character `str`.
 
         For example, the 12 bytes b'foo-bar-quux' do not follow the ObjectId
         specification but they are acceptable input::
@@ -85,7 +85,7 @@ class ObjectId(object):
           >>> ObjectId(b'foo-bar-quux')
           ObjectId('666f6f2d6261722d71757578')
 
-        `oid` can also be a :class:`unicode` or :class:`str` of 24 hex digits::
+        ``oid`` can also be a `unicode` or `str` of 24 hex digits::
 
           >>> ObjectId('0123456789ab0123456789ab')
           ObjectId('0123456789ab0123456789ab')
@@ -94,11 +94,11 @@ class ObjectId(object):
           >>> ObjectId(u'0123456789ab0123456789ab')
           ObjectId('0123456789ab0123456789ab')
 
-        Raises :class:`~bson.errors.InvalidId` if `oid` is not 12 bytes nor
-        24 hex digits, or :class:`TypeError` if `oid` is not an accepted type.
+        Raises `~bson.errors.InvalidId` if ``oid`` is not 12 bytes nor
+        24 hex digits, or `TypeError` if ``oid`` is not an accepted type.
 
         :Parameters:
-          - `oid` (optional): a valid ObjectId.
+          - ``oid`` (optional): a valid ObjectId.
 
         .. mongodoc:: objectids
         """
@@ -114,7 +114,7 @@ class ObjectId(object):
         """Create a dummy ObjectId instance with a specific generation time.
 
         This method is useful for doing range queries on a field
-        containing :class:`ObjectId` instances.
+        containing `ObjectId` instances.
 
         .. warning::
            It is not safe to insert a document containing an ObjectId
@@ -123,7 +123,7 @@ class ObjectId(object):
            generally provide. ObjectIds generated with this method
            should be used exclusively in queries.
 
-        `generation_time` will be converted to UTC. Naive datetime
+        ``generation_time`` will be converted to UTC. Naive datetime
         instances will be treated as though they already contain UTC.
 
         An example using this helper to get documents where ``"_id"``
@@ -134,7 +134,7 @@ class ObjectId(object):
         >>> result = collection.find({"_id": {"$lt": dummy_id}})
 
         :Parameters:
-          - `generation_time`: :class:`~datetime.datetime` to be used
+          - ``generation_time``: `~datetime.datetime` to be used
             as the generation time for the resulting ObjectId.
         """
         if generation_time.utcoffset() is not None:
@@ -146,10 +146,10 @@ class ObjectId(object):
 
     @classmethod
     def is_valid(cls, oid):
-        """Checks if a `oid` string is valid or not.
+        """Checks if a ``oid`` string is valid or not.
 
         :Parameters:
-          - `oid`: the object id to validate
+          - ``oid``: the object id to validate
 
         .. versionadded:: 2.3
         """
@@ -186,12 +186,12 @@ class ObjectId(object):
         """Validate and use the given id for this ObjectId.
 
         Raises TypeError if id is not an instance of
-        (:class:`basestring` (:class:`str` or :class:`bytes`
+        (`basestring` (`str` or `bytes`
         in python 3), ObjectId) and InvalidId if it is not a
         valid ObjectId.
 
         :Parameters:
-          - `oid`: a valid ObjectId
+          - ``oid``: a valid ObjectId
         """
         if isinstance(oid, ObjectId):
             self.__id = oid.binary
@@ -216,10 +216,10 @@ class ObjectId(object):
 
     @property
     def generation_time(self):
-        """A :class:`datetime.datetime` instance representing the time of
-        generation for this :class:`ObjectId`.
+        """A `datetime.datetime` instance representing the time of
+        generation for this `ObjectId`.
 
-        The :class:`datetime.datetime` is timezone aware, and
+        The `datetime.datetime` is timezone aware, and
         represents the generation time in UTC. It is precise to the
         second.
         """
@@ -288,5 +288,5 @@ class ObjectId(object):
         return NotImplemented
 
     def __hash__(self):
-        """Get a hash value for this :class:`ObjectId`."""
+        """Get a hash value for this `ObjectId`."""
         return hash(self.__id)

@@ -1,5 +1,5 @@
-:mod:`errors` -- Exceptions raised by the :mod:`gridfs` package
-=================================================================
+`errors` -- Exceptions raised by the `gridfs` package
+=====================================================
 
 .. automodule:: gridfs.errors
    :synopsis: Exceptions raised by the gridfs package

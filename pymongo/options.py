@@ -18,8 +18,8 @@ from pymongo.common import validate_boolean, validate_is_mapping
 
 class ReturnDocument(object):
     """An enum used with
-    :meth:`~pymongo.collection.Collection.find_one_and_replace` and
-    :meth:`~pymongo.collection.Collection.find_one_and_update`.
+    `~.Collection.find_one_and_replace` and
+    `~.Collection.find_one_and_update`.
     """
     Before = False
     """Return the original document before it was updated/replaced, or
@@ -50,16 +50,16 @@ class InsertOne(_WriteOp):
     def __init__(self, document):
         """Create an InsertOne instance.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `document`: The document to insert. If the document is missing an
+          - ``document``: The document to insert. If the document is missing an
             _id field one will be added.
         """
         super(InsertOne, self).__init__(doc=document)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_insert(self._doc)
 
     def __repr__(self):
@@ -72,15 +72,15 @@ class DeleteOne(_WriteOp):
     def __init__(self, filter):
         """Create a DeleteOne instance.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `filter`: A query that matches the document to delete.
+          - ``filter``: A query that matches the document to delete.
         """
         super(DeleteOne, self).__init__(filter)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_delete(self._filter, 1)
 
     def __repr__(self):
@@ -93,15 +93,15 @@ class DeleteMany(_WriteOp):
     def __init__(self, filter):
         """Create a DeleteMany instance.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `filter`: A query that matches the documents to delete.
+          - ``filter``: A query that matches the documents to delete.
         """
         super(DeleteMany, self).__init__(filter)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_delete(self._filter, 0)
 
     def __repr__(self):
@@ -114,18 +114,18 @@ class ReplaceOne(_WriteOp):
     def __init__(self, filter, replacement, upsert=False):
         """Create a ReplaceOne instance.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `filter`: A query that matches the document to replace.
-          - `replacement`: The new document.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the document to replace.
+          - ``replacement``: The new document.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
         """
         super(ReplaceOne, self).__init__(filter, replacement, upsert)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_replace(self._filter, self._doc, self._upsert)
 
     def __repr__(self):
@@ -140,18 +140,18 @@ class UpdateOne(_WriteOp):
     def __init__(self, filter, update, upsert=False):
         """Represents an update_one operation.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `filter`: A query that matches the document to update.
-          - `update`: The modifications to apply.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the document to update.
+          - ``update``: The modifications to apply.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
         """
         super(UpdateOne, self).__init__(filter, update, upsert)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_update(self._filter, self._doc, False, self._upsert)
 
     def __repr__(self):
@@ -166,18 +166,18 @@ class UpdateMany(_WriteOp):
     def __init__(self, filter, update, upsert=False):
         """Create an UpdateMany instance.
 
-        For use with :meth:`~pymongo.collection.Collection.bulk_write`.
+        For use with `~.Collection.bulk_write`.
 
         :Parameters:
-          - `filter`: A query that matches the documents to update.
-          - `update`: The modifications to apply.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the documents to update.
+          - ``update``: The modifications to apply.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
         """
         super(UpdateMany, self).__init__(filter, update, upsert)
 
     def _add_to_bulk(self, bulkobj):
-        """Add this operation to the _Bulk instance `bulkobj`."""
+        """Add this operation to the _Bulk instance ``bulkobj``."""
         bulkobj.add_update(self._filter, self._doc, True, self._upsert)
 
     def __repr__(self):

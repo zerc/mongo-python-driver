@@ -104,7 +104,7 @@ class Cursor(object):
         """Create a new cursor.
 
         Should not be called directly by application developers - see
-        :meth:`~pymongo.collection.Collection.find` instead.
+        `~.Collection.find` instead.
 
         .. mongodoc:: cursors
         """
@@ -189,8 +189,8 @@ class Cursor(object):
 
     @property
     def collection(self):
-        """The :class:`~pymongo.collection.Collection` that this
-        :class:`Cursor` is iterating.
+        """The `.Collection` that this
+        `Cursor` is iterating.
         """
         return self.__collection
 
@@ -383,13 +383,13 @@ class Cursor(object):
     def limit(self, limit):
         """Limits the number of results to be returned by this cursor.
 
-        Raises :exc:`TypeError` if `limit` is not an integer. Raises
-        :exc:`~pymongo.errors.InvalidOperation` if this :class:`Cursor`
-        has already been used. The last `limit` applied to this cursor
+        Raises `TypeError` if ``limit`` is not an integer. Raises
+        `~pymongo.errors.InvalidOperation` if this `Cursor`
+        has already been used. The last ``limit`` applied to this cursor
         takes precedence. A limit of ``0`` is equivalent to no limit.
 
         :Parameters:
-          - `limit`: the number of results to return
+          - ``limit``: the number of results to return
 
         .. mongodoc:: limit
         """
@@ -413,14 +413,14 @@ class Cursor(object):
            if you set batch size to 1,000,000,000, MongoDB will currently only
            return 4-16MB of results per batch).
 
-        Raises :exc:`TypeError` if `batch_size` is not an integer.
-        Raises :exc:`ValueError` if `batch_size` is less than ``0``.
-        Raises :exc:`~pymongo.errors.InvalidOperation` if this
-        :class:`Cursor` has already been used. The last `batch_size`
+        Raises `TypeError` if ``batch_size`` is not an integer.
+        Raises `ValueError` if ``batch_size`` is less than ``0``.
+        Raises `~pymongo.errors.InvalidOperation` if this
+        `Cursor` has already been used. The last ``batch_size``
         applied to this cursor takes precedence.
 
         :Parameters:
-          - `batch_size`: The size of each batch of results requested.
+          - ``batch_size``: The size of each batch of results requested.
         """
         if not isinstance(batch_size, integer_types):
             raise TypeError("batch_size must be an integer")
@@ -432,16 +432,16 @@ class Cursor(object):
         return self
 
     def skip(self, skip):
-        """Skips the first `skip` results of this cursor.
+        """Skips the first ``skip`` results of this cursor.
 
-        Raises :exc:`TypeError` if `skip` is not an integer. Raises
-        :exc:`ValueError` if `skip` is less than ``0``. Raises
-        :exc:`~pymongo.errors.InvalidOperation` if this :class:`Cursor` has
-        already been used. The last `skip` applied to this cursor takes
+        Raises `TypeError` if ``skip`` is not an integer. Raises
+        `ValueError` if ``skip`` is less than ``0``. Raises
+        `~pymongo.errors.InvalidOperation` if this `Cursor` has
+        already been used. The last ``skip`` applied to this cursor takes
         precedence.
 
         :Parameters:
-          - `skip`: the number of results to skip
+          - ``skip``: the number of results to skip
         """
         if not isinstance(skip, integer_types):
             raise TypeError("skip must be an integer")
@@ -455,15 +455,15 @@ class Cursor(object):
     def max_time_ms(self, max_time_ms):
         """Specifies a time limit for a query operation. If the specified
         time is exceeded, the operation will be aborted and
-        :exc:`~pymongo.errors.ExecutionTimeout` is raised. If `max_time_ms`
+        `~pymongo.errors.ExecutionTimeout` is raised. If ``max_time_ms``
         is ``None`` no limit is applied.
 
-        Raises :exc:`TypeError` if `max_time_ms` is not an integer or ``None``.
-        Raises :exc:`~pymongo.errors.InvalidOperation` if this :class:`Cursor`
+        Raises `TypeError` if `max_time_ms` is not an integer or ``None``.
+        Raises `~pymongo.errors.InvalidOperation` if this `Cursor`
         has already been used.
 
         :Parameters:
-          - `max_time_ms`: the time limit after which the operation is aborted
+          - ``max_time_ms``: the time limit after which the operation is aborted
         """
         if (not isinstance(max_time_ms, integer_types)
                 and max_time_ms is not None):
@@ -476,14 +476,14 @@ class Cursor(object):
     def __getitem__(self, index):
         """Get a single document or a slice of documents from this cursor.
 
-        Raises :class:`~pymongo.errors.InvalidOperation` if this
+        Raises `~pymongo.errors.InvalidOperation` if this
         cursor has already been used.
 
         To get a single document use an integral index, e.g.::
 
           >>> db.test.find()[50]
 
-        An :class:`IndexError` will be raised if the index is negative
+        An `IndexError` will be raised if the index is negative
         or greater than the amount of documents in this cursor. Any
         limit previously applied to this cursor will be ignored.
 
@@ -495,12 +495,12 @@ class Cursor(object):
         ``20`` applied.  Using a slice index will override any prior
         limits or skips applied to this cursor (including those
         applied through previous calls to this method). Raises
-        :class:`IndexError` when the slice has a step, a negative
+        `IndexError` when the slice has a step, a negative
         start value, or a stop value less than or equal to the start
         value.
 
         :Parameters:
-          - `index`: An integer or slice index to be applied to this cursor
+          - ``index``: An integer or slice index to be applied to this cursor
         """
         self.__check_okay_to_chain()
         self.__empty = False
@@ -545,22 +545,22 @@ class Cursor(object):
     def max_scan(self, max_scan):
         """Limit the number of documents to scan when performing the query.
 
-        Raises :class:`~pymongo.errors.InvalidOperation` if this
-        cursor has already been used. Only the last :meth:`max_scan`
+        Raises `~pymongo.errors.InvalidOperation` if this
+        cursor has already been used. Only the last ``max_scan``
         applied to this cursor has any effect.
 
         :Parameters:
-          - `max_scan`: the maximum number of documents to scan
+          - ``max_scan``: the maximum number of documents to scan
         """
         self.__check_okay_to_chain()
         self.__max_scan = max_scan
         return self
 
     def max(self, spec):
-        """Adds `max` operator that specifies upper bound for specific index.
+        """Adds ``max`` operator that specifies upper bound for specific index.
 
         :Parameters:
-          - `spec`: a list of field, limit pairs specifying the exclusive
+          - ``spec``: a list of field, limit pairs specifying the exclusive
             upper bound for all keys of a specific index in order.
 
         .. versionadded:: 2.7
@@ -573,10 +573,10 @@ class Cursor(object):
         return self
 
     def min(self, spec):
-        """Adds `min` operator that specifies lower bound for specific index.
+        """Adds ``min`` operator that specifies lower bound for specific index.
 
         :Parameters:
-          - `spec`: a list of field, limit pairs specifying the inclusive
+          - ``spec``: a list of field, limit pairs specifying the inclusive
             lower bound for all keys of a specific index in order.
 
         .. versionadded:: 2.7
@@ -592,7 +592,7 @@ class Cursor(object):
         """Sorts this cursor's results.
 
         Pass a field name and a direction, either
-        :data:`~pymongo.ASCENDING` or :data:`~pymongo.DESCENDING`::
+        `~pymongo.ASCENDING` or `~pymongo.DESCENDING`::
 
             for doc in collection.find().sort('field', pymongo.ASCENDING):
                 print(doc)
@@ -617,15 +617,15 @@ class Cursor(object):
             for doc in cursor:
                 print(doc)
 
-        Raises :class:`~pymongo.errors.InvalidOperation` if this cursor has
-        already been used. Only the last :meth:`sort` applied to this
+        Raises `~pymongo.errors.InvalidOperation` if this cursor has
+        already been used. Only the last ``sort`` applied to this
         cursor has any effect.
 
         :Parameters:
-          - `key_or_list`: a single key or a list of (key, direction)
+          - ``key_or_list``: a single key or a list of (key, direction)
             pairs specifying the keys to sort on
-          - `direction` (optional): only used if `key_or_list` is a single
-            key, if not given :data:`~pymongo.ASCENDING` is assumed
+          - ``direction`` (optional): only used if ``key_or_list`` is a single
+            key, if not given `~pymongo.ASCENDING` is assumed
         """
         self.__check_okay_to_chain()
         keys = helpers._index_list(key_or_list, direction)
@@ -636,31 +636,31 @@ class Cursor(object):
         """Get the size of the results set for this query.
 
         Returns the number of documents in the results set for this query. Does
-        not take :meth:`limit` and :meth:`skip` into account by default - set
-        `with_limit_and_skip` to ``True`` if that is the desired behavior.
-        Raises :class:`~pymongo.errors.OperationFailure` on a database error.
+        not take ``limit`` and ``skip`` into account by default - set
+        ``with_limit_and_skip`` to ``True`` if that is the desired behavior.
+        Raises `~pymongo.errors.OperationFailure` on a database error.
 
-        When used with MongoDB >= 2.6, :meth:`~count` uses any :meth:`~hint`
+        When used with MongoDB >= 2.6, `~count` uses any `~hint`
         applied to the query. In the following example the hint is passed to
         the count command:
 
           collection.find({'field': 'value'}).hint('field_1').count()
 
-        The :meth:`count` method obeys the
-        :attr:`~pymongo.collection.Collection.read_preference` of the
-        :class:`~pymongo.collection.Collection` instance on which
-        :meth:`~pymongo.collection.Collection.find` was called.
+        The `count` method obeys the
+        `~.Collection.read_preference` of the
+        `.Collection` instance on which
+        `~.Collection.find` was called.
 
         :Parameters:
-          - `with_limit_and_skip` (optional): take any :meth:`limit` or
-            :meth:`skip` that has been applied to this cursor into account when
+          - ``with_limit_and_skip`` (optional): take any ``limit`` or
+            ``skip`` that has been applied to this cursor into account when
             getting the count
 
-        .. note:: The `with_limit_and_skip` parameter requires server
+        .. note:: The ``with_limit_and_skip`` parameter requires server
            version **>= 1.1.4-**
 
         .. versionchanged:: 2.8
-           The :meth:`~count` method now supports :meth:`~hint`.
+           The `~count` method now supports `~hint`.
         """
         validate_boolean("with_limit_and_skip", with_limit_and_skip)
         options = {"query": self.__spec}
@@ -681,21 +681,21 @@ class Cursor(object):
         return self.__collection.count(**options)
 
     def distinct(self, key):
-        """Get a list of distinct values for `key` among all documents
+        """Get a list of distinct values for ``key`` among all documents
         in the result set of this query.
 
-        Raises :class:`TypeError` if `key` is not an instance of
-        :class:`basestring` (:class:`str` in python 3).
+        Raises `TypeError` if ``key`` is not an instance of
+        `basestring` (`str` in python 3).
 
-        The :meth:`distinct` method obeys the
-        :attr:`~pymongo.collection.Collection.read_preference` of the
-        :class:`~pymongo.collection.Collection` instance on which
-        :meth:`~pymongo.collection.Collection.find` was called.
+        The `distinct` method obeys the
+        `~.Collection.read_preference` of the
+        `.Collection` instance on which
+        `~.Collection.find` was called.
 
         :Parameters:
-          - `key`: name of key for which we want to get the distinct values
+          - ``key``: name of key for which we want to get the distinct values
 
-        .. seealso:: :meth:`pymongo.collection.Collection.distinct`
+        .. seealso:: `pymongo.collection.Collection.distinct`
         """
         options = {}
         if self.__spec:
@@ -728,21 +728,21 @@ class Cursor(object):
         one of which is indexed) pass the indexed field as a hint to
         the query. Hinting will not do anything if the corresponding
         index does not exist. Raises
-        :class:`~pymongo.errors.InvalidOperation` if this cursor has
+        `~pymongo.errors.InvalidOperation` if this cursor has
         already been used.
 
-        `index` should be an index as passed to
-        :meth:`~pymongo.collection.Collection.create_index`
+        ``index`` should be an index as passed to
+        `~.Collection.create_index`
         (e.g. ``[('field', ASCENDING)]``) or the name of the index.
-        If `index` is ``None`` any existing hint for this query is
+        If ``index`` is ``None`` any existing hint for this query is
         cleared. The last hint applied to this cursor takes precedence
         over all others.
 
         :Parameters:
-          - `index`: index to hint on (as an index specifier)
+          - ``index``: index to hint on (as an index specifier)
 
         .. versionchanged:: 2.8
-           The :meth:`~hint` method accepts the name of the index.
+           The `~hint` method accepts the name of the index.
         """
         self.__check_okay_to_chain()
         if index is None:
@@ -761,7 +761,7 @@ class Cursor(object):
         http://docs.mongodb.org/manual/reference/operator/comment/
 
         :Parameters:
-          - `comment`: A string or document
+          - ``comment``: A string or document
 
         .. versionadded:: 2.7
         """
@@ -772,22 +772,22 @@ class Cursor(object):
     def where(self, code):
         """Adds a $where clause to this query.
 
-        The `code` argument must be an instance of :class:`basestring`
-        (:class:`str` in python 3) or :class:`~bson.code.Code`
+        The ``code`` argument must be an instance of `basestring`
+        (`str` in python 3) or `~bson.code.Code`
         containing a JavaScript expression. This expression will be
         evaluated for each document scanned. Only those documents
         for which the expression evaluates to *true* will be returned
         as results. The keyword *this* refers to the object currently
         being scanned.
 
-        Raises :class:`TypeError` if `code` is not an instance of
-        :class:`basestring` (:class:`str` in python 3). Raises
-        :class:`~pymongo.errors.InvalidOperation` if this
-        :class:`Cursor` has already been used. Only the last call to
-        :meth:`where` applied to a :class:`Cursor` has any effect.
+        Raises `TypeError` if ``code`` is not an instance of
+        `basestring` (`str` in python 3). Raises
+        `~pymongo.errors.InvalidOperation` if this
+        `Cursor` has already been used. Only the last call to
+        `where` applied to a `Cursor` has any effect.
 
         :Parameters:
-          - `code`: JavaScript expression to use as a filter
+          - ``code``: JavaScript expression to use as a filter
         """
         self.__check_okay_to_chain()
         if not isinstance(code, Code):
@@ -948,7 +948,7 @@ class Cursor(object):
 
         Useful if you need to manage cursor ids and want to handle killing
         cursors manually using
-        :meth:`~pymongo.mongo_client.MongoClient.kill_cursors`
+        `~pymongo.mongo_client.MongoClient.kill_cursors`
 
         .. versionadded:: 2.2
         """

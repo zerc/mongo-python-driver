@@ -1,5 +1,5 @@
-:mod:`objectid` -- Tools for working with MongoDB ObjectIds
-===========================================================
+`objectid` -- Tools for working with MongoDB ObjectIds
+======================================================
 
 .. automodule:: bson.objectid
    :synopsis: Tools for working with MongoDB ObjectIds
@@ -9,7 +9,7 @@
 
       .. describe:: str(o)
 
-         Get a hex encoded version of :class:`ObjectId` `o`.
+         Get a hex encoded version of `ObjectId` ``o``.
 
          The following property always holds:
 

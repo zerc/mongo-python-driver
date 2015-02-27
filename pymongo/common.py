@@ -439,12 +439,12 @@ class BaseObject(object):
 
     @property
     def codec_options(self):
-        """An instance of :class:`~bson.codec_options.CodecOptions`."""
+        """An instance of `~bson.codec_options.CodecOptions`."""
         return self.__codec_options
 
     @property
     def write_concern(self):
-        """The :class:`~pymongo.write_concern.WriteConcern` for this instance.
+        """The `~pymongo.write_concern.WriteConcern` for this instance.
         """
         return self.__write_concern
 
@@ -452,7 +452,7 @@ class BaseObject(object):
     def read_preference(self):
         """The read preference mode for this instance.
 
-        See :class:`~pymongo.read_preferences.ReadPreference` for
+        See `~pymongo.read_preferences.ReadPreference` for
         available options.
 
         .. versionadded:: 2.1

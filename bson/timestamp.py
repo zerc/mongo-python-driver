@@ -30,22 +30,22 @@ class Timestamp(object):
     _type_marker = 17
 
     def __init__(self, time, inc):
-        """Create a new :class:`Timestamp`.
+        """Create a new `Timestamp`.
 
         This class is only for use with the MongoDB opLog. If you need
         to store a regular timestamp, please use a
-        :class:`~datetime.datetime`.
+        `~datetime.datetime`.
 
-        Raises :class:`TypeError` if `time` is not an instance of
-        :class: `int` or :class:`~datetime.datetime`, or `inc` is not
-        an instance of :class:`int`. Raises :class:`ValueError` if
-        `time` or `inc` is not in [0, 2**32).
+        Raises `TypeError` if ``time`` is not an instance of
+        `int` or `~datetime.datetime`, or ``inc`` is not
+        an instance of `int`. Raises `ValueError` if
+        ``time`` or ``inc`` is not in [0, 2**32).
 
         :Parameters:
-          - `time`: time in seconds since epoch UTC, or a naive UTC
-            :class:`~datetime.datetime`, or an aware
-            :class:`~datetime.datetime`
-          - `inc`: the incrementing counter
+          - ``time``: time in seconds since epoch UTC, or a naive UTC
+            `~datetime.datetime`, or an aware
+            `~datetime.datetime`
+          - ``inc``: the incrementing counter
         """
         if isinstance(time, datetime.datetime):
             if time.utcoffset() is not None:
@@ -65,13 +65,13 @@ class Timestamp(object):
 
     @property
     def time(self):
-        """Get the time portion of this :class:`Timestamp`.
+        """Get the time portion of this `Timestamp`.
         """
         return self.__time
 
     @property
     def inc(self):
-        """Get the inc portion of this :class:`Timestamp`.
+        """Get the inc portion of this `Timestamp`.
         """
         return self.__inc
 
@@ -108,8 +108,8 @@ class Timestamp(object):
         return "Timestamp(%s, %s)" % (self.__time, self.__inc)
 
     def as_datetime(self):
-        """Return a :class:`~datetime.datetime` instance corresponding
-        to the time portion of this :class:`Timestamp`.
+        """Return a `~datetime.datetime` instance corresponding
+        to the time portion of this `Timestamp`.
 
         The returned datetime's timezone is UTC.
         """

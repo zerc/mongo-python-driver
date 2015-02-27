@@ -68,48 +68,50 @@ class Collection(common.BaseObject):
                  read_preference=None, write_concern=None, **kwargs):
         """Get / create a Mongo collection.
 
-        Raises :class:`TypeError` if `name` is not an instance of
-        :class:`basestring` (:class:`str` in python 3). Raises
-        :class:`~pymongo.errors.InvalidName` if `name` is not a valid
+        Raises `TypeError` if ``name`` is not an instance of
+        `basestring` (`str` in python 3). Raises
+        `~pymongo.errors.InvalidName` if ``name`` is not a valid
         collection name. Any additional keyword arguments will be used
         as options passed to the create command. See
-        :meth:`~pymongo.database.Database.create_collection` for valid
+        `~pymongo.database.Database.create_collection` for valid
         options.
 
-        If `create` is ``True`` or additional keyword arguments are
+        If ``create`` is ``True`` or additional keyword arguments are
         present a create command will be sent. Otherwise, a create
         command will not be sent and the collection will be created
         implicitly on first use.
 
         :Parameters:
-          - `database`: the database to get a collection from
-          - `name`: the name of the collection to get
-          - `create` (optional): if ``True``, force collection
+          - ``database``: the `.Database` to get a collection from
+          - ``name``: the name of the collection to get
+          - ``create`` (optional): if ``True``, force collection
             creation even without options being set
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the
-            default) database.codec_options is used.
-          - `read_preference` (optional): The read preference to use. If
-            ``None`` (the default) database.read_preference is used.
-          - `write_concern` (optional): An instance of
-            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the
-            default) database.write_concern is used.
-          - `**kwargs` (optional): additional keyword arguments will
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`. If ``None`` (the
+            default) the `~.Database.codec_options` of the `.Database` is used.
+          - ``read_preference`` (optional): The read preference to use. If
+            ``None`` (the default) the `~.Database.read_preference` of the
+            `.Database` is used.
+          - ``write_concern`` (optional): An instance of
+            `~pymongo.write_concern.WriteConcern`. If ``None`` (the
+            default) the `~.Database.write_concern` of the
+            `.Database` is used.
+          - ``**kwargs`` (optional): additional keyword arguments will
             be passed as options for the create collection command
 
         .. versionchanged:: 3.0
            Added the codec_options, read_preference, and write_concern options.
            Removed the uuid_subtype attribute.
-           :class:`~pymongo.collection.Collection` no longer returns an
-           instance of :class:`~pymongo.collection.Collection` for attribute
+           `.Collection` no longer returns an
+           instance of `.Collection` for attribute
            names with leading underscores. You must use dict-style lookups
            instead::
 
-               collection['__my_collection__']
+               ``collection['__my_collection__']``
 
            Not:
 
-               collection.__my_collection__
+               ``collection.__my_collection__``
 
         .. versionchanged:: 2.2
            Removed deprecated argument: options
@@ -152,13 +154,13 @@ class Collection(common.BaseObject):
         """Internal command helper.
 
         :Parameters:
-          - `command` - The command itself, as a SON instance.
-          - `read_preference` (optional) - An subclass of
-            :class:`~pymongo.read_preferences.ServerMode`.
-          - `codec_options` (optional) - An instance of
-            :class:`~bson.codec_options.CodecOptions`.
+          - ``command`` - The command itself, as a SON instance.
+          - ``read_preference`` (optional) - An subclass of
+            `~pymongo.read_preferences.ServerMode`.
+          - ``codec_options`` (optional) - An instance of
+            `~bson.codec_options.CodecOptions`.
           - `**kwargs` - any optional keyword arguments accepted by
-            :func:`~pymongo.helpers._command`.
+            `~pymongo.helpers._command`.
 
         :Returns:
           (result document, address of server the command was run on)
@@ -186,7 +188,7 @@ class Collection(common.BaseObject):
         Raises InvalidName if an invalid collection name is used.
 
         :Parameters:
-          - `name`: the name of the collection to get
+          - ``name``: the name of the collection to get
         """
         if name.startswith('_'):
             full_name = '%s.%s' % (self.__name, name)
@@ -213,21 +215,21 @@ class Collection(common.BaseObject):
 
     @property
     def full_name(self):
-        """The full name of this :class:`Collection`.
+        """The full name of this `Collection`.
 
-        The full name is of the form `database_name.collection_name`.
+        The full name is of the form ``database_name.collection_name``.
         """
         return self.__full_name
 
     @property
     def name(self):
-        """The name of this :class:`Collection`."""
+        """The name of this `Collection`."""
         return self.__name
 
     @property
     def database(self):
-        """The :class:`~pymongo.database.Database` that this
-        :class:`Collection` is a part of.
+        """The `~pymongo.database.Database` that this
+        `Collection` is a part of.
         """
         return self.__database
 
@@ -236,16 +238,16 @@ class Collection(common.BaseObject):
         """Get a clone of this collection changing the specified settings.
 
         :Parameters:
-          - `codec_options` (optional): An instance of
-            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the
-            default) the :attr:`codec_options` of this :class:`Collection`
+          - ``codec_options`` (optional): An instance of
+            `~bson.codec_options.CodecOptions`. If ``None`` (the
+            default) the `codec_options` of this `Collection`
             is used.
-          - `read_preference` (optional): The read preference to use. If
-            ``None`` (the default) the :attr:`read_preference` of this
-            :class:`Collection` is used.
-          - `write_concern` (optional): An instance of
-            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the
-            default) the :attr:`write_concern` of this :class:`Collection`
+          - ``read_preference`` (optional): The read preference to use. If
+            ``None`` (the default) the `read_preference` of this
+            `Collection` is used.
+          - ``write_concern`` (optional): An instance of
+            `~pymongo.write_concern.WriteConcern`. If ``None`` (the
+            default) the `write_concern` of this `Collection`
             is used.
         """
         return Collection(self.__database,
@@ -261,7 +263,7 @@ class Collection(common.BaseObject):
         Operations will be performed on the server in arbitrary order,
         possibly in parallel. All operations will be attempted.
 
-        Returns a :class:`~pymongo.bulk.BulkOperationBuilder` instance.
+        Returns a `~pymongo.bulk.BulkOperationBuilder` instance.
 
         See :ref:`unordered_bulk` for examples.
 
@@ -276,7 +278,7 @@ class Collection(common.BaseObject):
         order provided. If an error occurs all remaining operations
         are aborted.
 
-        Returns a :class:`~pymongo.bulk.BulkOperationBuilder` instance.
+        Returns a `~pymongo.bulk.BulkOperationBuilder` instance.
 
         See :ref:`ordered_bulk` for examples.
 
@@ -288,7 +290,7 @@ class Collection(common.BaseObject):
         """Send a batch of write operations to the server.
 
         Write operations are passed as a list using the write operation classes
-        from the :mod:`~pymongo.options` module::
+        from the `~pymongo.options` module::
 
           >>> # DeleteOne, UpdateOne, and UpdateMany are also available.
           ...
@@ -298,15 +300,15 @@ class Collection(common.BaseObject):
           >>> coll.bulk_write(requests)
 
         :Parameters:
-          - `requests`: A list of write operations (see examples above).
-          - `ordered` (optional): If ``True`` (the default) requests will be
+          - ``requests``: A list of write operations (see examples above).
+          - ``ordered`` (optional): If ``True`` (the default) requests will be
             performed on the server serially, in the order provided. If an error
             occurs all remaining operations are aborted. If ``False`` requests
             will be performed on the server in arbitrary order, possibly in
             parallel, and all operations will be attempted.
 
         :Returns:
-          An instance of :class:`~pymongo.results.BulkWriteResult`.
+          An instance of `~pymongo.results.BulkWriteResult`.
 
         .. versionadded:: 3.0
         """
@@ -388,12 +390,12 @@ class Collection(common.BaseObject):
         """Insert a single document.
 
         :Parameters:
-          - `document`: The document to insert. Must be a mutable mapping
+          - ``document``: The document to insert. Must be a mutable mapping
             type. If the document does not have an _id field one will be
             added automatically.
 
         :Returns:
-          - An instance of :class:`~pymongo.results.InsertOneResult`.
+          - An instance of `~pymongo.results.InsertOneResult`.
         """
         common.validate_is_mutable_mapping("document", document)
         if "_id" not in document:
@@ -405,15 +407,15 @@ class Collection(common.BaseObject):
         """Insert a list of documents.
 
         :Parameters:
-          - `documents`: A list of documents to insert.
-          - `ordered` (optional): If ``True`` (the default) documents will be
+          - ``documents``: A list of documents to insert.
+          - ``ordered`` (optional): If ``True`` (the default) documents will be
             inserted on the server serially, in the order provided. If an error
             occurs all remaining inserts are aborted. If ``False``, documents
             will be inserted on the server in arbitrary order, possibly in
             parallel, and all document inserts will be attempted.
 
         :Returns:
-          An instance of :class:`~pymongo.results.InsertManyResult`.
+          An instance of `~pymongo.results.InsertManyResult`.
         """
         if not isinstance(documents, list) or not documents:
             raise TypeError("documents must be a non-empty list")
@@ -482,13 +484,13 @@ class Collection(common.BaseObject):
         """Replace a single document matching the filter.
 
         :Parameters:
-          - `filter`: A query that matches the document to replace.
-          - `replacement`: The new document.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the document to replace.
+          - ``replacement``: The new document.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
 
         :Returns:
-          - An instance of :class:`~pymongo.results.UpdateResult`.
+          - An instance of `~pymongo.results.UpdateResult`.
         """
         common.validate_ok_for_replace(replacement)
         result = self._update(filter, replacement, upsert)
@@ -498,13 +500,13 @@ class Collection(common.BaseObject):
         """Update a single document matching the filter.
 
         :Parameters:
-          - `filter`: A query that matches the document to update.
-          - `update`: The modifications to apply.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the document to update.
+          - ``update``: The modifications to apply.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
 
         :Returns:
-          - An instance of :class:`~pymongo.results.UpdateResult`.
+          - An instance of `~pymongo.results.UpdateResult`.
         """
         common.validate_ok_for_update(update)
         result = self._update(filter, update, upsert, False)
@@ -514,20 +516,20 @@ class Collection(common.BaseObject):
         """Update one or more documents that match the filter.
 
         :Parameters:
-          - `filter`: A query that matches the documents to update.
-          - `update`: The modifications to apply.
-          - `upsert` (optional): If ``True``, perform an insert if no documents
+          - ``filter``: A query that matches the documents to update.
+          - ``update``: The modifications to apply.
+          - ``upsert`` (optional): If ``True``, perform an insert if no documents
             match the filter.
 
         :Returns:
-          - An instance of :class:`~pymongo.results.UpdateResult`.
+          - An instance of `~pymongo.results.UpdateResult`.
         """
         common.validate_ok_for_update(update)
         result = self._update(filter, update, upsert, False, True)
         return UpdateResult(result, self.write_concern.acknowledged)
 
     def drop(self):
-        """Alias for :meth:`~pymongo.database.Database.drop_collection`.
+        """Alias for `~pymongo.database.Database.drop_collection`.
 
         The following two calls are equivalent:
 
@@ -570,9 +572,9 @@ class Collection(common.BaseObject):
         """Delete a single document matching the filter.
 
         :Parameters:
-          - `filter`: A query that matches the document to delete.
+          - ``filter``: A query that matches the document to delete.
         :Returns:
-          - An instance of :class:`~pymongo.results.DeleteResult`.
+          - An instance of `~pymongo.results.DeleteResult`.
         """
         return DeleteResult(self._delete(filter, False),
                             self.write_concern.acknowledged)
@@ -581,9 +583,9 @@ class Collection(common.BaseObject):
         """Delete one or more documents matching the filter.
 
         :Parameters:
-          - `filter`: A query that matches the documents to delete.
+          - ``filter``: A query that matches the documents to delete.
         :Returns:
-          - An instance of :class:`~pymongo.results.DeleteResult`.
+          - An instance of `~pymongo.results.DeleteResult`.
         """
         return DeleteResult(self._delete(filter, True),
                             self.write_concern.acknowledged)
@@ -591,28 +593,28 @@ class Collection(common.BaseObject):
     def find_one(self, filter=None, *args, **kwargs):
         """Get a single document from the database.
 
-        All arguments to :meth:`find` are also valid arguments for
-        :meth:`find_one`, although any `limit` argument will be
+        All arguments to `find` are also valid arguments for
+        `find_one`, although any ``limit`` argument will be
         ignored. Returns a single document, or ``None`` if no matching
         document is found.
 
-        The :meth:`find_one` method obeys the :attr:`read_preference` of
-        this :class:`Collection`.
+        The `find_one` method obeys the `read_preference` of
+        this `Collection`.
 
         :Parameters:
 
-          - `filter` (optional): a dictionary specifying
+          - ``filter`` (optional): a dictionary specifying
             the query to be performed OR any other type to be used as
             the value for a query for ``"_id"``.
 
-          - `*args` (optional): any additional positional arguments
-            are the same as the arguments to :meth:`find`.
+          - ``*args`` (optional): any additional positional arguments
+            are the same as the arguments to `find`.
 
-          - `**kwargs` (optional): any additional keyword arguments
-            are the same as the arguments to :meth:`find`.
+          - ``**kwargs`` (optional): any additional keyword arguments
+            are the same as the arguments to `find`.
 
-          - `max_time_ms` (optional): a value for max_time_ms may be
-            specified as part of `**kwargs`, e.g.
+          - ``max_time_ms`` (optional): a value for max_time_ms may be
+            specified as part of ``**kwargs``, e.g.
 
               >>> find_one(max_time_ms=100)
         """
@@ -631,49 +633,49 @@ class Collection(common.BaseObject):
     def find(self, *args, **kwargs):
         """Query the database.
 
-        The `filter` argument is a prototype document that all results
+        The ``filter`` argument is a prototype document that all results
         must match. For example:
 
         >>> db.test.find({"hello": "world"})
 
         only matches documents that have a key "hello" with value
         "world".  Matches can have other keys *in addition* to
-        "hello". The `projection` argument is used to specify a subset
+        "hello". The ``projection`` argument is used to specify a subset
         of fields that should be included in the result documents. By
         limiting results to a certain subset of fields you can cut
         down on network traffic and decoding time.
 
-        Raises :class:`TypeError` if any of the arguments are of
+        Raises `TypeError` if any of the arguments are of
         improper type. Returns an instance of
-        :class:`~pymongo.cursor.Cursor` corresponding to this query.
+        `.Cursor` corresponding to this query.
 
-        The :meth:`find` method obeys the :attr:`read_preference` of
-        this :class:`Collection`.
+        The `find` method obeys the `read_preference` of
+        this `Collection`.
 
         :Parameters:
-          - `filter` (optional): a SON object specifying elements which
+          - ``filter`` (optional): a SON object specifying elements which
             must be present for a document to be included in the
             result set
-          - `projection` (optional): a list of field names that should be
+          - ``projection`` (optional): a list of field names that should be
             returned in the result set or a dict specifying the fields
-            to include or exclude. If `projection` is a list "_id" will
+            to include or exclude. If ``projection`` is a list ``"_id"`` will
             always be returned. Use a dict to exclude fields from
-            the result (e.g. projection={'_id': False}).
-          - `skip` (optional): the number of documents to omit (from
+            the result (e.g. ``projection={'_id': False}``).
+          - ``skip`` (optional): the number of documents to omit (from
             the start of the result set) when returning the results
-          - `limit` (optional): the maximum number of results to
+          - ``limit`` (optional): the maximum number of results to
             return
-          - `no_cursor_timeout` (optional): if False (the default), any
+          - ``no_cursor_timeout`` (optional): if False (the default), any
             returned cursor is closed by the server after 10 minutes of
             inactivity. If set to True, the returned cursor will never
             time out on the server. Care should be taken to ensure that
-            cursors with no_cursor_timeout turned on are properly closed.
-          - `cursor_type` (optional): the type of cursor to return. The valid
+            cursors with ``no_cursor_timeout`` turned on are properly closed.
+          - ``cursor_type`` (optional): the type of cursor to return. The valid
             options are:
 
-            - :data:`~pymongo.cursor.NON_TAILABLE` - the result of this find
+            - `.NON_TAILABLE` - the result of this find
               call will return a standard cursor over the result set.
-            - :data:`~pymongo.cursor.TAILABLE` - the result of this find call
+            - `.TAILABLE` - the result of this find call
               will be a tailable cursor - tailable cursors are only for use
               with capped collections. They are not closed when the last data
               is retrieved but are kept open and the cursor location marks the
@@ -681,68 +683,68 @@ class Collection(common.BaseObject):
               the cursor will continue from the last document received. For
               details, see the `tailable cursor documentation
               <http://www.mongodb.org/display/DOCS/Tailable+Cursors>`_.
-            - :data:`~pymongo.cursor.TAILABLE_AWAIT` - the result of this find
+            - `.TAILABLE_AWAIT` - the result of this find
               call will be a tailable cursor with the await flag set. The
               server will wait for a few seconds after returning the full
               result set so that it can capture and return additional data
               added during the query.
-            - :data:`~pymongo.cursor.EXHAUST` - the result of this find call
+            - `.EXHAUST` - the result of this find call
               will be an exhaust cursor. MongoDB will stream batched results to
               the client without waiting for the client to request each batch,
               reducing latency. See notes on compatibility below.
 
-          - `sort` (optional): a list of (key, direction) pairs
+          - ``sort`` (optional): a list of (key, direction) pairs
             specifying the sort order for this query. See
-            :meth:`~pymongo.cursor.Cursor.sort` for details.
-          - `allow_partial_results` (optional): if True, mongos will return
+            `.Cursor.sort` for details.
+          - ``allow_partial_results`` (optional): if True, mongos will return
             partial results if some shards are down instead of returning an
             error.
-          - `oplog_replay` (optional): If True, set the oplogReplay query
+          - ``oplog_replay`` (optional): If True, set the oplogReplay query
             flag.
-          - `modifiers` (optional): A dict specifying the MongoDB query
+          - ``modifiers`` (optional): A dict specifying the MongoDB query
             modifiers that should be used for this query.
-          - `manipulate`: (optional): **DEPRECATED** - If True (the default),
+          - ``manipulate``: (optional): **DEPRECATED** - If True (the default),
             apply any outgoing SON manipulators before returning.
 
         .. note:: There are a number of caveats to using
-           :data:`~pymongo.cursor.EXHAUST` as cursor_type:
+           `.EXHAUST` as cursor_type:
 
-            1. The `limit` option can not be used with an exhaust cursor.
+            1. The ``limit`` option can not be used with an exhaust cursor.
 
             2. Exhaust cursors are not supported by mongos and can not be
             used with a sharded cluster.
 
-            3. A :class:`~pymongo.cursor.Cursor` instance created with the
+            3. A `.Cursor` instance created with the
             cursor.EXHAUST cursor_type requires an exclusive
-            :class:`~socket.socket` connection to MongoDB. If the
-            :class:`~pymongo.cursor.Cursor` is discarded without being
-            completely iterated the underlying :class:`~socket.socket`
+            `~socket.socket` connection to MongoDB. If the
+            `.Cursor` is discarded without being
+            completely iterated the underlying `~socket.socket`
             connection will be closed and discarded without being returned to
             the connection pool.
 
         .. versionchanged:: 3.0
-           Changed the parameter names `spec`, `fields`, `timeout`, and
-           `partial` to `filter`, `projection`, `no_cursor_timeout`, and
-           `allow_partial_results` respectively.
-           Added the `cursor_type`, `oplog_replay`, and `modifiers` options.
-           Removed the `network_timeout`, `read_preference`, `tag_sets`,
-           `secondary_acceptable_latency_ms`, `max_scan`, `snapshot`,
-           `tailable`, `await_data`, `exhaust`, and `as_class` parameters.
-           Removed `compile_re` option: PyMongo now always represents BSON
-           regular expressions as :class:`~bson.regex.Regex` objects. Use
-           :meth:`~bson.regex.Regex.try_compile` to attempt to convert from a
+           Changed the parameter names ``spec``, ``fields``, ``timeout``, and
+           ``partial`` to ``filter``, ``projection``, ``no_cursor_timeout``, and
+           ``allow_partial_results`` respectively.
+           Added the ``cursor_type``, ``oplog_replay``, and ``modifiers`` options.
+           Removed the ``network_timeout``, ``read_preference``, ``tag_sets``,
+           ``secondary_acceptable_latency_ms``, ``max_scan``, ``snapshot``,
+           ``tailable``, ``await_data``, ``exhaust``, and ``as_class`` parameters.
+           Removed ``compile_re`` option: PyMongo now always represents BSON
+           regular expressions as `~bson.regex.Regex` objects. Use
+           `~bson.regex.Regex.try_compile` to attempt to convert from a
            BSON regular expression to a Python regular expression object.
-           Soft deprecated the `manipulate` option.
+           Soft deprecated the ``manipulate`` option.
 
         .. versionchanged:: 2.7
-           Added `compile_re` option. If set to False, PyMongo represented BSON
-           regular expressions as :class:`~bson.regex.Regex` objects instead of
+           Added ``compile_re`` option. If set to False, PyMongo represented BSON
+           regular expressions as `~bson.regex.Regex` objects instead of
            attempting to compile BSON regular expressions as Python native
            regular expressions, thus preventing errors for some incompatible
            patterns, see `PYTHON-500`_.
 
         .. versionadded:: 2.3
-           The `tag_sets` and `secondary_acceptable_latency_ms` parameters.
+           The ``tag_sets`` and ``secondary_acceptable_latency_ms`` parameters.
 
         .. _PYTHON-500: https://jira.mongodb.org/browse/PYTHON-500
 
@@ -780,11 +782,11 @@ class Collection(common.BaseObject):
 
             # All documents have now been processed.
 
-        The :meth:`parallel_scan` method obeys the :attr:`read_preference` of
-        this :class:`Collection`.
+        The `parallel_scan` method obeys the `read_preference` of
+        this `Collection`.
 
         :Parameters:
-          - `num_cursors`: the number of cursors to return
+          - ``num_cursors``: the number of cursors to return
 
         .. note:: Requires server version **>= 2.5.5**.
 
@@ -808,22 +810,23 @@ class Collection(common.BaseObject):
         All optional count parameters should be passed as keyword arguments
         to this method. Valid options include:
 
-          - `hint` (string or list of tuples): The index to use. Specify either
-            the index name as a string or the index specification as a list of
-            tuples (e.g. [('a', pymongo.ASCENDING), ('b', pymongo.ASCENDING)]).
-          - `limit` (int): The maximum number of documents to count.
-          - `skip` (int): The number of matching documents to skip before
+          - ``hint`` (string or list of tuples): The index to use. Specify
+            either the index name as a string or the index specification as a
+            list of tuples (e.g.
+            ``[('a', pymongo.ASCENDING), ('b', pymongo.ASCENDING)])``.
+          - ``limit`` (int): The maximum number of documents to count.
+          - ``skip`` (int): The number of matching documents to skip before
             returning results.
-          - `maxTimeMS` (int): The maximum amount of time to allow the count
+          - ``maxTimeMS`` (int): The maximum amount of time to allow the count
             command to run, in milliseconds.
 
-        The :meth:`count` method obeys the :attr:`read_preference` of
-        this :class:`Collection`.
+        The `count` method obeys the `read_preference` of
+        this `Collection`.
 
         :Parameters:
-          - `filter` (optional): A query document that selects which documents
+          - ``filter`` (optional): A query document that selects which documents
             to count in the collection.
-          - `**kwargs` (optional): See list of options above.
+          - ``**kwargs`` (optional): See list of options above.
         """
         cmd = SON([("count", self.__name)])
         if filter is not None:
@@ -843,12 +846,12 @@ class Collection(common.BaseObject):
         """Creates an index on this collection.
 
         Takes either a single key or a list of (key, direction) pairs.
-        The key(s) must be an instance of :class:`basestring`
-        (:class:`str` in python 3), and the direction(s) must be one of
-        (:data:`~pymongo.ASCENDING`, :data:`~pymongo.DESCENDING`,
-        :data:`~pymongo.GEO2D`, :data:`~pymongo.GEOHAYSTACK`,
-        :data:`~pymongo.GEOSPHERE`, :data:`~pymongo.HASHED`,
-        :data:`~pymongo.TEXT`).
+        The key(s) must be an instance of `basestring`
+        (`str` in python 3), and the direction(s) must be one of
+        (`~pymongo.ASCENDING`, `~pymongo.DESCENDING`,
+        `~pymongo.GEO2D`, `~pymongo.GEOHAYSTACK`,
+        `~pymongo.GEOSPHERE`, `~pymongo.HASHED`,
+        `~pymongo.TEXT`).
 
         To create a single key ascending index on the key ``'mike'`` we just
         use a string argument::
@@ -869,58 +872,58 @@ class Collection(common.BaseObject):
 
         Valid options include, but are not limited to:
 
-          - `name`: custom name to use for this index - if none is
+          - ``name``: custom name to use for this index - if none is
             given, a name will be generated
-          - `unique`: if ``True`` creates a uniqueness constraint on the index
-          - `background`: if ``True`` this index should be created in the
+          - ``unique``: if ``True`` creates a uniqueness constraint on the index
+          - ``background``: if ``True`` this index should be created in the
             background
-          - `sparse`: if ``True``, omit from the index any documents that lack
+          - ``sparse``: if ``True``, omit from the index any documents that lack
             the indexed field
-          - `bucketSize` or `bucket_size`: for use with geoHaystack indexes.
+          - ``bucketSize`` or ``bucket_size``: for use with geoHaystack indexes.
             Number of documents to group together within a certain proximity
             to a given longitude and latitude.
-          - `min`: minimum value for keys in a :data:`~pymongo.GEO2D`
+          - ``min``: minimum value for keys in a `~pymongo.GEO2D`
             index
-          - `max`: maximum value for keys in a :data:`~pymongo.GEO2D`
+          - ``max``: maximum value for keys in a `~pymongo.GEO2D`
             index
-          - `expireAfterSeconds`: <int> Used to create an expiring (TTL)
+          - ``expireAfterSeconds``: <int> Used to create an expiring (TTL)
             collection. MongoDB will automatically delete documents from
             this collection after <int> seconds. The indexed field must
             be a UTC datetime or the data will not expire.
-          - `dropDups` or `drop_dups` (**deprecated**): if ``True`` duplicate
+          - ``dropDups`` or ``drop_dups`` (**deprecated**): if ``True`` duplicate
             values are dropped during index creation when creating a unique
             index
 
         See the MongoDB documentation for a full list of supported options by
         server version.
 
-        .. warning:: `dropDups` / `drop_dups` is no longer supported by
+        .. warning:: ``dropDups`` / ``drop_dups`` is no longer supported by
           MongoDB starting with server version 2.7.5. The option is silently
           ignored by the server and unique index builds using the option will
           fail if a duplicate value is detected.
 
-        .. note:: `expireAfterSeconds` requires server version **>= 2.1.2**
+        .. note:: ``expireAfterSeconds`` requires server version **>= 2.1.2**
 
         :Parameters:
-          - `key_or_list`: a single key or a list of (key, direction)
+          - ``key_or_list``: a single key or a list of (key, direction)
             pairs specifying the index to create
-          - `cache_for` (optional): time window (in seconds) during which
+          - ``cache_for`` (optional): time window (in seconds) during which
             this index will be recognized by subsequent calls to
-            :meth:`ensure_index` - see documentation for
-            :meth:`ensure_index` for details
-          - `**kwargs` (optional): any additional index creation
+            `ensure_index` - see documentation for
+            `ensure_index` for details
+          - ``**kwargs`` (optional): any additional index creation
             options (see the above list) should be passed as keyword
             arguments
-          - `ttl` (deprecated): Use `cache_for` instead.
+          - ``ttl`` (deprecated): Use ``cache_for`` instead.
 
         .. versionchanged:: 2.3
-            The `ttl` parameter has been deprecated to avoid confusion with
-            TTL collections.  Use `cache_for` instead.
+            The ``ttl`` parameter has been deprecated to avoid confusion with
+            TTL collections.  Use ``cache_for`` instead.
 
         .. versionchanged:: 2.2
            Removed deprecated argument: deprecated_unique
 
-        .. seealso:: :meth:`ensure_index`
+        .. seealso:: `ensure_index`
 
         .. mongodoc:: indexes
         """
@@ -972,89 +975,89 @@ class Collection(common.BaseObject):
         """Ensures that an index exists on this collection.
 
         Takes either a single key or a list of (key, direction) pairs.
-        The key(s) must be an instance of :class:`basestring`
-        (:class:`str` in python 3), and the direction(s) must be one of
-        (:data:`~pymongo.ASCENDING`, :data:`~pymongo.DESCENDING`,
-        :data:`~pymongo.GEO2D`, :data:`~pymongo.GEOHAYSTACK`,
-        :data:`~pymongo.GEOSPHERE`, :data:`~pymongo.HASHED`,
-        :data:`pymongo.TEXT`).
+        The key(s) must be an instance of `basestring`
+        (`str` in python 3), and the direction(s) must be one of
+        (`~pymongo.ASCENDING`, `~pymongo.DESCENDING`,
+        `~pymongo.GEO2D`, `~pymongo.GEOHAYSTACK`,
+        `~pymongo.GEOSPHERE`, `~pymongo.HASHED`,
+        `pymongo.TEXT`).
 
-        See :meth:`create_index` for detailed examples.
+        See `create_index` for detailed examples.
 
-        Unlike :meth:`create_index`, which attempts to create an index
-        unconditionally, :meth:`ensure_index` takes advantage of some
+        Unlike `create_index`, which attempts to create an index
+        unconditionally, `ensure_index` takes advantage of some
         caching within the driver such that it only attempts to create
         indexes that might not already exist. When an index is created
-        (or ensured) by PyMongo it is "remembered" for `cache_for`
-        seconds. Repeated calls to :meth:`ensure_index` within that
+        (or ensured) by PyMongo it is "remembered" for ``cache_for``
+        seconds. Repeated calls to `ensure_index` within that
         time limit will be lightweight - they will not attempt to
         actually create the index.
 
         Care must be taken when the database is being accessed through
         multiple clients at once. If an index is created using
         this client and deleted using another, any call to
-        :meth:`ensure_index` within the cache window will fail to
+        `ensure_index` within the cache window will fail to
         re-create the missing index.
 
         Returns the specified or generated index name used if
-        :meth:`ensure_index` attempts to create the index. Returns
+        `ensure_index` attempts to create the index. Returns
         ``None`` if the index is already cached.
 
         All optional index creation parameters should be passed as
         keyword arguments to this method. Valid options include, but are not
         limited to:
 
-          - `name`: custom name to use for this index - if none is
+          - ``name``: custom name to use for this index - if none is
             given, a name will be generated
-          - `unique`: if ``True`` creates a uniqueness constraint on the index
-          - `background`: if ``True`` this index should be created in the
+          - ``unique``: if ``True`` creates a uniqueness constraint on the index
+          - ``background``: if ``True`` this index should be created in the
             background
-          - `sparse`: if ``True``, omit from the index any documents that lack
+          - ``sparse``: if ``True``, omit from the index any documents that lack
             the indexed field
-          - `bucketSize` or `bucket_size`: for use with geoHaystack indexes.
+          - ``bucketSize` or `bucket_size``: for use with geoHaystack indexes.
             Number of documents to group together within a certain proximity
             to a given longitude and latitude.
-          - `min`: minimum value for keys in a :data:`~pymongo.GEO2D`
+          - ``min``: minimum value for keys in a `~pymongo.GEO2D`
             index
-          - `max`: maximum value for keys in a :data:`~pymongo.GEO2D`
+          - ``max``: maximum value for keys in a `~pymongo.GEO2D`
             index
-          - `expireAfterSeconds`: <int> Used to create an expiring (TTL)
+          - ``expireAfterSeconds``: <int> Used to create an expiring (TTL)
             collection. MongoDB will automatically delete documents from
             this collection after <int> seconds. The indexed field must
             be a UTC datetime or the data will not expire.
-          - `dropDups` or `drop_dups` (**deprecated**): if ``True`` duplicate
+          - ``dropDups`` or ``drop_dups`` (**deprecated**): if ``True`` duplicate
             values are dropped during index creation when creating a unique
             index
 
         See the MongoDB documentation for a full list of supported options by
         server version.
 
-        .. warning:: `dropDups` / `drop_dups` is no longer supported by
+        .. warning:: ``dropDups`` / ``drop_dups`` is no longer supported by
           MongoDB starting with server version 2.7.5. The option is silently
           ignored by the server and unique index builds using the option will
           fail if a duplicate value is detected.
 
-        .. note:: `expireAfterSeconds` requires server version **>= 2.1.2**
+        .. note:: ``expireAfterSeconds`` requires server version **>= 2.1.2**
 
         :Parameters:
-          - `key_or_list`: a single key or a list of (key, direction)
+          - ``key_or_list``: a single key or a list of (key, direction)
             pairs specifying the index to create
-          - `cache_for` (optional): time window (in seconds) during which
+          - ``cache_for`` (optional): time window (in seconds) during which
             this index will be recognized by subsequent calls to
-            :meth:`ensure_index`
-          - `**kwargs` (optional): any additional index creation
+            `ensure_index`
+          - ``**kwargs`` (optional): any additional index creation
             options (see the above list) should be passed as keyword
             arguments
-          - `ttl` (deprecated): Use `cache_for` instead.
+          - ``ttl`` (deprecated): Use ``cache_for`` instead.
 
         .. versionchanged:: 2.3
-            The `ttl` parameter has been deprecated to avoid confusion with
-            TTL collections.  Use `cache_for` instead.
+            The ``ttl`` parameter has been deprecated to avoid confusion with
+            TTL collections.  Use ``cache_for`` instead.
 
         .. versionchanged:: 2.2
            Removed deprecated argument: deprecated_unique
 
-        .. seealso:: :meth:`create_index`
+        .. seealso:: `create_index`
         """
         if "name" in kwargs:
             name = kwargs["name"]
@@ -1081,8 +1084,8 @@ class Collection(common.BaseObject):
 
         Can be used on non-existant collections or collections with no
         indexes.  Raises OperationFailure on an error (e.g. trying to
-        drop an index that does not exist). `index_or_name`
-        can be either an index name (as returned by `create_index`),
+        drop an index that does not exist). ``index_or_name``
+        can be either an index name (as returned by `.create_index`),
         or an index specifier (as passed to `create_index`). An index
         specifier should be a list of (key, direction) pairs. Raises
         TypeError if index is not an instance of (str, unicode, list).
@@ -1090,11 +1093,11 @@ class Collection(common.BaseObject):
         .. warning::
 
           if a custom name was used on index creation (by
-          passing the `name` parameter to :meth:`create_index` or
-          :meth:`ensure_index`) the index **must** be dropped by name.
+          passing the ``name`` parameter to `create_index` or
+          `ensure_index`) the index **must** be dropped by name.
 
         :Parameters:
-          - `index_or_name`: index (or name of index) to drop
+          - ``index_or_name``: index (or name of index) to drop
         """
         name = index_or_name
         if isinstance(index_or_name, list):
@@ -1123,11 +1126,11 @@ class Collection(common.BaseObject):
         """Get information on this collection's indexes.
 
         Returns a dictionary where the keys are index names (as
-        returned by create_index()) and the values are dictionaries
+        returned by `.create_index`) and the values are dictionaries
         containing information about each index. The dictionary is
         guaranteed to contain at least a single key, ``"key"`` which
         is a list of (key, direction) pairs specifying the index (as
-        passed to create_index()). It will also contain any other
+        passed to `.create_index`). It will also contain any other
         metadata about the indexes, except for the ``"ns"`` and
         ``"name"`` keys, which are cleaned. Example output might look
         like this:
@@ -1167,7 +1170,7 @@ class Collection(common.BaseObject):
         """Get the options set on this collection.
 
         Returns a dictionary of options and their values - see
-        :meth:`~pymongo.database.Database.create_collection` for more
+        `~pymongo.database.Database.create_collection` for more
         information on the possible options. Returns an empty
         dictionary if the collection has not been created yet.
         """
@@ -1210,15 +1213,15 @@ class Collection(common.BaseObject):
         All optional aggregate parameters should be passed as keyword arguments
         to this method. Valid options include, but are not limited to:
 
-          - `allowDiskUse` (bool): Enables writing to temporary files. When set
+          - ``allowDiskUse`` (bool): Enables writing to temporary files. When set
             to True, aggregation stages can write data to the _tmp subdirectory
             of the --dbpath directory. The default is False.
-          - `batchSize` (int): The number of documents to return per batch.
+          - ``batchSize`` (int): The number of documents to return per batch.
             Requires results to be returned from the server as a cursor.
-          - `maxTimeMS` (int): The maximum amount of time to allow the query to
+          - ``maxTimeMS`` (int): The maximum amount of time to allow the query to
             run in milliseconds.
-          - `useCursor` (bool): Indicates if the *server* should return results
-            using a cursor. The default value for `useCursor` depends on
+          - ``useCursor`` (bool): Indicates if the *server* should return results
+            using a cursor. The default value for ``useCursor`` depends on
             the version of the server. For MongoDB versions previous to 2.6
             the default is False. Otherwise the default is True. The value
             of useCursor, if provided, will be obeyed regardless of server
@@ -1229,27 +1232,27 @@ class Collection(common.BaseObject):
            until all shards have been upgraded.
 
         .. note:: This method does not support the 'explain' option. Please
-           use :meth:`~pymongo.database.Database.command` instead. An
+           use `~pymongo.database.Database.command` instead. An
            example is included in the :ref:`aggregate-examples` documentation.
 
-        The :meth:`aggregate` method obeys the :attr:`read_preference` of this
-        :class:`Collection`.
+        The `aggregate` method obeys the `read_preference` of this
+        `Collection`.
 
         :Parameters:
-          - `pipeline`: a list of aggregation pipeline stages
-          - `**kwargs` (optional): See list of options above.
+          - ``pipeline``: a list of aggregation pipeline stages
+          - ``**kwargs`` (optional): See list of options above.
 
         :Returns:
-          A :class:`~pymongo.command_cursor.CommandCursor` over the result
+          A `~pymongo.command_cursor.CommandCursor` over the result
           set.
 
         .. versionchanged:: 3.0
-           The :meth:`aggregate` method always returns a CommandCursor. The
+           The `aggregate` method always returns a CommandCursor. The
            pipeline argument must be a list.
         .. versionchanged:: 2.7
            When the cursor option is used, return
-           :class:`~pymongo.command_cursor.CommandCursor` instead of
-           :class:`~pymongo.cursor.Cursor`.
+           `~pymongo.command_cursor.CommandCursor` instead of
+           `.Cursor`.
         .. versionchanged:: 2.6
            Added cursor support.
         .. versionadded:: 2.3
@@ -1316,27 +1319,27 @@ class Collection(common.BaseObject):
 
         Returns an array of grouped items.
 
-        The `key` parameter can be:
+        The ``key`` parameter can be:
 
           - ``None`` to use the entire document as a key.
-          - A :class:`list` of keys (each a :class:`basestring`
-            (:class:`str` in python 3)) to group by.
-          - A :class:`basestring` (:class:`str` in python 3), or
-            :class:`~bson.code.Code` instance containing a JavaScript
+          - A `list` of keys (each a `basestring`
+            (`str` in python 3)) to group by.
+          - A `basestring` (`str` in python 3), or
+            `~bson.code.Code` instance containing a JavaScript
             function to be applied to each document, returning the key
             to group by.
 
-        The :meth:`group` method obeys the :attr:`read_preference` of this
-        :class:`Collection`.
+        The `group` method obeys the `read_preference` of this
+        `Collection`.
 
         :Parameters:
-          - `key`: fields to group by (see above description)
-          - `condition`: specification of rows to be
-            considered (as a :meth:`find` query specification)
-          - `initial`: initial value of the aggregation counter object
-          - `reduce`: aggregation function as a JavaScript string
-          - `finalize`: function to be called on each object in output list.
-          - `**kwargs` (optional): additional arguments to the group command
+          - ``key``: fields to group by (see above description)
+          - ``condition``: specification of rows to be
+            considered (as a `find` query specification)
+          - ``initial``: initial value of the aggregation counter object
+          - ``reduce``: aggregation function as a JavaScript string
+          - ``finalize``: function to be called on each object in output list.
+          - ``**kwargs`` (optional): additional arguments to the group command
             may be passed as keyword arguments to this helper method
 
         .. versionchanged:: 2.2
@@ -1363,14 +1366,14 @@ class Collection(common.BaseObject):
         """Rename this collection.
 
         If operating in auth mode, client must be authorized as an
-        admin to perform this operation. Raises :class:`TypeError` if
-        `new_name` is not an instance of :class:`basestring`
-        (:class:`str` in python 3). Raises :class:`~pymongo.errors.InvalidName`
-        if `new_name` is not a valid collection name.
+        admin to perform this operation. Raises `TypeError` if
+        ``new_name`` is not an instance of `basestring`
+        (`str` in python 3). Raises `~pymongo.errors.InvalidName`
+        if ``new_name`` is not a valid collection name.
 
         :Parameters:
-          - `new_name`: new name for this collection
-          - `**kwargs` (optional): additional arguments to the rename command
+          - ``new_name``: new name for this collection
+          - ``**kwargs`` (optional): additional arguments to the rename command
             may be passed as keyword arguments to this helper method
             (i.e. ``dropTarget=True``)
         """
@@ -1392,27 +1395,27 @@ class Collection(common.BaseObject):
                  ReadPreference.PRIMARY, CodecOptions())
 
     def distinct(self, key, filter=None, **kwargs):
-        """Get a list of distinct values for `key` among all documents
+        """Get a list of distinct values for ``key`` among all documents
         in this collection.
 
-        Raises :class:`TypeError` if `key` is not an instance of
-        :class:`basestring` (:class:`str` in python 3).
+        Raises `TypeError` if ``key`` is not an instance of
+        `basestring` (`str` in python 3).
 
         All optional distinct parameters should be passed as keyword arguments
         to this method. Valid options include:
 
-          - `maxTimeMS` (int): The maximum amount of time to allow the count
-            command to run, in milliseconds.
+        - ``maxTimeMS`` (int): The maximum amount of time to allow the count
+          command to run, in milliseconds.
 
-        The :meth:`distinct` method obeys the :attr:`read_preference` of
-        this :class:`Collection`.
+        The `distinct` method obeys the `read_preference` of
+        this `Collection`.
 
         :Parameters:
-          - `key`: name of the field for which we want to get the distinct
+          - ``key``: name of the field for which we want to get the distinct
             values
-          - `filter` (optional): A query document that specifies the documents
+          - ``filter`` (optional): A query document that specifies the documents
             from which to retrieve the distinct values.
-          - `**kwargs` (optional): See list of options above.
+          - ``**kwargs`` (optional): See list of options above.
         """
         if not isinstance(key, string_type):
             raise TypeError("key must be an "
@@ -1429,25 +1432,25 @@ class Collection(common.BaseObject):
     def map_reduce(self, map, reduce, out, full_response=False, **kwargs):
         """Perform a map/reduce operation on this collection.
 
-        If `full_response` is ``False`` (default) returns a
-        :class:`~pymongo.collection.Collection` instance containing
+        If ``full_response`` is ``False`` (default) returns a
+        `.Collection` instance containing
         the results of the operation. Otherwise, returns the full
         response from the server to the `map reduce command`_.
 
-        The :meth:`map_reduce` method obeys the :attr:`read_preference` of this
-        :class:`Collection`.
+        The `map_reduce` method obeys the `read_preference` of this
+        `Collection`.
 
         :Parameters:
-          - `map`: map function (as a JavaScript string)
-          - `reduce`: reduce function (as a JavaScript string)
-          - `out`: output collection name or `out object` (dict). See
+          - ``map``: map function (as a JavaScript string)
+          - ``reduce``: reduce function (as a JavaScript string)
+          - ``out``: output collection name or "out object" (dict). See
             the `map reduce command`_ documentation for available options.
-            Note: `out` options are order sensitive. :class:`~bson.son.SON`
+            Note: ``out`` options are order sensitive. `~bson.son.SON`
             can be used to specify multiple options.
             e.g. SON([('replace', <collection name>), ('db', <database name>)])
-          - `full_response` (optional): if ``True``, return full response to
+          - ``full_response`` (optional): if ``True``, return full response to
             this command - otherwise just return the result collection
-          - `**kwargs` (optional): additional arguments to the
+          - ``**kwargs`` (optional): additional arguments to the
             `map reduce command`_ may be passed as keyword arguments to this
             helper method, e.g.::
 
@@ -1495,19 +1498,19 @@ class Collection(common.BaseObject):
         collection is not created. The result set is returned as a list
         of documents.
 
-        If `full_response` is ``False`` (default) returns the
+        If ``full_response`` is ``False`` (default) returns the
         result documents in a list. Otherwise, returns the full
         response from the server to the `map reduce command`_.
 
-        The :meth:`inline_map_reduce` method obeys the :attr:`read_preference`
-        of this :class:`Collection`.
+        The `inline_map_reduce` method obeys the `read_preference`
+        of this `Collection`.
 
         :Parameters:
-          - `map`: map function (as a JavaScript string)
-          - `reduce`: reduce function (as a JavaScript string)
-          - `full_response` (optional): if ``True``, return full response to
+          - ``map``: map function (as a JavaScript string)
+          - ``reduce``: reduce function (as a JavaScript string)
+          - ``full_response`` (optional): if ``True``, return full response to
             this command - otherwise just return the result collection
-          - `**kwargs` (optional): additional arguments to the
+          - ``**kwargs`` (optional): additional arguments to the
             `map reduce command`_ may be passed as keyword arguments to this
             helper method, e.g.::
 
@@ -1554,16 +1557,16 @@ class Collection(common.BaseObject):
         """Finds a single document and deletes it, returning the document.
 
         :Parameters:
-          - `filter`: A query that matches the document to delete.
-          - `projection` (optional): a list of field names that should be
+          - ``filter``: A query that matches the document to delete.
+          - ``projection`` (optional): a list of field names that should be
             returned in the result document or a mapping specifying the fields
-            to include or exclude. If `projection` is a list "_id" will
+            to include or exclude. If ``projection`` is a list "_id" will
             always be returned. Use a mapping to exclude fields from
             the result (e.g. projection={'_id': False}).
-          - `sort` (optional): a list of (key, direction) pairs
+          - ``sort`` (optional): a list of (key, direction) pairs
             specifying the sort order for the query. If multiple documents
             match the query, they are sorted and the first is deleted.
-          - `**kwargs` (optional): additional command arguments can be passed
+          - ``**kwargs`` (optional): additional command arguments can be passed
             as keyword arguments (for example maxTimeMS can be used with
             recent server versions).
         """
@@ -1577,25 +1580,25 @@ class Collection(common.BaseObject):
         original or the replaced document.
 
         :Parameters:
-          - `filter`: A query that matches the document to replace.
-          - `replacement`: The replacement document.
-          - `projection` (optional): A list of field names that should be
+          - ``filter``: A query that matches the document to replace.
+          - ``replacement``: The replacement document.
+          - ``projection`` (optional): A list of field names that should be
             returned in the result document or a mapping specifying the fields
-            to include or exclude. If `projection` is a list "_id" will
+            to include or exclude. If ``projection`` is a list ``"_id"`` will
             always be returned. Use a mapping to exclude fields from
-            the result (e.g. projection={'_id': False}).
-          - `sort` (optional): a list of (key, direction) pairs
+            the result (e.g. ``projection={'_id': False}``).
+          - ``sort`` (optional): a list of (key, direction) pairs
             specifying the sort order for the query. If multiple documents
             match the query, they are sorted and the first is replaced.
-          - `upsert` (optional): When ``True``, inserts a new document if no
+          - ``upsert`` (optional): When ``True``, inserts a new document if no
             document matches the query. Defaults to ``False``.
-          - `return_document`: If
-            :attr:`~pymongo.options.ReturnDocument.Before` (the default),
+          - ``return_document``: If
+            `~pymongo.options.ReturnDocument.Before` (the default),
             returns the original document before it was replaced, or ``None``
             if no document matches. If
-            :attr:`~pymongo.options.ReturnDocument.After`, returns the replaced
+            `~pymongo.options.ReturnDocument.After`, returns the replaced
             or inserted document.
-          - `**kwargs` (optional): additional command arguments can be passed
+          - ``**kwargs`` (optional): additional command arguments can be passed
             as keyword arguments (for example maxTimeMS can be used with
             recent server versions).
         """
@@ -1611,25 +1614,25 @@ class Collection(common.BaseObject):
         original or the updated document.
 
         :Parameters:
-          - `filter`: A query that matches the document to update.
-          - `update`: The update operations to apply.
-          - `projection` (optional): A list of field names that should be
+          - ``filter``: A query that matches the document to update.
+          - ``update``: The update operations to apply.
+          - ``projection`` (optional): A list of field names that should be
             returned in the result document or a mapping specifying the fields
-            to include or exclude. If `projection` is a list "_id" will
+            to include or exclude. If ``projection`` is a list ``"_id"`` will
             always be returned. Use a dict to exclude fields from
-            the result (e.g. projection={'_id': False}).
-          - `sort` (optional): a list of (key, direction) pairs
+            the result (e.g. ``projection={'_id': False}``).
+          - ``sort`` (optional): a list of (key, direction) pairs
             specifying the sort order for the query. If multiple documents
             match the query, they are sorted and the first is updated.
-          - `upsert` (optional): When ``True``, inserts a new document if no
+          - ``upsert`` (optional): When ``True``, inserts a new document if no
             document matches the query. Defaults to ``False``.
-          - `return_document`: If
-            :attr:`~pymongo.options.ReturnDocument.Before` (the default),
+          - ``return_document``: If
+            `~pymongo.options.ReturnDocument.Before` (the default),
             returns the original document before it was updated, or ``None``
             if no document matches. If
-            :attr:`~pymongo.options.ReturnDocument.After`, returns the updated
+            `~pymongo.options.ReturnDocument.After`, returns the updated
             or inserted document.
-          - `**kwargs` (optional): additional command arguments can be passed
+          - ``**kwargs`` (optional): additional command arguments can be passed
             as keyword arguments (for example maxTimeMS can be used with
             recent server versions).
         """
@@ -1641,10 +1644,10 @@ class Collection(common.BaseObject):
     def save(self, to_save, manipulate=True, check_keys=True, **kwargs):
         """Save a document in this collection.
 
-        **DEPRECATED** - Use :meth:`insert_one` or :meth:`replace_one` instead.
+        **DEPRECATED** - Use `insert_one` or `replace_one` instead.
 
         .. versionchanged:: 3.0
-           Removed the `safe` parameter
+           Removed the ``safe`` parameter
         """
         warnings.warn("save is deprecated. Use insert_one or replace_one "
                       "instead", DeprecationWarning, stacklevel=2)
@@ -1665,10 +1668,10 @@ class Collection(common.BaseObject):
                check_keys=True, continue_on_error=False, **kwargs):
         """Insert a document(s) into this collection.
 
-        **DEPRECATED** - Use :meth:`insert_one` or :meth:`insert_many` instead.
+        **DEPRECATED** - Use `insert_one` or `insert_many` instead.
 
         .. versionchanged:: 3.0
-           Removed the `safe` parameter
+           Removed the ``safe`` parameter
         """
         warnings.warn("insert is deprecated. Use insert_one or insert_many "
                       "instead.", DeprecationWarning, stacklevel=2)
@@ -1682,11 +1685,11 @@ class Collection(common.BaseObject):
                multi=False, check_keys=True, **kwargs):
         """Update a document(s) in this collection.
 
-        **DEPRECATED** - Use :meth:`replace_one`, :meth:`update_one`, or
-        :meth:`update_many` instead.
+        **DEPRECATED** - Use `replace_one`, `update_one`, or
+        `update_many` instead.
 
         .. versionchanged:: 3.0
-           Removed the `safe` parameter
+           Removed the ``safe`` parameter
         """
         warnings.warn("update is deprecated. Use replace_one, update_one or "
                       "update_many instead.", DeprecationWarning, stacklevel=2)
@@ -1711,10 +1714,10 @@ class Collection(common.BaseObject):
     def remove(self, spec_or_id=None, multi=True, **kwargs):
         """Remove a document(s) from this collection.
 
-        **DEPRECATED** - Use :meth:`delete_one` or :meth:`delete_many` instead.
+        **DEPRECATED** - Use `delete_one` or `delete_many` instead.
 
         .. versionchanged:: 3.0
-           Removed the `safe` parameter
+           Removed the ``safe`` parameter
         """
         warnings.warn("remove is deprecated. Use delete_one or delete_many "
                       "instead.", DeprecationWarning, stacklevel=2)
@@ -1732,8 +1735,8 @@ class Collection(common.BaseObject):
                         manipulate=False, **kwargs):
         """Update and return an object.
 
-        **DEPRECATED** - Use :meth:`find_one_and_delete`,
-        :meth:`find_one_and_replace`, or :meth:`find_one_and_update` instead.
+        **DEPRECATED** - Use `find_one_and_delete`,
+        `find_one_and_replace`, or `find_one_and_update` instead.
         """
         warnings.warn("find_and_modify is deprecated, use find_one_and_delete"
                       ", find_one_and_replace, or find_one_and_update instead",

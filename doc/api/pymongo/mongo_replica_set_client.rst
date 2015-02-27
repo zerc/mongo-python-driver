@@ -1,5 +1,5 @@
-:mod:`mongo_replica_set_client` -- Tools for connecting to a MongoDB replica set
-================================================================================
+`mongo_replica_set_client` -- Tools for connecting to a MongoDB replica set
+===========================================================================
 
 .. automodule:: pymongo.mongo_replica_set_client
    :synopsis: Tools for connecting to a MongoDB replica set
@@ -10,9 +10,9 @@
 
       .. describe:: c[db_name] || c.db_name
 
-         Get the `db_name` :class:`~pymongo.database.Database` on :class:`MongoReplicaSetClient` `c`.
+         Get the ``db_name`` `~pymongo.database.Database` on `MongoReplicaSetClient` ``c``.
 
-         Raises :class:`~pymongo.errors.InvalidName` if an invalid database name is used.
+         Raises `~pymongo.errors.InvalidName` if an invalid database name is used.
 
       .. autoattribute:: primary
       .. autoattribute:: secondaries

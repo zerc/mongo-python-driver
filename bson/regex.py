@@ -45,10 +45,10 @@ class Regex(object):
 
     @classmethod
     def from_native(cls, regex):
-        """Convert a Python regular expression into a ``Regex`` instance.
+        """Convert a Python regular expression into a `Regex` instance.
 
         Note that in Python 3, a regular expression compiled from a
-        :class:`str` has the ``re.UNICODE`` flag set. If it is undesirable
+        `str` has the `re.UNICODE` flag set. If it is undesirable
         to store this flag in a BSON regular expression, unset it first::
 
           >>> pattern = re.compile('.*')
@@ -57,7 +57,7 @@ class Regex(object):
           >>> db.collection.insert({'pattern': regex})
 
         :Parameters:
-          - `regex`: A regular expression object from ``re.compile()``.
+          - `Regex`: A regular expression object from ``re.compile()``.
 
         .. warning::
            Python regular expressions use a different syntax and different
@@ -82,8 +82,8 @@ class Regex(object):
         incompatible with Python's regular expression dialect.
 
         :Parameters:
-          - `pattern`: string
-          - `flags`: (optional) an integer bitmask, or a string of flag
+          - ``pattern``: string
+          - ``flags``: (optional) an integer bitmask, or a string of flag
             characters like "im" for IGNORECASE and MULTILINE
         """
         if not isinstance(pattern, (text_type, bytes)):
@@ -111,15 +111,15 @@ class Regex(object):
         return "Regex(%r, %r)" % (self.pattern, self.flags)
 
     def try_compile(self):
-        """Compile this :class:`Regex` as a Python regular expression.
+        """Compile this `Regex` as a Python regular expression.
 
         .. warning::
            Python regular expressions use a different syntax and different
            set of flags than MongoDB, which uses `PCRE`_. A regular
            expression retrieved from the server may not compile in
            Python, or may match a different set of strings in Python than
-           when used in a MongoDB query. :meth:`try_compile()` may raise
-           :exc:`re.error`.
+           when used in a MongoDB query. `try_compile()` may raise
+           `re.error`.
 
         .. _PCRE: http://www.pcre.org/
         """

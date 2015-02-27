@@ -173,7 +173,7 @@ def delete(collection_name, spec, safe,
            last_error_args, opts, flags=0):
     """Get a **delete** message.
 
-    `opts` is a CodecOptions. `flags` is a bit vector that may contain
+    ``opts`` is a CodecOptions. ``flags`` is a bit vector that may contain
     the SingleRemove flag or not:
 
     http://docs.mongodb.org/meta-driver/latest/legacy/mongodb-wire-protocol/#op-delete
@@ -205,7 +205,7 @@ def kill_cursors(cursor_ids):
 
 def _do_batched_insert(collection_name, docs, check_keys,
                        safe, last_error_args, continue_on_error, opts, client):
-    """Insert `docs` using multiple batches.
+    """Insert ``docs`` using multiple batches.
     """
     def _insert_message(insert_message, send_safe):
         """Build the insert message with header and GLE.

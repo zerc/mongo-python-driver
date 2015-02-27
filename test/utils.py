@@ -121,8 +121,8 @@ def server_started_with_option(client, cmdline_opt, config_opt):
     """Check if the server was started with a particular option.
     
     :Parameters:
-      - `cmdline_opt`: The command line option (i.e. --nojournal)
-      - `config_opt`: The config file option (i.e. nojournal)
+      - ``cmdline_opt``: The command line option (i.e. --nojournal)
+      - ``config_opt``: The config file option (i.e. nojournal)
     """
     command_line = get_command_line(client)
     if 'parsed' in command_line:
@@ -288,9 +288,9 @@ def read_from_which_host(
     Return the 'host:port' which was read from.
 
     :Parameters:
-      - `client`: A MongoClient
-      - `mode`: A ReadPreference
-      - `tag_sets`: List of dicts of tags for data-center-aware reads
+      - ``client``: A MongoClient
+      - ``mode``: A ReadPreference
+      - ``tag_sets``: List of dicts of tags for data-center-aware reads
     """
     db = client.pymongo_test
 
@@ -320,11 +320,11 @@ def assertReadFrom(testcase, client, member, *args, **kwargs):
     the expected replica-set member.
 
     :Parameters:
-      - `testcase`: A unittest.TestCase
-      - `client`: A MongoClient
-      - `member`: A host:port expected to be used
-      - `mode`: A ReadPreference
-      - `tag_sets` (optional): List of dicts of tags for data-center-aware reads
+      - ``testcase``: A unittest.TestCase
+      - ``client``: A MongoClient
+      - ``member``: A host:port expected to be used
+      - ``mode``: A ReadPreference
+      - ``tag_sets`` (optional): List of dicts of tags for data-center-aware reads
     """
     for _ in range(10):
         testcase.assertEqual(member,
@@ -336,11 +336,11 @@ def assertReadFromAll(testcase, client, members, *args, **kwargs):
     members in a set, and only members in that set.
 
     :Parameters:
-      - `testcase`: A unittest.TestCase
-      - `client`: A MongoClient
-      - `members`: Sequence of host:port expected to be used
-      - `mode`: A ReadPreference
-      - `tag_sets` (optional): List of dicts of tags for data-center-aware reads
+      - ``testcase``: A unittest.TestCase
+      - ``client``: A MongoClient
+      - ``members``: Sequence of host:port expected to be used
+      - ``mode``: A ReadPreference
+      - ``tag_sets`` (optional): List of dicts of tags for data-center-aware reads
     """
     members = set(members)
     used = set()
@@ -412,13 +412,13 @@ def frequent_thread_switches():
 def lazy_client_trial(reset, target, test, get_client):
     """Test concurrent operations on a lazily-connecting client.
 
-    `reset` takes a collection and resets it for the next trial.
+    ``reset`` takes a collection and resets it for the next trial.
 
-    `target` takes a lazily-connecting collection and an index from
+    ``target`` takes a lazily-connecting collection and an index from
     0 to NTHREADS, and performs some operation, e.g. an insert.
 
-    `test` takes the lazily-connecting collection and asserts a
-    post-condition to prove `target` succeeded.
+    ``test`` takes the lazily-connecting collection and asserts a
+    post-condition to prove ``target`` succeeded.
     """
     collection = client_context.client.pymongo_test.test
 

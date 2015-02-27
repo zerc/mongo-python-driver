@@ -28,19 +28,19 @@ class DBRef(object):
     _type_marker = 100
 
     def __init__(self, collection, id, database=None, _extra={}, **kwargs):
-        """Initialize a new :class:`DBRef`.
+        """Initialize a new `DBRef`.
 
-        Raises :class:`TypeError` if `collection` or `database` is not
-        an instance of :class:`basestring` (:class:`str` in python 3).
-        `database` is optional and allows references to documents to work
+        Raises `TypeError` if ``collection`` or ``database`` is not
+        an instance of `basestring` (`str` in python 3).
+        ``database`` is optional and allows references to documents to work
         across databases. Any additional keyword arguments will create
         additional fields in the resultant embedded document.
 
         :Parameters:
-          - `collection`: name of the collection the document is stored in
-          - `id`: the value of the document's ``"_id"`` field
-          - `database` (optional): name of the database to reference
-          - `**kwargs` (optional): additional keyword arguments will
+          - ``collection``: name of the collection the document is stored in
+          - ``id``: the value of the document's ``"_id"`` field
+          - ``database`` (optional): name of the database to reference
+          - ``**kwargs`` (optional): additional keyword arguments will
             create additional, custom fields
 
         .. mongodoc:: dbrefs
@@ -123,7 +123,7 @@ class DBRef(object):
         return not self == other
 
     def __hash__(self):
-        """Get a hash value for this :class:`DBRef`."""
+        """Get a hash value for this `DBRef`."""
         return hash((self.__collection, self.__id, self.__database,
                      tuple(sorted(self.__kwargs.items()))))
 

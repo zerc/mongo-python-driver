@@ -22,21 +22,21 @@ from bson.py3compat import string_type
 class Code(str):
     """BSON's JavaScript code type.
 
-    Raises :class:`TypeError` if `code` is not an instance of
-    :class:`basestring` (:class:`str` in python 3) or `scope`
-    is not ``None`` or an instance of :class:`dict`.
+    Raises `TypeError` if ``code`` is not an instance of
+    `basestring` (`str` in python 3) or ``scope``
+    is not ``None`` or an instance of `dict`.
 
-    Scope variables can be set by passing a dictionary as the `scope`
+    Scope variables can be set by passing a dictionary as the ``scope``
     argument or by using keyword arguments. If a variable is set as a
     keyword argument it will override any setting for that variable in
-    the `scope` dictionary.
+    the ``scope`` dictionary.
 
     :Parameters:
-      - `code`: string containing JavaScript code to be evaluated
-      - `scope` (optional): dictionary representing the scope in which
-        `code` should be evaluated - a mapping from identifiers (as
+      - ``code``: string containing JavaScript code to be evaluated
+      - ``scope`` (optional): dictionary representing the scope in which
+        ``code`` should be evaluated - a mapping from identifiers (as
         strings) to values
-      - `**kwargs` (optional): scope variables can also be passed as
+      - ``**kwargs`` (optional): scope variables can also be passed as
         keyword arguments
     """
 

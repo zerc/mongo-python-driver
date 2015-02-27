@@ -33,14 +33,14 @@ OLD_BINARY_SUBTYPE = 2
 """Old BSON binary subtype for binary data.
 
 This is the old default subtype, the current
-default is :data:`BINARY_SUBTYPE`.
+default is `BINARY_SUBTYPE`.
 """
 
 OLD_UUID_SUBTYPE = 3
 """Old BSON binary subtype for a UUID.
 
-:class:`uuid.UUID` instances will automatically be encoded
-by :mod:`bson` using this subtype.
+`uuid.UUID` instances will automatically be encoded
+by `bson` using this subtype.
 
 .. versionadded:: 2.1
 """
@@ -49,7 +49,7 @@ UUID_SUBTYPE = 4
 """BSON binary subtype for a UUID.
 
 This is the new BSON binary subtype for UUIDs. The
-current default is :data:`OLD_UUID_SUBTYPE` but will
+current default is `OLD_UUID_SUBTYPE` but will
 change to this in a future release.
 
 .. versionchanged:: 2.1
@@ -59,9 +59,9 @@ change to this in a future release.
 STANDARD = UUID_SUBTYPE
 """The standard UUID representation.
 
-:class:`uuid.UUID` instances will automatically be encoded to
+`uuid.UUID` instances will automatically be encoded to
 and decoded from BSON binary, using RFC-4122 byte order with
-binary subtype :data:`UUID_SUBTYPE`.
+binary subtype `UUID_SUBTYPE`.
 
 .. versionadded:: 3.0
 """
@@ -69,9 +69,9 @@ binary subtype :data:`UUID_SUBTYPE`.
 PYTHON_LEGACY = OLD_UUID_SUBTYPE
 """The Python legacy UUID representation.
 
-:class:`uuid.UUID` instances will automatically be encoded to
+`uuid.UUID` instances will automatically be encoded to
 and decoded from BSON binary, using RFC-4122 byte order with
-binary subtype :data:`OLD_UUID_SUBTYPE`.
+binary subtype `OLD_UUID_SUBTYPE`.
 
 .. versionadded:: 3.0
 """
@@ -79,9 +79,9 @@ binary subtype :data:`OLD_UUID_SUBTYPE`.
 JAVA_LEGACY = 5
 """The Java legacy UUID representation.
 
-:class:`uuid.UUID` instances will automatically be encoded to
+`uuid.UUID` instances will automatically be encoded to
 and decoded from BSON binary, using the Java driver's legacy
-byte order with binary subtype :data:`OLD_UUID_SUBTYPE`.
+byte order with binary subtype `OLD_UUID_SUBTYPE`.
 
 .. versionadded:: 2.3
 """
@@ -89,9 +89,9 @@ byte order with binary subtype :data:`OLD_UUID_SUBTYPE`.
 CSHARP_LEGACY = 6
 """The C#/.net legacy UUID representation.
 
-:class:`uuid.UUID` instances will automatically be encoded to
+`uuid.UUID` instances will automatically be encoded to
 and decoded from BSON binary, using the C# driver's legacy
-byte order and binary subtype :data:`OLD_UUID_SUBTYPE`.
+byte order and binary subtype `OLD_UUID_SUBTYPE`.
 
 .. versionadded:: 2.3
 """
@@ -121,17 +121,17 @@ class Binary(bytes):
     the difference between what should be considered binary data and
     what should be considered a string when we encode to BSON.
 
-    Raises TypeError if `data` is not an instance of :class:`str`
-    (:class:`bytes` in python 3) or `subtype` is not an instance of
-    :class:`int`. Raises ValueError if `subtype` is not in [0, 256).
+    Raises TypeError if ``data`` is not an instance of `str`
+    (`bytes` in python 3) or ``subtype`` is not an instance of
+    `int`. Raises ValueError if ``subtype`` is not in [0, 256).
 
     .. note::
       In python 3 instances of Binary with subtype 0 will be decoded
-      directly to :class:`bytes`.
+      directly to `bytes`.
 
     :Parameters:
-      - `data`: the binary data to represent
-      - `subtype` (optional): the `binary subtype
+      - ``data``: the binary data to represent
+      - ``subtype`` (optional): the `binary subtype
         <http://bsonspec.org/#/specification>`_
         to use
     """
@@ -209,10 +209,10 @@ class UUIDLegacy(Binary):
       >>> coll.find_one({'uuid': my_uuid})['uuid']
       UUID('...')
 
-    Raises TypeError if `obj` is not an instance of :class:`~uuid.UUID`.
+    Raises TypeError if ``obj`` is not an instance of `~uuid.UUID`.
 
     :Parameters:
-      - `obj`: An instance of :class:`~uuid.UUID`.
+      - ``obj``: An instance of `~uuid.UUID`.
     """
 
     def __new__(cls, obj):

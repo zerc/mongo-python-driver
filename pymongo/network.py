@@ -28,9 +28,9 @@ def command(sock, dbname, spec):
     """Execute a command over the socket, or raise socket.error.
 
     :Parameters:
-      - `sock`: a raw socket object
-      - `dbname`: name of the database on which to run the command
-      - `spec`: a command document as a dict, SON, or mapping object
+      - ``sock``: a raw socket object
+      - ``dbname``: name of the database on which to run the command
+      - ``spec``: a command document as a dict, SON, or mapping object
     """
     ns = dbname + '.$cmd'
     request_id, msg, _ = message.query(0, ns, 0, -1, spec,

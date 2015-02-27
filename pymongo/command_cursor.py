@@ -70,11 +70,11 @@ class CommandCursor(object):
            if you set batch size to 1,000,000,000, MongoDB will currently only
            return 4-16MB of results per batch).
 
-        Raises :exc:`TypeError` if `batch_size` is not an integer.
-        Raises :exc:`ValueError` if `batch_size` is less than ``0``.
+        Raises `TypeError` if ``batch_size`` is not an integer.
+        Raises `ValueError` if ``batch_size`` is less than ``0``.
 
         :Parameters:
-          - `batch_size`: The size of each batch of results requested.
+          - ``batch_size``: The size of each batch of results requested.
         """
         if not isinstance(batch_size, integer_types):
             raise TypeError("batch_size must be an integer")

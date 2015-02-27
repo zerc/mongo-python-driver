@@ -59,7 +59,7 @@ Doing a Release
 9. Push binaries to PyPI; for each version of python and platform do:`python
    setup.py bdist_egg upload`. Probably best to do `python setup.py bdist_egg`
    first, to make sure the egg builds properly. On Windows we also push a binary
-   installer. The setup.py target for that is `bdist_wininst`.
+   installer. The setup.py target for that is ``bdist_wininst``.
 
 10. Make sure to push a build of the new docs (see the apidocs repo).
 

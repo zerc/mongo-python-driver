@@ -52,7 +52,7 @@ class AutoAuthenticateThread(threading.Thread):
     check out and authenticate multiple sockets from the pool concurrently.
 
     :Parameters:
-      `collection`: An auth-protected collection containing one document.
+      ``collection``: An auth-protected collection containing one document.
     """
 
     def __init__(self, collection):

@@ -14,7 +14,7 @@ for threaded applications.
 How does connection pooling work in PyMongo?
 --------------------------------------------
 
-Every :class:`~pymongo.mongo_client.MongoClient` instance has a built-in
+Every `~.mongo_client.MongoClient` instance has a built-in
 connection pool. The client opens sockets on demand to support the number
 of concurrent MongoDB operations your application requires. There is no
 thread-affinity for sockets.
@@ -28,7 +28,7 @@ all other sockets are in use and the pool has reached its maximum, the
 thread pauses, waiting for a socket to be returned to the pool by another
 thread.
 
-The default configuration for a :class:`~pymongo.mongo_client.MongoClient`
+The default configuration for a `~.mongo_client.MongoClient`
 works for most applications::
 
     client = MongoClient(host, port)
@@ -54,7 +54,7 @@ than or equal to 500::
     client = MongoClient(host, port, max_pool_size=50, waitQueueMultiple=10)
 
 When 500 threads are waiting for a socket, the 501st that needs a socket
-raises :exc:`~pymongo.errors.ExceededMaxWaiters`. Use this option to
+raises `.ExceededMaxWaiters`. Use this option to
 bound the amount of queueing in your application during a load spike, at the
 cost of additional exceptions.
 
@@ -65,12 +65,11 @@ indefinitely for sockets to become available, unless you set
     client = MongoClient(host, port, waitQueueTimeoutMS=100)
 
 A thread that waits more than 100ms (in this example) for a socket raises
-:exc:`~pymongo.errors.ConnectionFailure`. Use this option if it is more
+`.ConnectionFailure`. Use this option if it is more
 important to bound the duration of operations during a load spike than it is to
 complete every operation.
 
-When :meth:`~pymongo.mongo_client.MongoClient.close` is called by any
-thread, all sockets are closed.
+When `.MongoClient.close` is called by any thread, all sockets are closed.
 
 Does PyMongo support Python 3?
 ------------------------------
@@ -134,9 +133,9 @@ stored in BSON. Here, "a" is shown before "b":
   >>> print collection.find_one()
   {u'_id': 1.0, u'subdocument': {u'a': 1.0, u'b': 1.0}}
 
-To preserve order when reading BSON, use the :class:`~bson.son.SON` class,
+To preserve order when reading BSON, use the `.SON` class,
 which is a dict that remembers its key order. First, get a handle to the
-collection, configured to use :class:`~bson.son.SON` instead of dict:
+collection, configured to use `.SON` instead of dict:
 
 .. doctest:: key-order
 
@@ -149,7 +148,7 @@ collection, configured to use :class:`~bson.son.SON` instead of dict:
   >>> collection_son = collection.with_options(codec_options=opts)
 
 Now, documents and subdocuments in query results are represented with
-:class:`~bson.son.SON` objects:
+`.SON` objects:
 
 .. doctest:: key-order
 
@@ -190,7 +189,7 @@ regardless of the order you specify them in Python or the order they are stored
 in BSON. Additionally, this query now matches subdocuments with additional
 keys besides "a" and "b", whereas the previous query required an exact match.
 
-The second solution is to use a :class:`~bson.son.SON` to specify the key order:
+The second solution is to use a `.SON` to specify the key order:
 
 .. doctest:: key-order
 
@@ -198,7 +197,7 @@ The second solution is to use a :class:`~bson.son.SON` to specify the key order:
   >>> collection.find_one(query)
   {u'_id': 1.0, u'subdocument': {u'a': 1.0, u'b': 1.0}}
 
-The key order you use when you create a :class:`~bson.son.SON` is preserved
+The key order you use when you create a `.SON` is preserved
 when it is serialized to BSON and used as a query. Thus you can create a
 subdocument that exactly matches the subdocument in the collection.
 
@@ -209,17 +208,17 @@ What does *CursorNotFound* cursor id not valid at server mean?
 --------------------------------------------------------------
 Cursors in MongoDB can timeout on the server if they've been open for
 a long time without any operations being performed on them. This can
-lead to an :class:`~pymongo.errors.CursorNotFound` exception being
+lead to an `~.errors.CursorNotFound` exception being
 raised when attempting to iterate the cursor.
 
 How do I change the timeout value for cursors?
 ----------------------------------------------
 MongoDB doesn't support custom timeouts for cursors, but cursor
 timeouts can be turned off entirely. Pass ``no_cursor_timeout=True`` to
-:meth:`~pymongo.collection.Collection.find`.
+`~.collection.Collection.find`.
 
-How can I store :mod:`decimal.Decimal` instances?
--------------------------------------------------
+How can I store `decimal.Decimal` instances?
+--------------------------------------------
 MongoDB only supports IEEE 754 floating points - the same as the
 Python float type. The only way PyMongo could store Decimal instances
 would be to convert them to this standard, so you'd really only be
@@ -269,32 +268,32 @@ What is the correct way to handle time zones with PyMongo?
 ----------------------------------------------------------
 
 Prior to PyMongo version 1.7, the correct way is to only save naive
-:class:`~datetime.datetime` instances, and to save all dates as
+`~datetime.datetime` instances, and to save all dates as
 UTC. In versions >= 1.7, the driver will automatically convert aware
 datetimes to UTC before saving them. By default, datetimes retrieved
 from the server (no matter what version of the driver you're using)
 will be naive and represent UTC. In newer versions of the driver you
-can set the :class:`~pymongo.mongo_client.MongoClient` `tz_aware`
+can set the `~.mongo_client.MongoClient` ``tz_aware``
 parameter to ``True``, which will cause all
-:class:`~datetime.datetime` instances returned from that MongoClient to
+`~datetime.datetime` instances returned from that MongoClient to
 be aware (UTC). This setting is recommended, as it can force
 application code to handle timezones properly.
 
 .. warning::
 
-   Be careful not to save naive :class:`~datetime.datetime`
+   Be careful not to save naive `~datetime.datetime`
    instances that are not UTC (i.e. the result of calling
-   :meth:`datetime.datetime.now`).
+   `datetime.datetime.now`).
 
-Something like :mod:`pytz` can be used to convert dates to localtime
+Something like ``pytz`` can be used to convert dates to localtime
 after retrieving them from the database.
 
-How can I save a :mod:`datetime.date` instance?
------------------------------------------------
-PyMongo doesn't support saving :mod:`datetime.date` instances, since
+How can I save a `datetime.date` instance?
+------------------------------------------
+PyMongo doesn't support saving `datetime.date` instances, since
 there is no BSON type for dates without times. Rather than having the
-driver enforce a convention for converting :mod:`datetime.date`
-instances to :mod:`datetime.datetime` instances for you, any
+driver enforce a convention for converting `datetime.date`
+instances to `datetime.datetime` instances for you, any
 conversion should be performed in your client code.
 
 .. _web-application-querying-by-objectid:
@@ -306,8 +305,8 @@ It's common in web applications to encode documents' ObjectIds in URLs, like::
   "/posts/50b3bda58a02fb9a84d8991e"
 
 Your web framework will pass the ObjectId portion of the URL to your request
-handler as a string, so it must be converted to :class:`~bson.objectid.ObjectId`
-before it is passed to :meth:`~pymongo.collection.Collection.find_one`. It is a
+handler as a string, so it must be converted to `~.bson.objectid.ObjectId`
+before it is passed to `~.collection.Collection.find_one`. It is a
 common mistake to forget to do this conversion. Here's how to do it correctly
 in Flask_ (other web frameworks are similar)::
 
@@ -335,7 +334,7 @@ in Flask_ (other web frameworks are similar)::
 How can I use PyMongo from Django?
 ----------------------------------
 `Django <http://www.djangoproject.com/>`_ is a popular Python web
-framework. Django includes an ORM, :mod:`django.db`. Currently,
+framework. Django includes an ORM, ``django.db``. Currently,
 there's no official MongoDB backend for Django.
 
 `django-mongodb-engine <https://django-mongodb-engine.readthedocs.org/>`_
@@ -346,14 +345,14 @@ and session frameworks and caching.
 
 However, it's easy to use MongoDB (and PyMongo) from Django
 without using a Django backend. Certain features of Django that require
-:mod:`django.db` (admin, authentication and sessions) will not work
+``django.db`` (admin, authentication and sessions) will not work
 using just MongoDB, but most of what Django provides can still be
 used.
 
 One project which should make working with MongoDB and Django easier
 is `mango <http://github.com/vpulim/mango>`_. Mango is a set of
 MongoDB backends for Django sessions and authentication (bypassing
-:mod:`django.db` entirely).
+``django.db`` entirely).
 
 .. _using-with-mod-wsgi:
 
@@ -361,26 +360,26 @@ Does PyMongo work with **mod_wsgi**?
 ------------------------------------
 Yes. See the configuration guide for :ref:`pymongo-and-mod_wsgi`.
 
-How can I use something like Python's :mod:`json` module to encode my documents to JSON?
+How can I use something like Python's `json` module to encode my documents to JSON?
 ----------------------------------------------------------------------------------------
-The :mod:`json` module won't work out of the box with all documents
+The `json` module won't work out of the box with all documents
 from PyMongo as PyMongo supports some special types (like
-:class:`~bson.objectid.ObjectId` and :class:`~bson.dbref.DBRef`)
+`~.bson.objectid.ObjectId` and `~bson.dbref.DBRef`)
 that are not supported in JSON. We've added some utilities for working
-with JSON in the :mod:`~bson.json_util` module.
+with JSON in the `~.bson.json_util` module.
 
 Why do I get OverflowError decoding dates stored by another language's driver?
 ------------------------------------------------------------------------------
 PyMongo decodes BSON datetime values to instances of Python's
-:class:`datetime.datetime`. Instances of :class:`datetime.datetime` are
-limited to years between :data:`datetime.MINYEAR` (usually 1) and
-:data:`datetime.MAXYEAR` (usually 9999). Some MongoDB drivers (e.g. the PHP
+`datetime.datetime`. Instances of `datetime.datetime` are
+limited to years between `datetime.MINYEAR` (usually 1) and
+`datetime.MAXYEAR` (usually 9999). Some MongoDB drivers (e.g. the PHP
 driver) can store BSON datetimes with year values far outside those supported
-by :class:`datetime.datetime`.
+by `datetime.datetime`.
 
 There are a few ways to work around this issue. One option is to filter
 out documents with values outside of the range supported by
-:class:`datetime.datetime`::
+`datetime.datetime`::
 
   >>> from datetime import datetime
   >>> coll = client.test.dates

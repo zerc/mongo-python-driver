@@ -22,8 +22,8 @@ class Response(object):
         """Represent a response from the server.
 
         :Parameters:
-          - `data`: Raw BSON bytes.
-          - `address`: (host, port) of the source server.
+          - ``data``: Raw BSON bytes.
+          - ``address``: (host, port) of the source server.
         """
         self._data = data
         self._address = address
@@ -46,10 +46,10 @@ class ExhaustResponse(Response):
         """Represent a response to an exhaust cursor's initial query.
 
         :Parameters:
-          - `data`: Raw BSON bytes.
-          - `address`: (host, port) of the source server.
-          - `socket_info`: The SocketInfo used for the initial query.
-          - `pool`: The Pool from which the SocketInfo came.
+          - ``data``: Raw BSON bytes.
+          - ``address``: (host, port) of the source server.
+          - ``socket_info``: The SocketInfo used for the initial query.
+          - ``pool``: The Pool from which the SocketInfo came.
         """
         super(ExhaustResponse, self).__init__(data, address)
         self._socket_info = socket_info

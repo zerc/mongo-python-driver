@@ -7,7 +7,7 @@ Geospatial Indexing Example
   client = MongoClient()
   client.drop_database('geo_example')
 
-This example shows how to create and use a :data:`~pymongo.GEO2D`
+This example shows how to create and use a `.GEO2D`
 index in PyMongo.
 
 .. mongodoc:: geo
@@ -54,7 +54,7 @@ Using the geospatial index we can find documents near another point:
   "{u'loc': [4, 4], u'_id': ObjectId('...')}"
   "{u'loc': [1, 2], u'_id': ObjectId('...')}"
 
-The $maxDistance operator requires the use of :class:`~bson.son.SON`:
+The $maxDistance operator requires the use of `~bson.son.SON`:
 
 .. doctest::
 
@@ -88,7 +88,7 @@ Or circle (specified by center point and radius):
   "{u'loc': [2, 5], u'_id': ObjectId('...')}"
   "{u'loc': [4, 4], u'_id': ObjectId('...')}"
 
-geoNear queries are also supported using :class:`~bson.son.SON`::
+geoNear queries are also supported using `~bson.son.SON`::
 
   >>> from bson.son import SON
   >>> db.command(SON([('geoNear', 'places'), ('near', [1, 2])]))

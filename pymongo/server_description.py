@@ -22,10 +22,10 @@ class ServerDescription(object):
     """Immutable representation of one server.
 
     :Parameters:
-      - `address`: A (host, port) pair
-      - `ismaster`: Optional IsMaster instance
-      - `round_trip_time`: Optional float
-      - `error`: Optional, the last error attempting to connect to the server
+      - ``address``: A (host, port) pair
+      - ``ismaster``: Optional IsMaster instance
+      - ``round_trip_time``: Optional float
+      - ``error``: Optional, the last error attempting to connect to the server
     """
 
     __slots__ = (

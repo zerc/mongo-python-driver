@@ -59,7 +59,7 @@ class _Run(object):
         """Get the original index of an operation in this run.
 
         :Parameters:
-          - `idx`: The Run index that maps to the original index.
+          - ``idx``: The Run index that maps to the original index.
         """
         return self.index_map[idx]
 
@@ -67,9 +67,9 @@ class _Run(object):
         """Add an operation to this Run instance.
 
         :Parameters:
-          - `original_index`: The original index of this operation
+          - ``original_index``: The original index of this operation
             within a larger bulk operation.
-          - `operation`: The operation document.
+          - ``operation``: The operation document.
         """
         self.index_map.append(original_index)
         self.ops.append(operation)
@@ -450,7 +450,7 @@ class BulkUpsertOperation(object):
         """Update one document matching the selector.
 
         :Parameters:
-          - `update` (dict): the update operations to apply
+          - ``update`` (dict): the update operations to apply
         """
         self.__bulk.add_update(self.__selector,
                                update, multi=False, upsert=True)
@@ -459,7 +459,7 @@ class BulkUpsertOperation(object):
         """Update all documents matching the selector.
 
         :Parameters:
-          - `update` (dict): the update operations to apply
+          - ``update`` (dict): the update operations to apply
         """
         self.__bulk.add_update(self.__selector,
                                update, multi=True, upsert=True)
@@ -468,7 +468,7 @@ class BulkUpsertOperation(object):
         """Replace one entire document matching the selector criteria.
 
         :Parameters:
-          - `replacement` (dict): the replacement document
+          - ``replacement`` (dict): the replacement document
         """
         self.__bulk.add_replace(self.__selector, replacement, upsert=True)
 
@@ -487,7 +487,7 @@ class BulkWriteOperation(object):
         """Update one document matching the selector criteria.
 
         :Parameters:
-          - `update` (dict): the update operations to apply
+          - ``update`` (dict): the update operations to apply
         """
         self.__bulk.add_update(self.__selector, update, multi=False)
 
@@ -495,7 +495,7 @@ class BulkWriteOperation(object):
         """Update all documents matching the selector criteria.
 
         :Parameters:
-          - `update` (dict): the update operations to apply
+          - ``update`` (dict): the update operations to apply
         """
         self.__bulk.add_update(self.__selector, update, multi=True)
 
@@ -503,7 +503,7 @@ class BulkWriteOperation(object):
         """Replace one entire document matching the selector criteria.
 
         :Parameters:
-          - `replacement` (dict): the replacement document
+          - ``replacement`` (dict): the replacement document
         """
         self.__bulk.add_replace(self.__selector, replacement)
 
@@ -522,7 +522,7 @@ class BulkWriteOperation(object):
         upserts.
 
         :Returns:
-          - A :class:`BulkUpsertOperation` instance, used to add
+          - A `BulkUpsertOperation` instance, used to add
             update operations to this bulk operation.
         """
         return BulkUpsertOperation(self.__selector, self.__bulk)
@@ -538,8 +538,8 @@ class BulkOperationBuilder(object):
         """Initialize a new BulkOperationBuilder instance.
 
         :Parameters:
-          - `collection`: A :class:`~pymongo.collection.Collection` instance.
-          - `ordered` (optional): If ``True`` all operations will be executed
+          - ``collection``: A `.Collection` instance.
+          - ``ordered`` (optional): If ``True`` all operations will be executed
             serially, in the order provided, and the entire execution will
             abort on the first error. If ``False`` operations will be executed
             in arbitrary order (possibly in parallel on the server), reporting
@@ -552,11 +552,11 @@ class BulkOperationBuilder(object):
         """Specify selection criteria for bulk operations.
 
         :Parameters:
-          - `selector` (dict): the selection criteria for update
+          - ``selector`` (dict): the selection criteria for update
             and remove operations.
 
         :Returns:
-          - A :class:`BulkWriteOperation` instance, used to add
+          - A `BulkWriteOperation` instance, used to add
             update and remove operations to this bulk operation.
         """
         validate_is_mapping("selector", selector)
@@ -566,7 +566,7 @@ class BulkOperationBuilder(object):
         """Insert a single document.
 
         :Parameters:
-          - `document` (dict): the document to insert
+          - ``document`` (dict): the document to insert
         """
         self.__bulk.add_insert(document)
 

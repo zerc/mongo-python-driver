@@ -21,28 +21,28 @@ class WriteConcern(object):
     """WriteConcern
     
     :Parameters:
-        - `w`: (integer or string) Used with replication, write operations
+        - ``w``: (integer or string) Used with replication, write operations
           will block until they have been replicated to the specified number
-          or tagged set of servers. `w=<integer>` always includes the replica
+          or tagged set of servers. ``w=<integer>`` always includes the replica
           set primary (e.g. w=3 means write to the primary and wait until
           replicated to **two** secondaries). **w=0 disables acknowledgement
           of write operations and can not be used with other write concern
           options.**
-        - `wtimeout`: (integer) Used in conjunction with `w`. Specify a value
+        - ``wtimeout``: (integer) Used in conjunction with ``w``. Specify a value
           in milliseconds to control how long to wait for write propagation
           to complete. If replication does not complete in the given
           timeframe, a timeout exception is raised.
-        - `j`: If ``True`` block until write operations have been committed
-          to the journal. Cannot be used in combination with `fsync`. Prior
+        - ``j``: If ``True`` block until write operations have been committed
+          to the journal. Cannot be used in combination with ``fsync``. Prior
           to MongoDB 2.6 this option was ignored if the server was running
           without journaling. Starting with MongoDB 2.6 write operations will
           fail with an exception if this option is used when the server is
           running without journaling.
-        - `fsync`: If ``True`` and the server is running without journaling,
+        - ``fsync``: If ``True`` and the server is running without journaling,
           blocks until the server has synced all data files to disk. If the
-          server is running with journaling, this acts the same as the `j`
+          server is running with journaling, this acts the same as the ``j``
           option, blocking until write operations have been committed to the
-          journal. Cannot be used in combination with `j`.
+          journal. Cannot be used in combination with ``j``.
     """
 
     __slots__ = ("__document", "__acknowledged")

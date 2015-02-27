@@ -16,11 +16,11 @@
 
 New cursor managers should be defined as subclasses of CursorManager and can be
 installed on a client by calling
-:meth:`~pymongo.mongo_client.MongoClient.set_cursor_manager`.
+`~pymongo.mongo_client.MongoClient.set_cursor_manager`.
 
 .. versionchanged:: 3.0
-   Undeprecated. :meth:`~pymongo.cursor_manager.CursorManager.close` now
-   requires an `address` argument. The ``BatchCursorManager`` class is removed.
+   Undeprecated. `~pymongo.cursor_manager.CursorManager.close` now
+   requires an ``address`` argument. The ``BatchCursorManager`` class is removed.
 """
 
 import weakref
@@ -34,7 +34,7 @@ class CursorManager(object):
         """Instantiate the manager.
 
         :Parameters:
-          - `client`: a MongoClient
+          - ``client``: a MongoClient
         """
         self.__client = weakref.ref(client)
 
@@ -44,11 +44,11 @@ class CursorManager(object):
         Raises TypeError if cursor_id is not an instance of (int, long).
 
         :Parameters:
-          - `cursor_id`: cursor id to close
-          - `address`: the cursor's server's (host, port) pair
+          - ``cursor_id``: cursor id to close
+          - ``address``: the cursor's server's (host, port) pair
 
         .. versionchanged:: 3.0
-           Now requires an `address` argument.
+           Now requires an ``address`` argument.
         """
         if not isinstance(cursor_id, integer_types):
             raise TypeError("cursor_id must be an integer")

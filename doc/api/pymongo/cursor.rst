@@ -1,5 +1,5 @@
-:mod:`cursor` -- Tools for iterating over MongoDB query results
-===============================================================
+`cursor` -- Tools for iterating over MongoDB query results
+==========================================================
 
 .. automodule:: pymongo.cursor
    :synopsis: Tools for iterating over MongoDB query results
@@ -9,6 +9,6 @@
 
       .. describe:: c[index]
 
-         See :meth:`__getitem__`.
+         See `__getitem__`.
 
       .. automethod:: __getitem__

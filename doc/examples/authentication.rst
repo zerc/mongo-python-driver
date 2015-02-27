@@ -10,7 +10,7 @@ Support For Special Characters In Usernames And Passwords
 
 If your username or password contains special characters (e.g. '/', ' ',
 or '@') you must ``%xx`` escape them for use in the MongoDB URI. PyMongo
-uses :meth:`~urllib.unquote_plus` to decode them. For example::
+uses `urllib.unquote_plus` to decode them. For example::
 
   >>> import urllib
   >>> password = urllib.quote_plus('pass/word')
@@ -26,7 +26,7 @@ SCRAM-SHA-1 (RFC 5802)
 SCRAM-SHA-1 is the default authentication mechanism supported by a cluster
 configured for authentication with MongoDB 3.0 or later. Authentication is
 per-database and credentials can be specified through the MongoDB URI or
-passed to the :meth:`~pymongo.database.Database.authenticate` method::
+passed to the `~.database.Database.authenticate` method::
 
   >>> from pymongo import MongoClient
   >>> client = MongoClient('example.com')
@@ -143,7 +143,7 @@ URI::
   >>> client = MongoClient(uri)
   >>>
 
-or using :meth:`~pymongo.database.Database.authenticate`::
+or using `~.database.Database.authenticate`::
 
   >>> from pymongo import MongoClient
   >>> client = MongoClient('example.com')
@@ -151,7 +151,7 @@ or using :meth:`~pymongo.database.Database.authenticate`::
   >>> db.authenticate('mongodbuser@EXAMPLE.COM', mechanism='GSSAPI')
   True
 
-The default service name used by MongoDB and PyMongo is `mongodb`. You can
+The default service name used by MongoDB and PyMongo is ``mongodb``. You can
 specify a custom service name with the ``authMechanismProperties`` option::
 
   >>> from pymongo import MongoClient

@@ -32,10 +32,10 @@ class TopologyDescription(object):
         """Represent a topology of servers.
 
         :Parameters:
-          - `topology_type`: initial type
-          - `server_descriptions`: dict of (address, ServerDescription) for
+          - ``topology_type``: initial type
+          - ``server_descriptions``: dict of (address, ServerDescription) for
             all seeds
-          - `replica_set_name`: replica set name or None
+          - ``replica_set_name``: replica set name or None
         """
         self._topology_type = topology_type
         self._replica_set_name = replica_set_name
@@ -143,8 +143,8 @@ def updated_topology_description(topology_description, server_description):
     """Return an updated copy of a TopologyDescription.
 
     :Parameters:
-      - `topology_description`: the current TopologyDescription
-      - `server_description`: a new ServerDescription that resulted from
+      - ``topology_description``: the current TopologyDescription
+      - ``server_description``: a new ServerDescription that resulted from
         an ismaster call
 
     Called after attempting (successfully or not) to call ismaster on the

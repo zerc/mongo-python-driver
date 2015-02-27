@@ -63,7 +63,7 @@ class PoolOptions(object):
     def max_pool_size(self):
         """The maximum number of connections that the pool will open
         simultaneously. If this is set, operations will block if there
-        are `max_pool_size` outstanding connections.
+        are ``max_pool_size`` outstanding connections.
         """
         return self.__max_pool_size
 
@@ -111,10 +111,11 @@ class SocketInfo(object):
     """Store a socket with some metadata.
 
     :Parameters:
-      - `sock`: a raw socket object
-      - `pool`: a Pool instance
-      - `ismaster`: an IsMaster instance, response to ismaster call on `sock`
-      - `host`: a string, the server's hostname (without port)
+      - ``sock``: a raw socket object.
+      - ``pool``: a Pool instance.
+      - ``ismaster``: an IsMaster instance, response to ismaster call on
+         ``sock``.
+      - ``host``: a string, the server's hostname (without port).
     """
     def __init__(self, sock, pool, ismaster, host):
         self.sock = sock
@@ -132,8 +133,8 @@ class SocketInfo(object):
         """Execute a command or raise socket.error or OperationFailure.
 
         :Parameters:
-          - `dbname`: name of the database on which to run the command
-          - `spec`: a command document as a dict, SON, or mapping object
+          - ``dbname``: name of the database on which to run the command
+          - ``spec``: a command document as a dict, SON, or mapping object
         """
         try:
             return command(self.sock, dbname, spec)
@@ -170,7 +171,7 @@ class SocketInfo(object):
         those provided. Can raise socket.error or OperationFailure.
 
         :Parameters:
-          - `all_credentials`: dict, maps auth source to MongoCredential.
+          - ``all_credentials``: dict, maps auth source to MongoCredential.
         """
         if all_credentials or self.authset:
             cached = set(itervalues(all_credentials))
@@ -186,10 +187,10 @@ class SocketInfo(object):
                 self.authset.add(credentials)
 
     def authenticate(self, credentials):
-        """Log in to the server and store these credentials in `authset`.
+        """Log in to the server and store these credentials in ``authset``.
 
         :Parameters:
-          - `credentials`: A MongoCredential.
+          - ``credentials``: A MongoCredential.
         """
         auth.authenticate(credentials, self)
         self.authset.add(credentials)
@@ -308,12 +309,12 @@ def _configured_socket(address, options):
 # Do *not* explicitly inherit from object or Jython won't call __del__
 # http://bugs.jython.org/issue1057
 class Pool:
+    """
+    :Parameters:
+      - ``address``: a (hostname, port) tuple
+      - ``options``: a PoolOptions instance
+    """
     def __init__(self, address, options):
-        """
-        :Parameters:
-          - `address`: a (hostname, port) tuple
-          - `options`: a PoolOptions instance
-        """
         # Check a socket's health with socket_closed() every once in a while.
         # Can override for testing: 0 to always check, None to never check.
         self._check_interval_seconds = 1
@@ -365,8 +366,8 @@ class Pool:
     def get_socket(self, all_credentials, checkout=False):
         """Get a socket from the pool. Use with a "with" statement.
 
-        Returns a :class:`SocketInfo` object wrapping a connected
-        :class:`socket.socket`.
+        Returns a `SocketInfo` object wrapping a connected
+        `socket.socket`.
 
         This method should always be used in a with-statement::
 
@@ -379,8 +380,8 @@ class Pool:
         protocol version.
 
         :Parameters:
-          - `all_credentials`: dict, maps auth source to MongoCredential.
-          - `checkout` (optional): keep socket checked out.
+          - ``all_credentials``: dict, maps auth source to MongoCredential.
+          - ``checkout`` (optional): keep socket checked out.
         """
         # First get a socket, then attempt authentication. Simplifies
         # semaphore management in the face of network errors during auth.
@@ -454,7 +455,7 @@ class Pool:
         error.
 
         Checking sockets lets us avoid seeing *some*
-        :class:`~pymongo.errors.AutoReconnect` exceptions on server
+        `~pymongo.errors.AutoReconnect` exceptions on server
         hiccups, etc. We only do this if it's been > 1 second since
         the last socket checkout, to keep performance reasonable - we
         can't avoid AutoReconnects completely anyway.

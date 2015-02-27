@@ -31,8 +31,8 @@ if HAVE_SSL:
 
     def validate_cert_reqs(option, value):
         """Validate the cert reqs are valid. It must be None or one of the
-        three values ``ssl.CERT_NONE``, ``ssl.CERT_OPTIONAL`` or
-        ``ssl.CERT_REQUIRED``.
+        three values `ssl.CERT_NONE`, `ssl.CERT_OPTIONAL` or
+        `ssl.CERT_REQUIRED`.
         """
         if value is None:
             return value

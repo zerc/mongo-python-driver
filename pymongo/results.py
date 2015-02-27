@@ -38,7 +38,7 @@ class _WriteResult(object):
 
 
 class InsertOneResult(_WriteResult):
-    """The return type for :meth:`Collection.insert_one`."""
+    """The return type for `~.Collection.insert_one`."""
 
     __slots__ = ("__inserted_id", "__acknowledged")
 
@@ -53,7 +53,7 @@ class InsertOneResult(_WriteResult):
 
 
 class InsertManyResult(_WriteResult):
-    """The return type for :meth:`~pymongo.collection.Collection.insert_many`.
+    """The return type for `~.Collection.insert_many`.
     """
 
     __slots__ = ("__inserted_ids", "__acknowledged")
@@ -66,8 +66,8 @@ class InsertManyResult(_WriteResult):
     def inserted_ids(self):
         """A list of _ids of the inserted documents, in the order provided.
 
-        .. note:: If ``False`` is passed for the `ordered` parameter to
-          :meth:`~pymongo.collection.Collection.insert_many` the server
+        .. note:: If ``False`` is passed for the ``ordered`` parameter to
+          `~.Collection.insert_many` the server
           may have inserted the documents in a different order than what
           is presented here.
         """
@@ -75,8 +75,8 @@ class InsertManyResult(_WriteResult):
 
 
 class UpdateResult(_WriteResult):
-    """The return type for :meth:`~pymongo.collection.Collection.update_one`
-    and :meth:`~pymongo.collection.Collection.update_many`"""
+    """The return type for `~.Collection.update_one`
+    and `~.Collection.update_many`"""
 
     __slots__ = ("__raw_result", "__acknowledged")
 
@@ -119,8 +119,8 @@ class UpdateResult(_WriteResult):
 
 
 class DeleteResult(_WriteResult):
-    """The return type for :meth:`~pymongo.collection.Collection.delete_one`
-    and :meth:`~pymongo.collection.Collection.delete_many`"""
+    """The return type for `~.Collection.delete_one`
+    and `~.Collection.delete_many`"""
 
     __slots__ = ("__raw_result", "__acknowledged")
 
@@ -149,10 +149,10 @@ class BulkWriteResult(_WriteResult):
         """Create a BulkWriteResult instance.
 
         :Parameters:
-          - `bulk_api_result`: A result dict from the bulk API
-          - `acknowledged`: Was this write result acknowledged? If ``False``
+          - ``bulk_api_result``: A result dict from the bulk API
+          - ``acknowledged``: Was this write result acknowledged? If ``False``
             then all properties of this object will raise
-            :exc:`~pymongo.errors.InvalidOperation`.
+            `~pymongo.errors.InvalidOperation`.
         """
         self.__bulk_api_result = bulk_api_result
         super(BulkWriteResult, self).__init__(acknowledged)

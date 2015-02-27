@@ -13,8 +13,14 @@ import pymongo
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.coverage',
-              'sphinx.ext.todo', 'doc.mongo_extensions']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.coverage',
+    'sphinx.ext.todo',
+    'doc.mongo_extensions',
+    'sphinx.ext.intersphinx',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -63,6 +69,9 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 # -- Options for extensions ----------------------------------------------------
+primary_domain = 'py'
+default_role = 'py:obj'
+
 autoclass_content = 'init'
 
 doctest_path = os.path.abspath('..')
@@ -75,6 +84,10 @@ client = MongoClient()
 client.drop_database("doctest_test")
 db = client.doctest_test
 """
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/2/', None),
+}
 
 # -- Options for HTML output ---------------------------------------------------
 

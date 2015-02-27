@@ -58,8 +58,8 @@ class Server(object):
         Can raise ConnectionFailure.
 
         :Parameters:
-          - `message`: (request_id, data).
-          - `all_credentials`: dict, maps auth source to MongoCredential.
+          - ``message``: (request_id, data).
+          - ``all_credentials``: dict, maps auth source to MongoCredential.
         """
         request_id, data = self._check_bson_size(message)
         try:
@@ -78,9 +78,9 @@ class Server(object):
         Can raise ConnectionFailure.
 
         :Parameters:
-          - `message`: (request_id, data, max_doc_size) or (request_id, data).
-          - `all_credentials`: dict, maps auth source to MongoCredential.
-          - `exhaust` (optional): If True, the socket used stays checked out.
+          - ``message``: (request_id, data, max_doc_size) or (request_id, data).
+          - ``all_credentials``: dict, maps auth source to MongoCredential.
+          - ``exhaust`` (optional): If True, the socket used stays checked out.
             It is returned along with its Pool in the Response.
         """
         request_id, data = self._check_bson_size(message)
@@ -124,7 +124,7 @@ class Server(object):
         than the server will accept.
 
         :Parameters:
-          - `message`: (request_id, data, max_doc_size) or (request_id, data)
+          - ``message``: (request_id, data, max_doc_size) or (request_id, data)
 
         Returns request_id, data.
         """

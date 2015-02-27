@@ -86,12 +86,12 @@ def _unpack_response(response, cursor_id=None, codec_options=CodecOptions()):
     OperationFailure.
 
     :Parameters:
-      - `response`: byte string as returned from the database
-      - `cursor_id` (optional): cursor_id we sent to get this response -
+      - ``response``: byte string as returned from the database
+      - ``cursor_id`` (optional): cursor_id we sent to get this response -
         used for raising an informative exception when we get cursor id not
         valid at server response
-      - `codec_options` (optional): an instance of
-        :class:`~bson.codec_options.CodecOptions`
+      - ``codec_options`` (optional): an instance of
+        `~bson.codec_options.CodecOptions`
     """
     response_flag = struct.unpack("<i", response[:4])[0]
     if response_flag & 1:

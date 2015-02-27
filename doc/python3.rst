@@ -11,14 +11,14 @@ PyMongo supports Python 3.x where x >= 2.
 Are there any PyMongo behavior changes with Python 3?
 -----------------------------------------------------
 
-Only one intentional change. Instances of :class:`bytes`
+Only one intentional change. Instances of `bytes`
 are encoded as BSON type 5 (Binary data) with subtype 0.
-In Python 3 they are decoded back to :class:`bytes`. In
-Python 2 they will be decoded to :class:`~bson.binary.Binary`
+In Python 3 they are decoded back to `bytes`. In
+Python 2 they will be decoded to `~.binary.Binary`
 with subtype 0.
 
-For example, let's insert a :class:`bytes` instance using Python 3 then
-read it back. Notice the byte string is decoded back to :class:`bytes`::
+For example, let's insert a `bytes` instance using Python 3 then
+read it back. Notice the byte string is decoded back to `bytes`::
 
   Python 3.2.5 (default, Feb 26 2014, 12:40:25)
   [GCC 4.7.3] on linux2
@@ -31,7 +31,7 @@ read it back. Notice the byte string is decoded back to :class:`bytes`::
   {'binary': b'this is a byte string', '_id': ObjectId('4f9086b1fba5222021000000')}
 
 Now retrieve the same document in Python 2. Notice the byte string is decoded
-to :class:`~bson.binary.Binary`::
+to `~.binary.Binary`::
 
   Python 2.7.6 (default, Feb 26 2014, 10:36:22)
   [GCC 4.7.3] on linux2
@@ -45,7 +45,7 @@ to :class:`~bson.binary.Binary`::
 Why can't I share pickled ObjectIds between some versions of Python 2 and 3?
 ----------------------------------------------------------------------------
 
-Instances of :class:`~bson.objectid.ObjectId` pickled using Python 2
+Instances of `~.objectid.ObjectId` pickled using Python 2
 can always be unpickled using Python 3. Due to
 `http://bugs.python.org/issue13505 <http://bugs.python.org/issue13505>`_
 you must use Python 3.2.3 or newer to pickle instances of ObjectId if you

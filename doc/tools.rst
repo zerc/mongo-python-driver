@@ -97,7 +97,7 @@ various Python frameworks and libraries.
   For more information `see the tutorial
   <http://django-mongodb-engine.readthedocs.org/en/latest/tutorial.html>`_.
 * `mango <http://github.com/vpulim/mango>`_ provides MongoDB backends for
-  Django sessions and authentication (bypassing :mod:`django.db` entirely).
+  Django sessions and authentication (bypassing ``django.db`` entirely).
 * `Django MongoEngine
   <https://github.com/MongoEngine/django-mongoengine>`_ is a MongoDB backend for
   Django, an `example:
@@ -116,7 +116,7 @@ various Python frameworks and libraries.
 * `repoze-what-plugins-mongodb
   <http://code.google.com/p/repoze-what-plugins-mongodb/>`_ is a project
   working to support a plugin for using MongoDB as a backend for
-  :mod:`repoze.what`.
+  ``repoze.what``.
 * `mongobox <http://github.com/theorm/mongobox>`_ is a tool to run a sandboxed
   MongoDB instance from within a python app.
 * `Flask-MongoAlchemy <http://github.com/cobrateam/flask-mongoalchemy/>`_ Add
